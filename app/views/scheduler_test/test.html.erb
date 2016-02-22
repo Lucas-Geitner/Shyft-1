@@ -1,0 +1,17 @@
+<table id="planner">
+  <tr>
+    <th>Employees</th>
+    <% @range.each do |time| %>
+      <th colspan="2"><%= time %></th>
+    <% end %>
+  </tr>
+  <% @employees.each do |employee| %>
+    <tr>
+      <td><%= employee %></td>
+      <% @range.each do |time| %>
+        <td id="<%= "#{time}.00" %>"></td>
+        <td id="<%= "#{time}.30" %>"></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,2 @@
+module OrganisationMembershipsHelper
+end
