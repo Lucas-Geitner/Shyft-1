@@ -7,52 +7,20 @@ Rails.application.routes.draw do
 
   get 'memberships/create'
 
-  get 'shifts/create'
-
-  get 'shifts/update'
-
-  get 'shifts/destroy'
-
-  get 'postes/new'
-
-  get 'postes/create'
-
-  get 'postes/edit'
-
-  get 'postes/update'
-
-  get 'postes/destroy'
-
-  get 'plannings/index'
-
-  get 'plannings/new'
-
-  get 'plannings/show'
-
-  get 'plannings/create'
-
-  get 'plannings/edit'
-
-  get 'plannings/update'
-
-  get 'plannings/destroy'
-
-  get 'users/new'
-
-  get 'users/show'
-
-  get 'users/create'
-
-  get 'users/edit'
-
-  get 'users/update'
-
-  get 'users/destroy'
-
   get 'scheduler_test/test' => 'scheduler_test#test'
 
   devise_for :users
   root to: 'pages#home'
+  resources :users, except: :index
+  resources :plannings, except: :index
+  resources :postes, except: :index
+  resources :shifts, only: [:create, :update, :destroy]
+  resources :memberships, only: :create
+  resources :organisation_memberships, only: :create
+  resources :organisations, only: :create
+  resources :shops, only: :create
+  get "shops/:shop_id/plannings" => 'plannings#index', as: :planning_index
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
