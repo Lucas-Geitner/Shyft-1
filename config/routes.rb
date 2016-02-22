@@ -1,4 +1,56 @@
 Rails.application.routes.draw do
+  get 'shops/create'
+
+  get 'organisations/create'
+
+  get 'organisation_memberships/create'
+
+  get 'memberships/create'
+
+  get 'shifts/create'
+
+  get 'shifts/update'
+
+  get 'shifts/destroy'
+
+  get 'postes/new'
+
+  get 'postes/create'
+
+  get 'postes/edit'
+
+  get 'postes/update'
+
+  get 'postes/destroy'
+
+  get 'plannings/index'
+
+  get 'plannings/new'
+
+  get 'plannings/show'
+
+  get 'plannings/create'
+
+  get 'plannings/edit'
+
+  get 'plannings/update'
+
+  get 'plannings/destroy'
+
+  get 'users/new'
+
+  get 'users/show'
+
+  get 'users/create'
+
+  get 'users/edit'
+
+  get 'users/update'
+
+  get 'users/destroy'
+
+  get 'scheduler_test/test' => 'scheduler_test#test'
+
   devise_for :users
   root to: 'pages#home'
   # The priority is based upon order of creation: first created -> highest priority.
