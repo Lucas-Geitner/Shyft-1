@@ -11,10 +11,82 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222144531) do
+ActiveRecord::Schema.define(version: 20160222151136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "memberships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "shop_id"
+    t.string   "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "memberships", ["shop_id"], name: "index_memberships_on_shop_id", using: :btree
+  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
+
+  create_table "organisation_memberships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "organisation_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "organisation_memberships", ["organisation_id"], name: "index_organisation_memberships_on_organisation_id", using: :btree
+  add_index "organisation_memberships", ["user_id"], name: "index_organisation_memberships_on_user_id", using: :btree
+
+  create_table "organisations", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "plannings", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "shop_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "plannings", ["shop_id"], name: "index_plannings_on_shop_id", using: :btree
+  add_index "plannings", ["user_id"], name: "index_plannings_on_user_id", using: :btree
+
+  create_table "postes", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shifts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "poste_id"
+    t.integer  "planning_id"
+    t.integer  "shop_id"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "shifts", ["planning_id"], name: "index_shifts_on_planning_id", using: :btree
+  add_index "shifts", ["poste_id"], name: "index_shifts_on_poste_id", using: :btree
+  add_index "shifts", ["shop_id"], name: "index_shifts_on_shop_id", using: :btree
+  add_index "shifts", ["user_id"], name: "index_shifts_on_user_id", using: :btree
+
+  create_table "shops", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "organisation_id"
+    t.datetime "opening_time"
+    t.datetime "closing_time"
+  end
+
+  add_index "shops", ["organisation_id"], name: "index_shops_on_organisation_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -29,9 +101,22 @@ ActiveRecord::Schema.define(version: 20160222144531) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "memberships", "shops"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "organisation_memberships", "organisations"
+  add_foreign_key "organisation_memberships", "users"
+  add_foreign_key "plannings", "shops"
+  add_foreign_key "plannings", "users"
+  add_foreign_key "shifts", "plannings"
+  add_foreign_key "shifts", "postes"
+  add_foreign_key "shifts", "shops"
+  add_foreign_key "shifts", "users"
+  add_foreign_key "shops", "organisations"
 end
