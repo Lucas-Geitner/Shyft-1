@@ -6,7 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 organisations = ["McDonald's", "Quick", "Exki"]
-postes = ["Kitchen", "Cashier", "Bar", "Dishwash"]
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -44,7 +43,7 @@ end
   shop.save
 end
 
-postes.each do |poste|
+User::POSTES.each do |poste|
   Poste.new(name: poste).save
 end
 
@@ -57,33 +56,39 @@ User.all.each do |user|
   membership = Membership.new(
     user: user,
     shop: Shop.all.sample,
-    role: choose_weighted({ rh_manager: 1, manager: 10, basic_employee: 100 }))
+    role: choose_weighted({ hr_manager: 1, line_manager: 10, basic_employee: 100 }))
   membership.save
 end
 
-Shop.all.each do |shop|
+User.joins(:memberships).where(memberships: {role: :line_manager}).each do |manager|
   start_date = Date.today + rand(4).months + rand(30).days
   end_date = start_date + 30.days
   rand(10).times do
     planning = Planning.new(
       start_date: start_date,
       end_date: end_date,
-      user: shop.memberships.sample.user,
-      shop: shop)
+      user: manager,
+      shop: manager.memberships.first.shop)
     planning.save
   end
 end
 
-User.all.each do |user|
-  poste = Poste.all.sample
-  planning = Planning.where(user: user).all.sample
-  shop = Membership.where(user: user).all.sample.shop
+User.joins(:memberships).where(memberships: {role: :basic_employee}).each do |employee|
+  Poste.all.sample(rand(1..Poste.count)).each do |poste|
+    Ability.new(user: employee, poste: poste).save
+  end
+
+  poste = employee.abilities.all.sample.poste
+  shop = employee.memberships.first.shop
+  planning = Planning.where(shop: shop).sample
+
   shift = Shift.new(
-    user: user,
+    user: employee,
     poste: poste,
     planning: planning,
-    shop: shop,
     starts_at: shop.opening_time + rand(3).hours,
     ends_at: shop.closing_time - rand(3).hours)
   shift.save
 end
+
+
