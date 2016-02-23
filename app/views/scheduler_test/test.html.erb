@@ -77,9 +77,14 @@
           if (cellsDroppedIn.length === 1) {
             if ($(ui.draggable).hasClass("item") === false) {
               $(this).parent().append($(ui.draggable).clone().addClass("item i-" + uniqueIdForItems).attr('data-toggle', 'popover').attr('data-placement', 'bottom'));
+
+              // POPOVER
+
               $('[data-toggle="popover"]').popover({
                 html: true,
-                content: "<a href='#' data-effect='delete'>delete</a>"
+                delay: { "show": 300, "hide": 50 },
+                trigger: "hover",
+                content: "<a href='#' data-effect='delete'><i class='fa fa-trash'></i></a>"
               });
             }
             $(".item").removeClass("ui-draggable product");
@@ -92,8 +97,8 @@
               scroll: false,
               revert: "invalid",
               start: function(e, ui) {
-                  cellsDroppedIn = []
-              },
+                cellsDroppedIn = []
+              }
             });
 
             // ITEM RESIZE
