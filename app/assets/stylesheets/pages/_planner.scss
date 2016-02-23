@@ -1,6 +1,89 @@
-#planner th, #planner td {
-  height: 70px;
-  width: 70px;
-  border: 1px solid $gray-lighter;
+#planner {
+  font-size: 14px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
+#planner td {
+  height: 30px;
+  min-width: 30px;
+  border: 1px solid $gray-lighter;
+  position:relative;
+}
+
+#planner th {
+  border: 1px solid $gray-lighter;
+  padding-left: 5px;
+}
+
+#agenda {
+  overflow-x: scroll;
+}
+#planner th:first-child {
+  padding-right: 10px;
+}
+
+.poste {
+  width: 60px;
+  height: 28px;
+  max-height: 28px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 2;
+  border-radius: 8px;
+}
+
+.poste > span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+.ui-resizable-se {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 10px;
+    height: 10px;
+    cursor: se-resize;
+}
+
+.blech {
+  margin-left: 2px;
+  height: 80%;
+  width: 80%;
+}
+
+.half-hour {
+  font-size: 8px;
+  color: $gray-light;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.name-padding-right {
+  padding-right: 5px;
+}
+
+#bin {
+  margin: 10px;
+  color: $gray-light;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 2px solid $gray-light;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+}

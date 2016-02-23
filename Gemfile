@@ -21,6 +21,7 @@ gem 'attachinary'
 gem 'jquery-fileupload-rails'
 gem 'coffee-rails'
 gem 'faker'
+gem 'jquery-ui-rails', '~> 5.0', '>= 5.0.5'
 
 group :development, :test do
   gem 'binding_of_caller'
