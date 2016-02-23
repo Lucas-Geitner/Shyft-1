@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-lg-8">
+      <%= simple_form_for(@poste) do |f| %>
+        <%= f.error_notification %>
+        <h1>Creer un nouveau poste</h1>
+        <%= f.input :name %>
+        <%= f.submit 'Creer'%>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <% @poste.each do |poste| %>
+      <div class="col-xs-12 col-sm-6 col-lg-8">
+      <%= poste.name %>
+      <% end -%>
+    </div>
+  </div>
+</div>
