@@ -2,6 +2,9 @@
 <div class="page-content-wrapper">
   <div class="container">
     <div class="row">
+      <%= link_to "Creer un Planning", new_planning_path, class: "btn btn-primary"%>
+    </div>
+    <div class="row">
       <%@plannings.each do |planning|%>
         <div class="col-xs-4">
         <p>Semaine du </p>

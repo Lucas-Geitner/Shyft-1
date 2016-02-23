@@ -4,7 +4,7 @@ class PlanningsController < ApplicationController
   end
 
   def new
-    @planning = Plannnig.new
+    @planning = Planning.new
   end
 
   def create
