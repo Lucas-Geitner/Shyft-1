@@ -72,7 +72,6 @@
 }
 
 #bin {
-  position: absolute;
   color: $gray-light;
   height: 50px;
   width: 50px;
@@ -85,11 +84,6 @@
 }
 
 #bin-padding {
-  height: 80px;
-  width: 100%;
-}
-
-#bin-wrapper {
   height: 80px;
   width: 100%;
 }
