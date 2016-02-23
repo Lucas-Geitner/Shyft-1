@@ -1,17 +1,117 @@
-<table id="planner">
-  <tr>
-    <th>Employees</th>
-    <% @range.each do |time| %>
-      <th colspan="2"><%= time %></th>
-    <% end %>
-  </tr>
-  <% @employees.each do |employee| %>
-    <tr>
-      <td><%= employee %></td>
-      <% @range.each do |time| %>
-        <td id="<%= "#{time}.00" %>"></td>
-        <td id="<%= "#{time}.30" %>"></td>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+      <div>
+        <p>Start time: <span id="start-time"></span></p>
+        <p>End time: <span id="end-time"></span></p>
+        <p>Employee: <span id="employee-name"></span></p>
+      </div>
+
+      <div id="agenda">
+        <div>
+          <% @postes.each do |poste| %>
+            <div class="poste resizable flex-center" style="background-color: <%= COLORS.sample %>"><%= poste %></div>
+          <% end %>
+        </div>
+        <table id="planner">
+          <tr>
+            <th>Employees</th>
+            <% @range.each do |time| %>
+              <th colspan="2"><%= time %>h</th>
+            <% end %>
+          </tr>
+          <% @employees.each do |employee| %>
+            <tr>
+              <td class="text-right name-padding-right"><%= employee %></td>
+              <% @range.each do |time| %>
+                <td class="time-cell" id="<%= "#{time}/#{employee}" %>"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.5/#{employee}" %>"><div class="blech"></div></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+        <div id="bin">
+          <i class="fa fa-trash"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :scripts do %>
+  <script>
+    $(function() {
+      var uniqueIdForItems = 0
+      var cellsDroppedIn = [];
+      $(".poste").draggable({
+        helper: "clone",
+        snap: ".time-cell",
+        snapMode: "inner",
+        revert: "invalid",
+        start: function(e, ui) {
+            cellsDroppedIn = []
+        },
+      });
+      $(".blech").droppable({
+        tolerance: "touch",
+        drop: function( event, ui ) {
+          cellsDroppedIn.push(parseFloat($(this).parent().attr("id")))
+          if (cellsDroppedIn.length === 1) {
+            if ($(ui.draggable).hasClass("item") === false) {
+              $(this).parent().append($(ui.draggable).clone().addClass("item i-" + uniqueIdForItems));
+            }
+            $(".item").removeClass("ui-draggable product");
+            $('.i-' + uniqueIdForItems).find('.ui-resizable-handle').remove();
+            $(".item").draggable({
+              snap: ".time-cell",
+              revert: "invalid",
+              start: function(e, ui) {
+                  cellsDroppedIn = []
+              },
+            });
+            $(".item").resizable({
+              grid: 30,
+              stop: function(e, ui) {
+                  var endTime = parseFloat($('#end-time').text())
+                  blechbefore = ui.originalSize
+                  blechafter = ui.size
+                  endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
+                  if (endTime > 23.5) {
+                    endTime -= 24
+                  }
+                  $("#end-time").text(endTime)
+              }
+            });
+            uniqueIdForItems += 1
+          }
+          var endTime = cellsDroppedIn[cellsDroppedIn.length - 1] + 0.5
+          var startTime = cellsDroppedIn[0]
+          var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
+          $('#start-time').text(startTime)
+          $('#end-time').text(endTime)
+          $('#employee-name').text(employeeName)
+        }
+      });
+      $("#bin").droppable({
+        tolerance: "touch",
+        accept: '.item',
+        drop: function(event, ui) {
+          $(ui.draggable).remove();
+        }
+      });
+      $(".resizable").resizable({
+        grid: 30,
+        stop: function(e, ui) {
+            var endTime = parseFloat($('#end-time').text())
+            blechbefore = ui.originalSize
+            blechafter = ui.size
+            endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
+            if (endTime > 23.5) {
+              endTime -= 24
+            }
+            $("#end-time").text(endTime)
+        }
+      });
+    });
+  </script>
+<% end %>
