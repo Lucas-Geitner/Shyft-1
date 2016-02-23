@@ -82,8 +82,8 @@
 
               $('[data-toggle="popover"]').popover({
                 html: true,
-                delay: { "show": 300, "hide": 50 },
-                trigger: "hover",
+                trigger: "click hover",
+                delay: {"show": "300", "hide": "50"},
                 content: "<a href='#' data-effect='delete'><i class='fa fa-trash'></i></a>"
               });
             }
@@ -117,6 +117,7 @@
               }
             });
             uniqueIdForItems += 1
+            $('.popover').hide();
           }
           var endTime = cellsDroppedIn[cellsDroppedIn.length - 1] + 0.5
           var startTime = cellsDroppedIn[0]
