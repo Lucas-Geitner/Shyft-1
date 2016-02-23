@@ -17,7 +17,8 @@
 }
 
 #agenda {
-  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 #planner th:first-child {
   padding-right: 10px;
@@ -71,19 +72,42 @@
 }
 
 #bin {
-  margin: 10px;
+  position: absolute;
   color: $gray-light;
+  height: 50px;
+  width: 50px;
   font-size: 20px;
   border-radius: 50%;
   border: 2px solid $gray-light;
-  height: 50px;
-  width: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+#bin-padding {
+  height: 80px;
+  width: 100%;
+}
+
+#bin-wrapper {
+  height: 80px;
+  width: 100%;
+}
+
 .item {
   position: absolute;
   top: 0;
+  z-index: 90;
+}
+
+.agenda-wrapper {
+  margin-left: 20px;
+}
+
+.postes-list {
+  margin-bottom: 20px;
+}
+
+.postes-list > .row > div {
+  padding-top: 10px;
 }
