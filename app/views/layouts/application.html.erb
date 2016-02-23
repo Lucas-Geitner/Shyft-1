@@ -6,13 +6,25 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <%= stylesheet_link_tag    'application', media: 'all' %>
   </head>
   <body>
     <%= render 'shared/navbar' %>
     <%= render 'shared/flashes' %>
-    <%= yield %>
+
+    <div id="wrapper">
+      <%= render 'shared/sidebar' %>
+
+      <%= yield %>
+    </div>
     <%= javascript_include_tag 'application' %>
+    <script>
+      $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+    </script>
     <%= yield :scripts %>
   </body>
 </html>
