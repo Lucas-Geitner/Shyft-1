@@ -1,12 +1,13 @@
 class PostesController < ApplicationController
   def new
     @poste = Poste.new
+    @postes = Poste.all
   end
 
   def create
     @poste = Poste.new(poste_params)
     @poste.save
-    redirect_to postes_path
+    redirect_to new_poste_path
   end
 
   def edit

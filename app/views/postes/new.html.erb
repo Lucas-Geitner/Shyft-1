@@ -1,1 +1,21 @@
 <%= render 'form'%>
+<div class="container">
+  <h1>Liste des Postes</h1>
+  <div class="row">
+    <% @postes.each do |poste|%>
+      <div class="poste-flex">
+        <div>
+          <%= poste.name %>
+        </div>
+        <div style="flex-grow: 1">
+        </div>
+        <div>
+          <%= link_to "Modifier", edit_poste_path(poste),class: "btn btn-primary" %>
+        </div>
+        <div>
+          <%= link_to "Supprimer", poste_path(poste), method: :delete, data: {confirm: "are you sure?"}, class: "btn btn-danger" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
