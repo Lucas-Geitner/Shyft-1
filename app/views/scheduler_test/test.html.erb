@@ -42,7 +42,7 @@
 <% content_for :scripts do %>
   <script>
     // POPOVER DELETE
-    $("body").on('click', '[data-effect="delete"]', function(e){
+    $("#agenda").on('click', '[data-effect="delete"]', function(e){
     e.preventDefault();
     $(this).parent().parent().parent().find(".item").remove()
     $(this).parent().parent().remove()
