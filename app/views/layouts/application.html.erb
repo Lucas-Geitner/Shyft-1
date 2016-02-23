@@ -15,8 +15,9 @@
 
     <div id="wrapper">
       <%= render 'shared/sidebar' %>
-
+      <div class="page-content-wrapper">
       <%= yield %>
+      </div>
     </div>
     <%= javascript_include_tag 'application' %>
     <script>
@@ -25,6 +26,7 @@
         $("#wrapper").toggleClass("toggled");
       });
     </script>
+    <%= cloudinary_js_config %>
     <%= yield :scripts %>
   </body>
 </html>

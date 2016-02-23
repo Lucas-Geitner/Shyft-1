@@ -16,6 +16,11 @@ gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'simple_form'
 gem 'autoprefixer-rails'
+gem 'cloudinary'
+gem 'attachinary'
+gem 'jquery-fileupload-rails'
+gem 'coffee-rails'
+gem 'faker'
 gem 'jquery-ui-rails', '~> 5.0', '>= 5.0.5'
 
 group :development, :test do

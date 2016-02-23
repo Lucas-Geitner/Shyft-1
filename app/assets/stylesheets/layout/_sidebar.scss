@@ -49,16 +49,12 @@
     width: 225px;
 }
 
-#page-content-wrapper {
+.page-content-wrapper {
     width: 100%;
     position: absolute;
     padding: 15px;
 }
 
-#wrapper.toggled #page-content-wrapper {
-    position: absolute;
-    margin-right: -250px;
-}
 
 /* Sidebar Styles */
 .sidebar-nav {
@@ -115,6 +111,10 @@
 }
 
 @media(min-width:768px) {
+   .poste-flex {
+      display: flex;
+      margin-right: 225px;
+    }
     #wrapper {
         padding-left: 225px;
     }
@@ -131,15 +131,21 @@
         width: 0;
     }
 
-    #page-content-wrapper {
-        padding: 20px;
-        position: relative;
+    .page-content-wrapper {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      top: 70px;
+      padding: 15px 20px;
+      //padding-right: 225px;
+    }
+    #wrapper.toggled .page-content-wrapper {
+      margin-right: -225px;
+    }
+    #wrapper.toggled .poste-flex {
+      margin-right: 0px;
     }
 
-    #wrapper.toggled #page-content-wrapper {
-        position: relative;
-        margin-right: 0;
-    }
 }
 
 .icon {

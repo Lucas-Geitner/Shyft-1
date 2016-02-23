@@ -1,2 +1,7 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<h1>Add an employee</h1>
+<%= simple_form_for @user do |f| %>
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+  <%# f.collection_check_boxes :postes, [[true, 'Yes'] ,[false, 'No']], :first, :last %>
+  <%= f.button :submit, value: "Create" %>
+<% end %>
