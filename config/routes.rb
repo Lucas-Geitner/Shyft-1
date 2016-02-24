@@ -11,7 +11,8 @@ Rails.application.routes.draw do
 
   devise_for :users
   root to: 'pages#home'
-  resources :users, except: :index
+  resources :users, except: [:index, :create]
+  post 'users_custom' => "users#create", as: :custom
   resources :plannings, except: :index
   resources :postes, except: :index
   resources :shifts, only: [:create, :update, :destroy]
