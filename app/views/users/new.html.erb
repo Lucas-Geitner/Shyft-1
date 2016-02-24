@@ -1,11 +1,12 @@
 <h1>Add an employee</h1>
-<%= simple_form_for @user do |f| %>
-  <%= f.input :first_name %>
-  <%= f.input :last_name %>
-  <%= f.fields_for @membership do |builder| %>
-    <%= builder.input :role, type: :select, collection: Membership::ROLES %>
+<%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
+
+<h1>My users</h1>
+
+<div id="users">
+  <% @shop_employees.each do |employee| %>
+    <%= employee.first_name %>
+    <%= employee.last_name %>
+    </br>
   <% end %>
-
-
-  <%= f.button :submit, value: "Create" %>
-<% end %>
+</div>
