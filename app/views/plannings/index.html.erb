@@ -1,42 +1,53 @@
-<h1>Plannings#index</h1>
-<div class="page-content-wrapper">
+<!-- search container on index -->
   <div class="container">
-    <div class="row">
-      <%#= link_to "Creer un Planning", new_planning_path, class: "btn btn-primary", data-toggle: "modal" data-target: "#myModal"%>
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
-        Create new planning
-      </button>
+    <div class="search-container">
+      <form action="/shops/<%= @shop.id %>/plannings" class="search-container">
+          <label>Date</label>
+          <input name="date" class="datepicker" >
+          <input type="submit" class="btn btn-success" value="Rechercher">
+      </form>
     </div>
-    <div class="row">
-      <%@plannings.each do |planning|%>
-        <div class="col-xs-4">
-        <p>Semaine du </p>
-        <%=planning.start_date.strftime("%d.%m.%y")%>au<%=planning.end_date.strftime("%d.%m.%y")%>
-        <%= link_to "Voir le Planning", planning_path(planning), class: "btn btn-success"%>
+
+    <div class="container">
+      <div class="row">
+        <div class="create-container">
+        <%#= link_to "Creer un Planning", new_planning_path, class: "btn btn-primary", data-toggle: "modal" data-target: "#myModal"%>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+          Create new planning
+        </button>
         </div>
-       <%end%>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
-      <div class="modal-body">
-      <!-- login -->
-      <%= render 'form'%>
-
-       <!-- login -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary">Creer</button>
+      <div class="row">
+        <%@plannings.each do |planning|%>
+          <div class="col-xs-4">
+          <p>Semaine du </p>
+          <%=planning.start_date.strftime("%d.%m.%y")%>au<%=planning.end_date.strftime("%d.%m.%y")%>
+          <%= link_to "Voir le Planning", planning_path(planning), class: "btn btn-success"%>
+          </div>
+         <%end%>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Nouveau planning</h4>
+        </div>
+        <div class="modal-body">
+        <!-- login -->
+        <%= render 'form'%>
+
+         <!-- login -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <!-- <button type="button" class="btn btn-primary">Creer</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
