@@ -1,0 +1,15 @@
+<%= simple_nested_form_for user, url: custom_path do |f| %>
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+  <%= f.input :email %>
+  <%= f.input :password %>
+  <%= f.fields_for membership do |builder| %>
+    <%= builder.input :role, type: :select, collection: Membership::ROLES %>
+    <%= builder.input :user, as: :hidden, :input_html => { :value => user } %>
+  <% end %>
+  <%= f.fields_for ability do |builder| %>
+    <%= builder.input :poste, as: :check_boxes, collection: Poste.all %>
+    <%= builder.input :user, as: :hidden, :input_html => { :value => user } %>
+  <% end %>
+  <%= f.button :submit, value: "Create" %>
+<% end %>
