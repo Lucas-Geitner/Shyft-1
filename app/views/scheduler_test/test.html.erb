@@ -39,6 +39,12 @@
   </div>
 </div>
 
+<div>
+  <ul id="shift-listing">
+
+  </ul>
+</div>
+
 <% content_for :scripts do %>
   <script>
     // POPOVER DELETE
@@ -98,6 +104,7 @@
               revert: "invalid",
               start: function(e, ui) {
                 cellsDroppedIn = []
+                console.log($(ui['helper']['0']).parent().attr("id"))
               }
             });
 
@@ -106,7 +113,9 @@
             $(".item").resizable({
               grid: 30,
               stop: function(e, ui) {
-                  var endTime = parseFloat($('#end-time').text())
+                  var elementId = $(ui.element[0]).parent().attr("id")
+                  var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
+                  var endTime = parseFloat($(lineInList).find('#end-list').text())
                   blechbefore = ui.originalSize
                   blechafter = ui.size
                   endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
@@ -114,17 +123,21 @@
                     endTime -= 24
                   }
                   $("#end-time").text(endTime)
+                  $(lineInList).find('#end-list').text(endTime)
               }
             });
-            uniqueIdForItems += 1
             $('.popover').hide();
+
+            var endTime = cellsDroppedIn[cellsDroppedIn.length - 1] + 1
+            var startTime = cellsDroppedIn[0]
+            var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
+            var jobName = $('.i-' + uniqueIdForItems)[0].textContent
+            $('#start-time').text(startTime)
+            $('#end-time').text(endTime)
+            $('#employee-name').text(employeeName)
+            $('#shift-listing').append("<li>" + employeeName + ": " + startTime + 'h - ' + "<span id='end-list'>" + endTime + "</span>" + 'h, is ' + jobName + '</li>')
+            uniqueIdForItems += 1
           }
-          var endTime = cellsDroppedIn[cellsDroppedIn.length - 1] + 0.5
-          var startTime = cellsDroppedIn[0]
-          var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
-          $('#start-time').text(startTime)
-          $('#end-time').text(endTime)
-          $('#employee-name').text(employeeName)
         }
       });
 
