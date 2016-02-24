@@ -1,7 +1,8 @@
 <h1><%= @user.first_name + " " + @user.last_name %></h1>
-<ul>
-  <li><strong>role:</strong> <%= @user.memberships.first.role %></li>
-  <li><strong>email:</strong> <%= @user.email %> </li>
-  <li><strong>skillz:</strong> <%= @user.abilities.map{ |a| a.poste.name.capitalize }.join(" ") %></li>
-</ul>
+<p><strong>role:</strong> <%= @user.memberships.first.role %></p>
+<p><strong>email:</strong> <%= @user.email %> </p>
+<p><strong>skillz:</strong> <%= @user.abilities.map{ |a| a.poste.name.capitalize }.join(" ") %></p>
+<% if @user.contract? %>
+  <%= link_to "Contract", "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" %>
+<% end %>
 
