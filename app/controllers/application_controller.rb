@@ -8,4 +8,14 @@ class ApplicationController < ActionController::Base
   def set_shop_for_user
     @shop = current_user.shops.first
   end
+
+  def find_today_planning
+    if @plannings = Planning.where("start_date < ? AND end_date > ?", Date.today, Date.today) != ""
+        redirect_to planning_path(planning)
+    else
+      @plannings = Planning.all
+    end
+  end
 end
+
+
