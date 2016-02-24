@@ -1,0 +1,17 @@
+<% if @user.errors.any? %>
+  // Render new user form with errors
+  // $('#new_user').html("<%= j render 'users/form', user: @user %>");
+<% else %>
+  // Create a paragraph for the new user. But hide it.
+  var first_name = '<td><%= j @user.first_name %></td>'
+  var last_name = '<td><%= j @user.last_name %></td>'
+  var role = '<td><%= j @user.memberships.first.role %></td>'
+  var postes = '<td><%= j @user.abilities.map{ |a| a.poste.name.capitalize }.join(" ") %></td>'
+  var new_user = '<tr>' + first_name + last_name + role + postes + '</tr>'
+  // Add it to the DOM, at the end of the existing users. It's still hidden.
+  $('#employees tr:first').after(new_user);
+  // Show the new user with an animation!
+  new_user.slideDown();
+  // Remove the text from the content textarea.
+  $('#user_content').val('');
+<% end %>
