@@ -9,5 +9,6 @@
   <%= f.fields_for ability do |builder| %>
     <%= builder.input :poste, as: :check_boxes, collection: Poste.all %>
   <% end %>
+  <%= f.input :photo, as: :attachinary %>
   <%= f.button :submit, value: "Create" %>
 <% end %>
