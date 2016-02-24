@@ -3,28 +3,32 @@ class UsersController < ApplicationController
     @user = User.new
     @membership = Membership.new
     @ability = Ability.new
+
+    #TEMPORARY!!
+    @shop = Shop.first
     @shop_employees = User.joins(:memberships).where(memberships: {shop_id: 1})
   end
 
   def show
+    @user = User.find(params[:id])
   end
 
   def create
     @user = User.new(user_params)
-    Membership.create(
-      user: @user,
-      role: params[:user][:membership][:role])
-    postes = []
+
+    @shop = Shop.first
+
+    @membership = @user.memberships.build(role: params[:user][:membership][:role], shop: @shop)
+    @abilities = []
     params[:user][:ability][:poste].reject(&:empty?).each do |i|
-      postes << Poste.all.pluck("name")[i.to_i - 1]
-    end
-    postes.each do |poste|
-      Ability.create(
-        user: @user,
-        poste: Poste.find_by_name(poste))
+      ability = @user.abilities.build(poste_id: i.to_i)
+      @abilities << ability
     end
 
-    if @user.save
+    if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
+      @user.save
+      @membership.save
+      @abilities.each { |ability| ability.save }
       respond_to do |format|
         format.html { redirect_to user_path(@user) }
         format.js
@@ -49,6 +53,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :contract)
   end
 end

@@ -1,8 +1,11 @@
 class PlanningsController < ApplicationController
   def index
-    @plannings = Planning.all
+    if params[:date]
+      @plannings = Planning.where("start_date < ? AND end_date > ?", params[:date], params[:date])
+    else
+      @plannings = Planning.all
+    end
     @planning = Planning.new
-    # @shop = current_user.shops.first
   end
 
   def new

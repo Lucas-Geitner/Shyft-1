@@ -1,8 +1,9 @@
 <%= simple_form_for [@shop, @planning] do |f| %>
   <%= f.error_notification %>
-  <%= f.input :start_date%>
-  <%= f.input :end_date%>
-  <%= f.submit 'Creer'%>
+  <%= f.input :start_date, as: :string, input_html: {value: '20/02/2016', class: "datepicker"}%>
+  <%= f.input :end_date, as: :string, input_html: {value: '21/02/2016', class: "datepicker"} %>
+
+  <%= f.submit 'Creer', class: "btn btn-primary"%>
 <% end %>
 
     <!-- <form action="#">

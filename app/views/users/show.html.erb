@@ -1,2 +1,8 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<h1><%= @user.first_name + " " + @user.last_name %></h1>
+<p><strong>role:</strong> <%= @user.memberships.first.role %></p>
+<p><strong>email:</strong> <%= @user.email %> </p>
+<p><strong>skillz:</strong> <%= @user.abilities.map{ |a| a.poste.name.capitalize }.join(" ") %></p>
+<% if @user.contract? %>
+  <%= link_to "Contract", "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" %>
+<% end %>
+

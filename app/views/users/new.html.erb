@@ -1,15 +1,33 @@
 <h1>Add an employee</h1>
 <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
+</br>
 
-<h1>My users</h1>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">My employees</div>
 
-
-
-
-<div id="users">
-  <% @shop_employees.each do |employee| %>
-    <%= employee.first_name %>
-    <%= employee.last_name %>
-    </br>
-  <% end %>
+  <!-- Table -->
+  <table class="table" id="employees">
+    <th>
+      <td>First Name</td>
+      <td>Last Name</td>
+      <td>Role</td>
+      <td>Possible jobs</td>
+    </th>
+    <% @shop_employees.each_with_index do |employee, i| %>
+      <tr id="employees-list">
+        <td><%= i + 1 %></td>
+        <td><%= employee.first_name %></td>
+        <td><%= employee.last_name %></td>
+        <!-- TEMPORARY!!! CHANGE TO CURRENT SHOP -->
+        <td><%= employee.memberships.first.role %></td>
+        <td>
+          <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+            <%= poste.name %>
+          <% end %>
+        </td>
+        <td><%= link_to "View profile", user_path(employee) %></td>
+      </tr>
+    <% end %>
+  </table>
 </div>
