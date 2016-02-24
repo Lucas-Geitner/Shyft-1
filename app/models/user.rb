@@ -12,4 +12,6 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
   accepts_nested_attributes_for :abilities, allow_destroy: true
+
+  has_attachment :contract
 end

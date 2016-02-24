@@ -9,7 +9,9 @@
          <% end %>
       </li>
       <li>
-        <a href="#"><i class="fa fa-users icon" ></i>Mes Employés</a>
+        <%= link_to new_user_path do %>
+          <i class="fa fa-users icon" ></i>Mes Employés
+        <% end %>
       </li>
       <li>
         <%= link_to new_poste_path do %>

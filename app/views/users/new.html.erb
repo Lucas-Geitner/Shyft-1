@@ -16,7 +16,6 @@
     </th>
     <% @shop_employees.each_with_index do |employee, i| %>
       <tr id="employees-list">
-        <%= link_to "", user_path(employee) %>
         <td><%= i + 1 %></td>
         <td><%= employee.first_name %></td>
         <td><%= employee.last_name %></td>
@@ -27,17 +26,8 @@
             <%= poste.name %>
           <% end %>
         </td>
+        <td><%= link_to "View profile", user_path(employee) %></td>
       </tr>
     <% end %>
   </table>
 </div>
-
-<% content_for :scripts do %>
-  <script>
-    $('#employees-list').click( function() {
-        window.location = $(this).find('a').attr('href');
-    }).hover( function() {
-        $(this).toggleClass('hover');
-    });
-  </script>
-<% end %>
