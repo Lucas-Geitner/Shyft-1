@@ -1,5 +1,6 @@
 class SchedulerTestController < ApplicationController
   def test
+    @today = DateTime.new(1998, 6, 5)
     @start_time = 8
     @end_time = 4
     if @end_time < @start_time
@@ -8,7 +9,9 @@ class SchedulerTestController < ApplicationController
     else
       @range = (@start_time..@end_time).to_a
     end
-    @employees = ["Paul","Jean","Marc","Etienne"]
-    @postes = ["barista", "accueil", "cuisine", "service"]
+    @employees = %w(Jesse Sister Andreane Kenneth)
+    @postes = %w(kitchen cashier bar dishwash)
+    @shift = Shift.new()
+    @planning = Planning.find(params[:planning_id])
   end
 end

@@ -32,6 +32,18 @@
         </tr>
       <% end %>
     </table>
+      <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }) do |f| %>
+      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year %>
+      <%= f.input :poste, input_html: { id: "destroy_poste" }  %>
+      <%= f.input :user, input_html: { id: "destroy_user" }  %>
+    <% end %>
+    <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
+      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :poste, as: :hidden %>
+      <%= f.input :user, as: :hidden %>
+    <% end %>
+
     <div id="bin">
       <i class="fa fa-trash"></i>
     </div>
@@ -39,19 +51,34 @@
   </div>
 </div>
 
+<div>
+  <ul id="shift-listing">
+
+  </ul>
+</div>
+
 <% content_for :scripts do %>
   <script>
     // POPOVER DELETE
     $("#agenda").on('click', '[data-effect="delete"]', function(e){
-    e.preventDefault();
-    $(this).parent().parent().parent().find(".item").remove()
-    $(this).parent().parent().remove()
+      e.preventDefault();
+      $(this).parent().parent().parent().find(".item").remove()
+      $(this).parent().parent().remove()
     });
 
 
     $(function() {
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
+      $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
+      $("#find_destroy #shift_starts_at_2i").val("<%= @today.month %>")
+      $("#find_destroy #shift_starts_at_3i").val("<%= @today.day %>")
+      $("#new_shift #shift_starts_at_1i").val("<%= @today.year %>")
+      $("#new_shift #shift_starts_at_2i").val("<%= @today.month %>")
+      $("#new_shift #shift_starts_at_3i").val("<%= @today.day %>")
+      $("#new_shift #shift_ends_at_1i").val("<%= @today.year %>")
+      $("#new_shift #shift_ends_at_2i").val("<%= @today.month %>")
+      $("#new_shift #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
 
@@ -82,49 +109,88 @@
 
               $('[data-toggle="popover"]').popover({
                 html: true,
-                trigger: "click hover",
+                trigger: "click",
                 delay: {"show": "300", "hide": "50"},
                 content: "<a href='#' data-effect='delete'><i class='fa fa-trash'></i></a>"
               });
-            }
-            $(".item").removeClass("ui-draggable product");
-            $('.i-' + uniqueIdForItems).find('.ui-resizable-handle').remove();
+              $(".item").removeClass("ui-draggable product");
+              $('.i-' + uniqueIdForItems).find('.ui-resizable-handle').remove();
 
-            // ITEM DRAG
+              // ITEM DRAG
 
-            $(".item").draggable({
-              snap: ".time-cell",
-              scroll: false,
-              revert: "invalid",
-              start: function(e, ui) {
-                cellsDroppedIn = []
-              }
-            });
-
-            // ITEM RESIZE
-
-            $(".item").resizable({
-              grid: 30,
-              stop: function(e, ui) {
-                  var endTime = parseFloat($('#end-time').text())
-                  blechbefore = ui.originalSize
-                  blechafter = ui.size
-                  endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
-                  if (endTime > 23.5) {
-                    endTime -= 24
+              $(".item").draggable({
+                snap: ".time-cell",
+                scroll: false,
+                revert: "invalid",
+                start: function(e, ui) {
+                  cellsDroppedIn = []
+                  var elementId = $(ui['helper']['0']).parent().attr("id")
+                  var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
+                  var employeeName = elementId.match(/\/(.*)$/)[1]
+                  var jobName = e.target.textContent
+                  var startTime = parseFloat(elementId)
+                  if ( startTime % 1 > 0 ) {
+                    var startSeconds = 30
+                  } else {
+                    var startSeconds = "00"
                   }
-                  $("#end-time").text(endTime)
-              }
-            });
-            uniqueIdForItems += 1
+                  $("#find_destroy #shift_starts_at_4i").val(Math.floor(startTime))
+                  $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+                  $('#destroy_user').val(employeeName)
+                  $('#destroy_poste').val(jobName)
+                  $(lineInList).remove()
+                  $('#find_destroy').submit()
+                }
+              });
+
+              // ITEM RESIZE
+
+              $(".item").resizable({
+                grid: 30,
+                stop: function(e, ui) {
+                    var elementId = $(ui.element[0]).parent().attr("id")
+                    var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
+                    var endTime = parseFloat($(lineInList).find('#end-list').text())
+                    blechbefore = ui.originalSize
+                    blechafter = ui.size
+                    endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
+                    if (endTime > 23.5) {
+                      endTime -= 24
+                    }
+                    $(lineInList).find('#end-list').text(endTime)
+                }
+              });
+
+            } else {
+              $(this).parent().append($(ui.draggable).css({"top": "0", "left": "0"}));
+            }
             $('.popover').hide();
+            var startTime = cellsDroppedIn[0]
+            var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
+            var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
+            var jobName = $(ui.draggable)[0].textContent
+            if ( startTime % 1 > 0 ) {
+              var startSeconds = 30
+            } else {
+              var startSeconds = "00"
+            }
+            if ( endTime % 1 > 0 ) {
+              var endSeconds = 30
+            } else {
+              var endSeconds = "00"
+            }
+            $('#shift_poste').val(jobName)
+            console.log(startTime)
+            console.log(endTime)
+            $("#new_shift #shift_starts_at_4i").val(Math.floor(startTime))
+            $("#new_shift #shift_starts_at_5i").val(startSeconds)
+            $("#new_shift #shift_ends_at_4i").val(Math.floor(endTime))
+            $("#new_shift #shift_ends_at_5i").val(endSeconds)
+            $("#new_shift #shift_user").val(employeeName)
+            $('#shift-listing').append("<li>" + employeeName + ": " + startTime + 'h - ' + "<span id='end-list'>" + endTime + "</span>" + 'h, is ' + jobName + '</li>')
+            uniqueIdForItems += 1
+            $("#new_shift").submit()
           }
-          var endTime = cellsDroppedIn[cellsDroppedIn.length - 1] + 0.5
-          var startTime = cellsDroppedIn[0]
-          var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
-          $('#start-time').text(startTime)
-          $('#end-time').text(endTime)
-          $('#employee-name').text(employeeName)
         }
       });
 
@@ -135,22 +201,6 @@
         accept: '.item',
         drop: function(event, ui) {
           $(ui.draggable).remove();
-        }
-      });
-
-      // RESIZE
-
-      $(".resizable").resizable({
-        grid: 30,
-        stop: function(e, ui) {
-            var endTime = parseFloat($('#end-time').text())
-            blechbefore = ui.originalSize
-            blechafter = ui.size
-            endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
-            if (endTime > 23.5) {
-              endTime -= 24
-            }
-            $("#end-time").text(endTime)
         }
       });
     });
