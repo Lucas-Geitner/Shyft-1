@@ -22,7 +22,7 @@ end
 300.times do
   user = User.new(
     email: Faker::Internet.email,
-    password: Faker::Internet.password(8),
+    password: "aaaaaaaa",
     first_name: Faker::Name.first_name,
     last_name:Faker::Name.last_name)
   user.save

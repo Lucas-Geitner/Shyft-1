@@ -5,7 +5,7 @@
       <%#= link_to "Creer un Planning", new_planning_path, class: "btn btn-primary", data-toggle: "modal" data-target: "#myModal"%>
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
-        Create modal planning
+        Create new planning
       </button>
     </div>
     <div class="row">
@@ -29,21 +29,13 @@
       </div>
       <div class="modal-body">
       <!-- login -->
-              <form action="#">
-                <div class="form-group">
-                  <label>Your email</label>
-                  <input type="email" class="form-control" placeholder="bob@gmail.com">
-                </div>
-                <div class="form-group">
-                  <label>Your password</label>
-                  <input type="password" class="form-control" placeholder="********">
-                </div>
-              </form>
+      <%= render 'form'%>
+
        <!-- login -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary">Creer</button>
       </div>
     </div>
   </div>

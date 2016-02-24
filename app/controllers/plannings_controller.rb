@@ -1,6 +1,8 @@
 class PlanningsController < ApplicationController
   def index
     @plannings = Planning.all
+    @planning = Planning.new
+    # @shop = current_user.shops.first
   end
 
   def new
@@ -8,9 +10,9 @@ class PlanningsController < ApplicationController
   end
 
   def create
-    @planning = planning.new(planning_params)
+    @planning = Planning.new(planning_params)
     @planning.save
-    redirect_to planning_path(@planning)
+    redirect_to planning_path(@shop, @planning)
   end
 
   def edit
