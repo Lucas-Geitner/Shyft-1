@@ -2,6 +2,10 @@
 <%= simple_form_for @user do |f| %>
   <%= f.input :first_name %>
   <%= f.input :last_name %>
-  <%# f.collection_check_boxes :postes, [[true, 'Yes'] ,[false, 'No']], :first, :last %>
+  <%= f.fields_for @membership do |builder| %>
+    <%= builder.input :role, type: :select, collection: Membership::ROLES %>
+  <% end %>
+
+
   <%= f.button :submit, value: "Create" %>
 <% end %>
