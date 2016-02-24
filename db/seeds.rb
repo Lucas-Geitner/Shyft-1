@@ -6,6 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 organisations = ["McDonald's", "Quick", "Exki"]
+postes = %w(kitchen cashier bar dishwash)
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -21,7 +22,7 @@ end
 300.times do
   user = User.new(
     email: Faker::Internet.email,
-    password: Faker::Internet.password(8),
+    password: "aaaaaaaa",
     first_name: Faker::Name.first_name,
     last_name:Faker::Name.last_name)
   user.save
@@ -43,7 +44,7 @@ end
   shop.save
 end
 
-User::POSTES.each do |poste|
+postes.each do |poste|
   Poste.new(name: poste).save
 end
 

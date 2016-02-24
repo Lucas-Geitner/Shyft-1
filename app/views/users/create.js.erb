@@ -1,0 +1,13 @@
+<% if @employee.errors.any? %>
+  // Render new employee form with errors
+  $('#new_employee').html("<%= j render 'employees/form', restaurant: @restaurant, employee: @employee %>");
+<% else %>
+  // Create a paragraph for the new employee. But hide it.
+  var new_employee = $("<%= j render 'employees/show', employee: @employee %>").hide();
+  // Add it to the DOM, at the end of the existing employees. It's still hidden.
+  $('#employees').append(new_employee);
+  // Show the new employee with an animation!
+  new_employee.slideDown();
+  // Remove the text from the content textarea.
+  $('#employee_content').val('');
+<% end %>
