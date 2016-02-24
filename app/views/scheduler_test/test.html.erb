@@ -32,12 +32,16 @@
         </tr>
       <% end %>
     </table>
-    <%= simple_form_for([@planning, @shift]) do |f| %>
+      <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }) do |f| %>
       <%= f.input :starts_at, start_year: @today.year, end_year: @today.year %>
-      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year %>
-      <%= f.input :poste %>
-      <%= f.input :user %>
-      <%= f.submit %>
+      <%= f.input :poste, input_html: { id: "destroy_poste" }  %>
+      <%= f.input :user, input_html: { id: "destroy_user" }  %>
+    <% end %>
+    <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
+      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :poste, as: :hidden %>
+      <%= f.input :user, as: :hidden %>
     <% end %>
 
     <div id="bin">
@@ -66,10 +70,15 @@
     $(function() {
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
-      $("#shift_starts_at_2i").val("<%= @today.month %>")
-      $("#shift_ends_at_2i").val("<%= @today.month %>")
-      $("#shift_starts_at_3i").val("<%= @today.day %>")
-      $("#shift_ends_at_3i").val("<%= @today.day %>")
+      $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
+      $("#find_destroy #shift_starts_at_2i").val("<%= @today.month %>")
+      $("#find_destroy #shift_starts_at_3i").val("<%= @today.day %>")
+      $("#new_shift #shift_starts_at_1i").val("<%= @today.year %>")
+      $("#new_shift #shift_starts_at_2i").val("<%= @today.month %>")
+      $("#new_shift #shift_starts_at_3i").val("<%= @today.day %>")
+      $("#new_shift #shift_ends_at_1i").val("<%= @today.year %>")
+      $("#new_shift #shift_ends_at_2i").val("<%= @today.month %>")
+      $("#new_shift #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
 
@@ -117,7 +126,20 @@
                   cellsDroppedIn = []
                   var elementId = $(ui['helper']['0']).parent().attr("id")
                   var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
+                  var employeeName = elementId.match(/\/(.*)$/)[1]
+                  var jobName = e.target.textContent
+                  var startTime = parseFloat(elementId)
+                  if ( startTime % 1 > 0 ) {
+                    var startSeconds = 30
+                  } else {
+                    var startSeconds = "00"
+                  }
+                  $("#find_destroy #shift_starts_at_4i").val(Math.floor(startTime))
+                  $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+                  $('#destroy_user').val(employeeName)
+                  $('#destroy_poste').val(jobName)
                   $(lineInList).remove()
+                  $('#find_destroy').submit()
                 }
               });
 
@@ -160,11 +182,11 @@
             $('#shift_poste').val(jobName)
             console.log(startTime)
             console.log(endTime)
-            $("#shift_starts_at_4i").val(Math.floor(startTime))
-            $("#shift_starts_at_5i").val(startSeconds)
-            $("#shift_ends_at_4i").val(Math.floor(endTime))
-            $("#shift_ends_at_5i").val(endSeconds)
-            $("#shift_user").val(employeeName)
+            $("#new_shift #shift_starts_at_4i").val(Math.floor(startTime))
+            $("#new_shift #shift_starts_at_5i").val(startSeconds)
+            $("#new_shift #shift_ends_at_4i").val(Math.floor(endTime))
+            $("#new_shift #shift_ends_at_5i").val(endSeconds)
+            $("#new_shift #shift_user").val(employeeName)
             $('#shift-listing').append("<li>" + employeeName + ": " + startTime + 'h - ' + "<span id='end-list'>" + endTime + "</span>" + 'h, is ' + jobName + '</li>')
             uniqueIdForItems += 1
             $("#new_shift").submit()
