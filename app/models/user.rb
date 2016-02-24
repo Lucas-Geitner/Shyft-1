@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :plannings
   has_many :shifts
   has_many :abilities
+  has_many :shops, through: :memberships
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

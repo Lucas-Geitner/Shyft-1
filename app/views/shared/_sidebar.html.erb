@@ -2,20 +2,28 @@
   <ul class="sidebar-nav">
     <li class="sidebar-brand"><h4>Dashboard</h4>
     </li>
-    <li>
-      <%= link_to new_planning_path, do %>
-         <i class="fa fa-calendar icon"></i>
-       <% end %>
-    </li>
-    <li>
-      <a href="#"><i class="fa fa-users icon" ></i>Mes Employés</a>
-    </li>
-    <li>
-      <a href="#"><i class="fa fa-list icon"></i>Postes</a>
-    </li>
-    <li>
-      <a href="#"><i class="fa fa-file-text-o icon"></i>Apercu Nbre heure</a>
-    </li>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to shop_plannings_path(@shop) do %>
+          <i class="fa fa-calendar icon"></i>Mes plannings
+         <% end %>
+      </li>
+      <li>
+        <a href="#"><i class="fa fa-users icon" ></i>Mes Employés</a>
+      </li>
+      <li>
+        <%= link_to new_poste_path do %>
+          <i class="fa fa-list icon"></i>Postes
+         <% end %>
+      </li>
+      <li>
+        <a href="#"><i class="fa fa-file-text-o icon"></i>Apercu Nbre heure</a>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to
+      </li>
+    <% end %>
   </ul>
 </div>
 <a href="#menu-toggle" class="sidebar-wrapper-border" id="menu-toggle"></a>
