@@ -137,22 +137,23 @@
           $(ui.helper).removeClass("grab")
           $(ui.helper).addClass("dragged-poste")
           cellsDroppedIn = []
-          var elementId = $(ui['helper']['0']).parent().attr("id")
-          var employeeName = elementId.match(/\/(.*)$/)[1]
-          var jobName = e.target.textContent
-          var startTime = parseFloat(elementId)
-          var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-          if ( startTime % 1 > 0 ) {
-            var startSeconds = 30
-          } else {
-            var startSeconds = "00"
+          if ($(ui.helper).hasClass("item")) {
+            var elementId = $(ui['helper']['0']).parent().attr("id")
+            var employeeName = elementId.match(/\/(.*)$/)[1]
+            var jobName = e.target.textContent
+            var startTime = parseFloat(elementId)
+            var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
+            if ( startTime % 1 > 0 ) {
+              var startSeconds = 30
+            } else {
+              var startSeconds = "00"
+            }
+            $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
+            $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+            $('#destroy_user').val(employeeName)
+            $('#destroy_poste').val(jobName)
+            $(lineInList).remove()
           }
-          $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
-          $("#find_destroy #shift_starts_at_5i").val(startSeconds)
-          $('#destroy_user').val(employeeName)
-          $('#destroy_poste').val(jobName)
-          $(lineInList).remove()
-
         },
       });
 
@@ -168,11 +169,9 @@
           var employeeName = elementId.match(/\/(.*)$/)[1]
           var jobName = e.target.textContent
           var startTime = parseFloat(elementId)
-          console.log(startTime + ($(e.target)[0].clientWidth / 60))
           var endTime = startTime + ($(e.target)[0].clientWidth / 60)
           if (endTime > 23.5) {
             endTime -= 24
-            console.log("blech")
           }
           if ( startTime % 1 > 0 ) {
             var startSeconds = 30
@@ -262,11 +261,9 @@
                     var employeeName = elementId.match(/\/(.*)$/)[1]
                     var jobName = e.target.textContent
                     var startTime = parseFloat(elementId)
-                    console.log(startTime + ($(e.target)[0].clientWidth / 60))
                     var endTime = startTime + ($(e.target)[0].clientWidth / 60)
                     if (endTime > 23.5) {
                       endTime -= 24
-                      console.log("blech")
                     }
                     if ( startTime % 1 > 0 ) {
                       var startSeconds = 30
