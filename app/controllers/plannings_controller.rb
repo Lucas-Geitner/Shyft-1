@@ -1,6 +1,6 @@
 class PlanningsController < ApplicationController
   def index
-    if params[:date]
+    if params[:date] && params[:date] != ""
       @plannings = Planning.where("start_date < ? AND end_date > ?", params[:date], params[:date])
     else
       @plannings = Planning.all
