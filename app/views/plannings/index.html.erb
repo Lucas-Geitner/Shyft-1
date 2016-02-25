@@ -8,16 +8,55 @@
       </form>
     </div>
 
+    <!-- essai avec l icon + -->
+    <i style= $brand-primary class="fa fa-plus-circle fa-5x"></i>
     <div class="container">
+    <!-- essai avec onglets -->
+      <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-info">Creer un Planning</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary">Rechercher un Planning</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-success">Index</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+    <!-- create planning button -->
       <div class="row">
         <div class="create-container">
         <%#= link_to "Creer un Planning", new_planning_path, class: "btn btn-primary", data-toggle: "modal" data-target: "#myModal"%>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#myModal">
           Create new planning
         </button>
         </div>
       </div>
+
+      <!-- index plannings -->
+      <div class="product">
+        <div class='product-upvote'>
+          <div class="product-arrow"></div>
+          <div class='product-count'>95</div>
+        </div>
+        <img src="kudoz.jpg" alt="kudoz" class="product-image">
+        <div class='product-body'>
+          <h3>Kudoz</h3>
+          <p>Les meilleures offres d'emploi cadre sur mobile</p>
+        </div>
+        <ul class="list-inline product-controls">
+          <li><a href=""><i class="fa fa-heart"></i></a></li>
+          <li><a href=""><i class="fa fa-share"></i></a></li>
+          <li><a href=""><i class="fa fa-star"></i></a></li>
+        </ul>
+      </div>
+
       <div class="row">
         <%@plannings.each do |planning|%>
           <div class="col-xs-4">

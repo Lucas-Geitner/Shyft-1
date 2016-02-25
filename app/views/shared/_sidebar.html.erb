@@ -1,6 +1,10 @@
-<div id="sidebar-wrapper">
+<div id="sidebar-wrapper" class="hidden-xs hidden-sm">
   <ul class="sidebar-nav">
-    <li class="sidebar-brand"><h4>Dashboard</h4>
+    <li class="sidebar-brand">
+      <h4>Dashboard</h4>
+      <a href="menu-toggle" class="hidden-xs hidden-sm menu-toggle">
+        <i class="fa fa-times"></i>
+      </a>
     </li>
     <% if user_signed_in? %>
       <li>
@@ -28,6 +32,6 @@
     <% end %>
   </ul>
 </div>
-<a href="#menu-toggle" class="sidebar-wrapper-border" id="menu-toggle"></a>
-
-
+<a href="menu-toggle" class="hidden menu-toggle show">
+  show menu <i class="fa fa-caret-right"></i>
+</a>
