@@ -32,26 +32,28 @@
         </tr>
       <% end %>
     </table>
-    <!-- Create -->
-    <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
-      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
-      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
-      <%= f.input :poste, as: :hidden %>
-      <%= f.input :user, as: :hidden %>
-    <% end %>
-    <!-- Update -->
-    <%= simple_form_for([@planning, @shift], url: find_and_update_path(@planning), html: { id: "find_update", remote: true }) do |f| %>
-      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
-      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
-      <%= f.input :poste, input_html: { id: "update_poste" }, as: :hidden %>
-      <%= f.input :user, input_html: { id: "update_user" }, as: :hidden  %>
-    <% end %>
-    <!-- Destroy -->
-      <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }, remote: true) do |f| %>
-      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
-      <%= f.input :poste, input_html: { id: "destroy_poste" }, as: :hidden  %>
-      <%= f.input :user, input_html: { id: "destroy_user" }, as: :hidden  %>
-    <% end %>
+    <div id="forms">
+      <!-- Create -->
+      <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
+        <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+        <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+        <%= f.input :poste, as: :hidden %>
+        <%= f.input :user, as: :hidden %>
+      <% end %>
+      <!-- Update -->
+      <%= simple_form_for([@planning, @shift], url: find_and_update_path(@planning), html: { id: "find_update", remote: true }) do |f| %>
+        <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+        <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+        <%= f.input :poste, input_html: { id: "update_poste" }, as: :hidden %>
+        <%= f.input :user, input_html: { id: "update_user" }, as: :hidden  %>
+      <% end %>
+      <!-- Destroy -->
+        <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }, remote: true) do |f| %>
+        <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+        <%= f.input :poste, input_html: { id: "destroy_poste" }, as: :hidden  %>
+        <%= f.input :user, input_html: { id: "destroy_user" }, as: :hidden  %>
+      <% end %>
+    </div>
     <div id="bin">
       <i class="fa fa-trash"></i>
     </div>
@@ -70,6 +72,22 @@
     // POPOVER DELETE
     $("#agenda").on('click', '[data-effect="delete"]', function(e){
       e.preventDefault();
+      var elementId = $(this).parent().parent().parent().attr("id")
+      var employeeName = elementId.match(/\/(.*)$/)[1]
+      var jobName = $(this).parent().parent().parent().find(".item")[0].textContent
+      var startTime = parseFloat(elementId)
+      var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
+      if ( startTime % 1 > 0 ) {
+        var startSeconds = 30
+      } else {
+        var startSeconds = "00"
+      }
+      $("#find_destroy #shift_starts_at_4i").val(Math.floor(startTime))
+      $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+      $('#destroy_user').val(employeeName)
+      $('#destroy_poste').val(jobName)
+      $(lineInList).remove()
+      $('#find_destroy').submit()
       $(this).parent().parent().parent().find(".item").remove()
       $(this).parent().parent().remove()
     });
@@ -135,6 +153,9 @@
               $(".item").draggable({
                 snap: ".time-cell",
                 scroll: false,
+
+                // DELETE
+
                 revert: function(socketObj) {
                     if (socketObj.length > 0) {
                       $('#find_destroy').submit()
@@ -167,6 +188,9 @@
               $(".item").resizable({
                 grid: 30,
                 stop: function(e, ui) {
+
+                    // UPDATE
+
                     var elementId = $(ui.element[0]).parent().attr("id")
                     var employeeName = elementId.match(/\/(.*)$/)[1]
                     var jobName = e.target.textContent
@@ -204,6 +228,9 @@
               $(this).parent().append($(ui.draggable).css({"top": "0", "left": "0"}));
             }
             $('.popover').hide();
+
+            // CREATE
+
             var startTime = cellsDroppedIn[0]
             var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
