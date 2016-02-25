@@ -1,6 +1,51 @@
-<h1>Add an employee</h1>
-<%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
-</br>
+<div class="row scrolling-list">
+  <% @shop_employees.each do |employee| %>
+    <div class="card-planning">
+      <div class="card-planning-description">
+        <div class="card-planning-dates">
+          <span>
+            <i class="fa fa-user"></i>
+            <%= employee.first_name.capitalize + " " + employee.last_name.capitalize %>
+          </span>
+          <span class="separator">-</span>
+          <span>
+            <% case employee.memberships.first.role %>
+            <% when "hr_manager" then role = "HR Manager" %>
+            <% when "line_manager" then role = "Line Manager" %>
+            <% when "basic_employee" then role = "Employee" %>
+            <% end %>
+            <%= role %>
+          </span>
+        </div>
+        <div class="skill-buttons">
+          <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+            <div class="skill-button">
+              <%= poste.name %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="card-planning-controls">
+        <div class="planning-owner">
+          Insert some <strong>really</strong> cool information here!
+        </div>
+        <div class="list-controls">
+          <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
+          <%= link_to "Modifier", user_path(employee), class: "btn btn-default" %>
+          <%= link_to user_path(employee), class: "btn btn-default" do %>
+            <i class="fa fa-print"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+<div class="fixed-form">
+  <h2>Add an employee</h1>
+  <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
+</div>
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
