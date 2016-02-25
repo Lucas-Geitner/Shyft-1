@@ -75,6 +75,7 @@
   width: 100%;
   position: absolute;
   padding: 15px;
+  background: #F1F1F1;
 }
 
 
@@ -101,6 +102,7 @@
 .sidebar-nav li {
     text-indent: 10px;
     line-height: 40px;
+    font-size: 13px;
 }
 
 .sidebar-nav li a {
@@ -122,8 +124,10 @@
 
 .sidebar-nav > .sidebar-brand {
     height: 65px;
-    font-size: 18px;
     line-height: 60px;
+    h4 {
+      font-size: 16px;
+    }
 }
 
 .sidebar-nav > .sidebar-brand a {
@@ -176,12 +180,4 @@
 .icon {
   color: white;
   padding-right: 10px;
-}
-.container {
-  @media (min-width: 1200px) {
-    width: 100%;
-  }
-  @media (max-width: 1200px) {
-    width: 100%;
-  }
 }

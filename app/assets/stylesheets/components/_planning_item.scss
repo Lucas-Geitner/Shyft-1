@@ -1,0 +1,99 @@
+.card-planning {
+  background: white;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  transition: border-left 0.1s ease;
+  &:hover {
+    border-left: 4px solid black;
+  }
+}
+
+.card-planning-dates {
+  font-size: 13px;
+  font-weight: bold;
+  color: #585858;
+  margin-bottom: 13px;
+  i {
+    font-size: 17px;
+    margin-right: 5px;
+    color: #717171;
+  }
+  .separator {
+    margin: 0 5px;
+    color: #EAEAEA;
+  }
+}
+.planning-owner {
+  font-size: 12px;
+  color: #9C9C9C;
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.card-planning-users {
+  display: flex;
+  align-items: center;
+  img {
+    margin: 0 3px;
+  }
+}
+
+.planning-user-plus {
+  width: 30px;
+  border: 2px solid #C1C1C1;
+  color: #C1C1C1;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 50%;
+  margin-left: 3px;
+  font-size: 14px;
+}
+.list-controls {
+  display: flex;
+  align-items: center;
+  a {
+    flex: 1 0 auto;
+  }
+  .btn {
+    border: none;
+    border-right: 1px solid #E3E3E3;
+    color: #999999;
+    font-size: 14px;
+    &:last-child {
+      border-right: none;
+    }
+    &:hover {
+      background: transparent;
+      color: black;
+    }
+  }
+}
+
+.planning-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #E8E8E8;
+  .btn {
+    background: transparent;
+    border: 1px solid #AFAFAF;
+    color: #AFAFAF;
+  }
+  .btn-plus {
+    background: $blue;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+  }
+  input[type="text"] {
+    width: 300px;
+  }
+}

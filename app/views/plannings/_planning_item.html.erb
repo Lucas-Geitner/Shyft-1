@@ -1,0 +1,25 @@
+<div class="card-planning">
+  <div class="card-planning-description">
+    <div class="card-planning-dates">
+      <span><i class="fa fa-calendar"></i> <%= planning.start_date.strftime("%A, %b %e") %></span>
+      <span class="separator">-</span>
+      <span><%= planning.end_date.strftime("%A, %b %e") %></span>
+    </div>
+    <div class="card-planning-users">
+      <img class="img-circle" src="http://placehold.it/30x30"></img>
+      <img class="img-circle" src="http://placehold.it/30x30"></img>
+      <img class="img-circle" src="http://placehold.it/30x30"></img>
+      <div class="planning-user-plus">+3</div>
+    </div>
+  </div>
+  <div class="card-planning-controls">
+    <div class="planning-owner">Last edited by <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> 3 days  ago</div>
+    <div class="list-controls">
+      <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
+      <%= link_to "Déclarer", planning_path(planning), class: "btn btn-default" %>
+      <%= link_to planning_path(planning), class: "btn btn-default" do %>
+        <i class="fa fa-print"></i>
+      <% end %>
+    </div>
+  </div>
+</div>
