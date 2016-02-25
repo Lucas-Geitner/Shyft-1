@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   get 'plannings/:planning_id/scheduler_test/test' => 'scheduler_test#test'
   post 'plannings/:planning_id/shifts/find_and_destroy' => 'shifts#find_and_destroy', as: :find_and_destroy
+  post 'plannings/:planning_id/shifts/find_and_update' => 'shifts#find_and_update', as: :find_and_update
 
   devise_for :users
   root to: 'pages#home'

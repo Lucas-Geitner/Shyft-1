@@ -1,6 +1,6 @@
 class SchedulerTestController < ApplicationController
   def test
-    @today = DateTime.new(1998, 6, 5)
+    @today = DateTime.new(2000, 6, 5)
     @start_time = 8
     @end_time = 4
     if @end_time < @start_time

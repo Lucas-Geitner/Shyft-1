@@ -32,18 +32,26 @@
         </tr>
       <% end %>
     </table>
-      <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }) do |f| %>
-      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year %>
-      <%= f.input :poste, input_html: { id: "destroy_poste" }  %>
-      <%= f.input :user, input_html: { id: "destroy_user" }  %>
-    <% end %>
+    <!-- Create -->
     <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
       <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
       <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
       <%= f.input :poste, as: :hidden %>
       <%= f.input :user, as: :hidden %>
     <% end %>
-
+    <!-- Update -->
+    <%= simple_form_for([@planning, @shift], url: find_and_update_path(@planning), html: { id: "find_update", remote: true }) do |f| %>
+      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :poste, input_html: { id: "update_poste" }, as: :hidden %>
+      <%= f.input :user, input_html: { id: "update_user" }, as: :hidden  %>
+    <% end %>
+    <!-- Destroy -->
+      <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }, remote: true) do |f| %>
+      <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
+      <%= f.input :poste, input_html: { id: "destroy_poste" }, as: :hidden  %>
+      <%= f.input :user, input_html: { id: "destroy_user" }, as: :hidden  %>
+    <% end %>
     <div id="bin">
       <i class="fa fa-trash"></i>
     </div>
@@ -79,6 +87,12 @@
       $("#new_shift #shift_ends_at_1i").val("<%= @today.year %>")
       $("#new_shift #shift_ends_at_2i").val("<%= @today.month %>")
       $("#new_shift #shift_ends_at_3i").val("<%= @today.day %>")
+      $("#find_update #shift_starts_at_1i").val("<%= @today.year %>")
+      $("#find_update #shift_starts_at_2i").val("<%= @today.month %>")
+      $("#find_update #shift_starts_at_3i").val("<%= @today.day %>")
+      $("#find_update #shift_ends_at_1i").val("<%= @today.year %>")
+      $("#find_update #shift_ends_at_2i").val("<%= @today.month %>")
+      $("#find_update #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
 
@@ -121,14 +135,20 @@
               $(".item").draggable({
                 snap: ".time-cell",
                 scroll: false,
-                revert: "invalid",
+                revert: function(socketObj) {
+                    if (socketObj.length > 0) {
+                      $('#find_destroy').submit()
+                    } else {
+                      return 'invalid'
+                    }
+                  },
                 start: function(e, ui) {
                   cellsDroppedIn = []
                   var elementId = $(ui['helper']['0']).parent().attr("id")
-                  var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
                   var employeeName = elementId.match(/\/(.*)$/)[1]
                   var jobName = e.target.textContent
                   var startTime = parseFloat(elementId)
+                  var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
                   if ( startTime % 1 > 0 ) {
                     var startSeconds = 30
                   } else {
@@ -139,7 +159,6 @@
                   $('#destroy_user').val(employeeName)
                   $('#destroy_poste').val(jobName)
                   $(lineInList).remove()
-                  $('#find_destroy').submit()
                 }
               });
 
@@ -149,7 +168,10 @@
                 grid: 30,
                 stop: function(e, ui) {
                     var elementId = $(ui.element[0]).parent().attr("id")
-                    var lineInList = $("li:contains('" + elementId.match(/\/(.*)$/)[1] + ": " + parseFloat(elementId) + "h -')")
+                    var employeeName = elementId.match(/\/(.*)$/)[1]
+                    var jobName = e.target.textContent
+                    var startTime = parseFloat(elementId)
+                    var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
                     var endTime = parseFloat($(lineInList).find('#end-list').text())
                     blechbefore = ui.originalSize
                     blechafter = ui.size
@@ -157,7 +179,24 @@
                     if (endTime > 23.5) {
                       endTime -= 24
                     }
+                    if ( startTime % 1 > 0 ) {
+                      var startSeconds = 30
+                    } else {
+                      var startSeconds = "00"
+                    }
+                    if ( endTime % 1 > 0 ) {
+                      var endSeconds = 30
+                    } else {
+                      var endSeconds = "00"
+                    }
                     $(lineInList).find('#end-list').text(endTime)
+                    $('#update_poste').val(jobName)
+                    $("#find_update #shift_starts_at_4i").val(Math.floor(startTime))
+                    $("#find_update #shift_starts_at_5i").val(startSeconds)
+                    $("#find_update #shift_ends_at_4i").val(Math.floor(endTime))
+                    $("#find_update #shift_ends_at_5i").val(endSeconds)
+                    $("#update_user").val(employeeName)
+                    $("#find_update").submit()
                 }
               });
 
@@ -180,8 +219,6 @@
               var endSeconds = "00"
             }
             $('#shift_poste').val(jobName)
-            console.log(startTime)
-            console.log(endTime)
             $("#new_shift #shift_starts_at_4i").val(Math.floor(startTime))
             $("#new_shift #shift_starts_at_5i").val(startSeconds)
             $("#new_shift #shift_ends_at_4i").val(Math.floor(endTime))
