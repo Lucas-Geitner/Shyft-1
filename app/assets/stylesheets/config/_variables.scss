@@ -24,11 +24,11 @@ $base-height: 1.4;
  * Colors
  * ------------------------------------- */
 // Scheme
-$brand-color: #D23333;
+$brand-color: #00BCD4;
 
 $red: #EE5F5B;
-$blue: #469AE0;
-$yellow: #FDB631;
+$blue: #00BCD4;
+$yellow: #CDDC39;
 $orange: #E67E22;
 $green: #32B796;
 
@@ -38,3 +38,11 @@ $gray-dark:    lighten(#000, 20%);   // #333
 $gray:         lighten(#000, 33.5%); // #555
 $gray-light:   lighten(#000, 46.7%); // #777
 $gray-lighter: lighten(#000, 93.5%); // #eee
+
+// Charte grphique colors
+$divider-color: #B6B6B6;
+$secondary-tet: #727272;
+$primary-text: #212121;
+
+// buttons border
+

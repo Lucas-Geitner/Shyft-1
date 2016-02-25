@@ -20,12 +20,6 @@
       </div>
     </div>
     <%= javascript_include_tag 'application' %>
-    <script>
-      $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-      });
-    </script>
     <%= cloudinary_js_config %>
     <%= yield :scripts %>
   </body>
