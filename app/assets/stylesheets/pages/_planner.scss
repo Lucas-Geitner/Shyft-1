@@ -24,6 +24,11 @@
   padding-right: 10px;
 }
 
+#forms {
+  position: absolute;
+  display: none;
+}
+
 .poste {
   width: 60px;
   height: 28px;
@@ -91,6 +96,7 @@
 
 .agenda-wrapper {
   margin-left: 20px;
+  margin-top: 50px;
 }
 
 .postes-list {
