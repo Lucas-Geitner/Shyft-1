@@ -42,14 +42,14 @@
         <%= f.input :poste, input_html: { id: "update_poste" }, as: :hidden %>
         <%= f.input :user, input_html: { id: "update_user" }, as: :hidden  %>
       <% end %>
-    </div>
-    <div id="forms-test">
       <!-- Destroy -->
         <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }, remote: true) do |f| %>
         <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
         <%= f.input :poste, input_html: { id: "destroy_poste" }, as: :hidden  %>
         <%= f.input :user, input_html: { id: "destroy_user" }, as: :hidden  %>
       <% end %>
+    </div>
+    <div id="forms-test">
     </div>
     <div id="bin">
       <i class="fa fa-trash"></i>
