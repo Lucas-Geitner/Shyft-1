@@ -1,16 +1,11 @@
 <div class="agenda-wrapper">
-  <div>
-    <p>Start time: <span id="start-time"></span></p>
-    <p>End time: <span id="end-time"></span></p>
-    <p>Employee: <span id="employee-name"></span></p>
-    <div class="container postes-list">
-      <div class="row">
-        <% @postes.each do |poste| %>
-          <div class="col-xs-6 col-sm-1">
-            <div class="poste resizable grab flex-center" style="background-color: <%= COLORS.sample %>"><%= poste %></div>
-          </div>
-        <% end %>
-      </div>
+  <div class="container postes-list">
+    <div class="row">
+      <% @postes.each do |poste| %>
+        <div class="col-xs-6 col-sm-1">
+          <div class="poste resizable grab flex-center" style="background-color: <%= COLORS.sample %>"><%= poste.name %></div>
+        </div>
+      <% end %>
     </div>
   </div>
 
@@ -24,10 +19,10 @@
       </tr>
       <% @employees.each do |employee| %>
         <tr>
-          <td class="text-right name-padding-right"><%= employee %></td>
+          <td class="text-right name-padding-right"><%= employee.first_name %></td>
           <% @range.each do |time| %>
-            <td class="time-cell" id="<%= "#{time}/#{employee}" %>"><div class="blech"></div></td>
-            <td class= "time-cell" id="<%= "#{time}.5/#{employee}" %>"><div class="blech"></div></td>
+            <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+            <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>"><div class="blech"></div></td>
           <% end %>
         </tr>
       <% end %>
@@ -41,12 +36,14 @@
         <%= f.input :user, as: :hidden %>
       <% end %>
       <!-- Update -->
-      <%= simple_form_for([@planning, @shift], url: find_and_update_path(@planning), html: { id: "find_update", remote: true }) do |f| %>
+      <%= simple_form_for([@planning, @shift], url: find_and_update_path(@planning), html: { id: "find_update" }, remote: true) do |f| %>
         <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
         <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
         <%= f.input :poste, input_html: { id: "update_poste" }, as: :hidden %>
         <%= f.input :user, input_html: { id: "update_user" }, as: :hidden  %>
       <% end %>
+    </div>
+    <div id="forms-test">
       <!-- Destroy -->
         <%= simple_form_for([@planning, @shift], url: find_and_destroy_path(@planning), html: { id: "find_destroy" }, remote: true) do |f| %>
         <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
@@ -94,6 +91,16 @@
 
 
     $(function() {
+      <% @planning.shifts.each do |shift| %>
+        <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
+          <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
+          <% if shift.starts_at.min > 0 %>
+            $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+          <% else %>
+            $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+          <% end %>
+        <% end %>
+      <% end %>
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
       $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
@@ -119,12 +126,72 @@
         helper: "clone",
         snap: ".time-cell",
         snapMode: "inner",
-        revert: "invalid",
+        revert: function(socketObj) {
+          if (socketObj.length > 0) {
+            $('#find_destroy').submit()
+          } else {
+            return 'invalid'
+          }
+        },
         start: function(e, ui) {
           $(ui.helper).removeClass("grab")
           $(ui.helper).addClass("dragged-poste")
           cellsDroppedIn = []
+          var elementId = $(ui['helper']['0']).parent().attr("id")
+          var employeeName = elementId.match(/\/(.*)$/)[1]
+          var jobName = e.target.textContent
+          var startTime = parseFloat(elementId)
+          var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
+          if ( startTime % 1 > 0 ) {
+            var startSeconds = 30
+          } else {
+            var startSeconds = "00"
+          }
+          $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
+          $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+          $('#destroy_user').val(employeeName)
+          $('#destroy_poste').val(jobName)
+          $(lineInList).remove()
+
         },
+      });
+
+      // RESIZE
+
+      $(".item").resizable({
+        grid: 30,
+        stop: function(e, ui) {
+
+          // UPDATE
+
+          var elementId = $(ui.element[0]).parent().attr("id")
+          var employeeName = elementId.match(/\/(.*)$/)[1]
+          var jobName = e.target.textContent
+          var startTime = parseFloat(elementId)
+          console.log(startTime + ($(e.target)[0].clientWidth / 60))
+          var endTime = startTime + ($(e.target)[0].clientWidth / 60)
+          if (endTime > 23.5) {
+            endTime -= 24
+            console.log("blech")
+          }
+          if ( startTime % 1 > 0 ) {
+            var startSeconds = 30
+          } else {
+            var startSeconds = "00"
+          }
+          if ( endTime % 1 > 0 ) {
+            var endSeconds = 30
+          } else {
+            var endSeconds = "00"
+          }
+          $('#update_poste').val(jobName)
+          $("#find_update #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
+          $("#find_update #shift_starts_at_5i").val(startSeconds)
+          $("#find_update #shift_ends_at_4i").val(('0' + Math.floor(endTime)).slice(-2))
+          $("#find_update #shift_ends_at_5i").val(endSeconds)
+          $("#update_user").val(employeeName)
+          $("#find_update").submit()
+        }
       });
 
       // DROP
@@ -175,7 +242,7 @@
                   } else {
                     var startSeconds = "00"
                   }
-                  $("#find_destroy #shift_starts_at_4i").val(Math.floor(startTime))
+                  $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
                   $("#find_destroy #shift_starts_at_5i").val(startSeconds)
                   $('#destroy_user').val(employeeName)
                   $('#destroy_poste').val(jobName)
@@ -189,19 +256,17 @@
                 grid: 30,
                 stop: function(e, ui) {
 
-                    // UPDATE
+                    // ITEM UPDATE
 
                     var elementId = $(ui.element[0]).parent().attr("id")
                     var employeeName = elementId.match(/\/(.*)$/)[1]
                     var jobName = e.target.textContent
                     var startTime = parseFloat(elementId)
-                    var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-                    var endTime = parseFloat($(lineInList).find('#end-list').text())
-                    blechbefore = ui.originalSize
-                    blechafter = ui.size
-                    endTime += ((blechafter['width'] - blechbefore['width']) / 30 / 2)
+                    console.log(startTime + ($(e.target)[0].clientWidth / 60))
+                    var endTime = startTime + ($(e.target)[0].clientWidth / 60)
                     if (endTime > 23.5) {
                       endTime -= 24
+                      console.log("blech")
                     }
                     if ( startTime % 1 > 0 ) {
                       var startSeconds = 30
@@ -213,11 +278,10 @@
                     } else {
                       var endSeconds = "00"
                     }
-                    $(lineInList).find('#end-list').text(endTime)
                     $('#update_poste').val(jobName)
-                    $("#find_update #shift_starts_at_4i").val(Math.floor(startTime))
+                    $("#find_update #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
                     $("#find_update #shift_starts_at_5i").val(startSeconds)
-                    $("#find_update #shift_ends_at_4i").val(Math.floor(endTime))
+                    $("#find_update #shift_ends_at_4i").val(('0' + Math.floor(endTime)).slice(-2))
                     $("#find_update #shift_ends_at_5i").val(endSeconds)
                     $("#update_user").val(employeeName)
                     $("#find_update").submit()
@@ -232,7 +296,9 @@
             // CREATE
 
             var startTime = cellsDroppedIn[0]
+            console.log(startTime)
             var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
+            console.log(endTime)
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
             var jobName = $(ui.draggable)[0].textContent
             if ( startTime % 1 > 0 ) {
@@ -246,9 +312,9 @@
               var endSeconds = "00"
             }
             $('#shift_poste').val(jobName)
-            $("#new_shift #shift_starts_at_4i").val(Math.floor(startTime))
+            $("#new_shift #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
             $("#new_shift #shift_starts_at_5i").val(startSeconds)
-            $("#new_shift #shift_ends_at_4i").val(Math.floor(endTime))
+            $("#new_shift #shift_ends_at_4i").val(('0' + Math.floor(endTime)).slice(-2))
             $("#new_shift #shift_ends_at_5i").val(endSeconds)
             $("#new_shift #shift_user").val(employeeName)
             $('#shift-listing').append("<li>" + employeeName + ": " + startTime + 'h - ' + "<span id='end-list'>" + endTime + "</span>" + 'h, is ' + jobName + '</li>')

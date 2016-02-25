@@ -2,7 +2,7 @@ class ShiftsController < ApplicationController
   def create
     @planning = Planning.find(params[:planning_id])
     @shift = Shift.new(shift_params)
-    @shift.user = User.find_by_first_name(params[:shift][:user])
+    @shift.user = User.find(params[:shift][:user])
     @shift.planning = @planning
     @poste = Poste.find_by_name(params[:shift][:poste])
     @shift.poste = @poste
@@ -11,13 +11,13 @@ class ShiftsController < ApplicationController
 
   def find_and_destroy
     @example = Shift.new(shift_params)
-    @shift = Shift.find_by_planning_id_and_starts_at(params[:planning_id], @example.starts_at)
+    @shift = Shift.find_by_user_id_and_starts_at(params[:shift][:user], @example.starts_at)
     @shift.destroy
   end
 
   def find_and_update
     @example = Shift.new(shift_params)
-    @shift = Shift.find_by_planning_id_and_starts_at(params[:planning_id], @example.starts_at)
+    @shift = Shift.find_by_user_id_and_starts_at(params[:shift][:user], @example.starts_at)
     @shift.update(ends_at: @example.ends_at)
   end
 
