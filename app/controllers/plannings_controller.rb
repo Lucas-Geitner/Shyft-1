@@ -12,6 +12,25 @@ class PlanningsController < ApplicationController
     @planning = Planning.new
   end
 
+  def show
+    @planning = Planning.find(params[:id])
+    @shop = @planning.shop
+    @week = params[:week] ? params[:week].to_i : 1
+    @day = params[:day] ? ((@week - 1) * 7) + params[:day].to_i : 1
+    @today = params[:day] ? (@planning.start_date + (@day - 1).days) : @planning.start_date
+    @start_time = @shop.opening_time.hour
+    @end_time = @shop.closing_time.hour
+    if @end_time < @start_time
+      @range = (@start_time..23).to_a
+      (0..@end_time).to_a.each { |t| @range << t }
+    else
+      @range = (@start_time..@end_time).to_a
+    end
+    @employees = @shop.users
+    @postes = Poste.all
+    @shift = Shift.new()
+  end
+
   def create
     @planning = Planning.new(planning_params)
     @planning.save
