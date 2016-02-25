@@ -27,6 +27,7 @@ class UsersController < ApplicationController
 
     if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
       @user.save
+      @user.invite!(current_user)
       @membership.save
       @abilities.each { |ability| ability.save }
       respond_to do |format|
