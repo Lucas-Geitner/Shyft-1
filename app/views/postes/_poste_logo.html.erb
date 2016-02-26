@@ -1,8 +1,19 @@
-<% if @poste.name == "bar" %>
-    <i class="fa fa-coffee fa-5X"></i>
-  <% elsif @poste.name == "cashier" %>
-    <i class="fa fa-money fa-5X"></i>
-  <% elsif @poste.name == "dishwash" %>
-    <i class="fa fa-tint fa-5X"></i>
+ <% if poste.name == [] %>
+  <div>
+    <%=image_tag "Restaurant-48.png" %>
+  </div>
+  <% else %>
+  <div>
+  <% if poste.name == "kitchen" %>
+      <%=image_tag "Hamburger-48.png" %>
+    <% elsif poste.name == "cashier" %>
+      <%=image_tag "Check-48.png" %>
+    <% elsif poste.name == "dishwash" %>
+      <%=image_tag "Broom-48.png" %>
+    <% elsif poste.name == "bar" %>
+      <%=image_tag "barista.png" %>
+    <% elsif poste.name == "serveur" %>
+      <%=image_tag "Waiter-48.png" %>
+  <% end %>
+  </div>
 <% end %>
-

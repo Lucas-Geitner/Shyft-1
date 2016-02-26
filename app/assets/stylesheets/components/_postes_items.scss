@@ -1,3 +1,30 @@
+.card-poste-container {
+  width: 85%;
+  margin: auto;
+  h1 {
+    margin-left: -18px;
+  }
+}
+.postes-header {
+  padding: 20px 0px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #E8E8E8;
+  button {
+    margin-left: 772px;
+  }
+  .btn {
+    background: transparent;
+    border: 1px solid #AFAFAF;
+    color: #AFAFAF;
+  }
+  .btn-plus {
+    background: $blue;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+  }
+}
 .card-postes {
   background: white;
   padding: 15px 10px;
@@ -15,7 +42,7 @@
   font-size: 13px;
   font-weight: bold;
   color: #585858;
-  margin-bottom: 13px;
+  margin-bottom: 0px;
   img {
     font-size: 30px;
     margin-right: 25px;
@@ -58,7 +85,11 @@
   padding-right: 50px;
   padding-left: 20px;
   text-align: center;
-
+  display: flex;
+  align-items: center;
+img {
+  height: 62px;
+}
 }
 .planning-header {
   display: flex;
