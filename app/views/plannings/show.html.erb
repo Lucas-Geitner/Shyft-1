@@ -1,16 +1,15 @@
 <div class="week-buttons">
   <% (1..((@planning.end_date - @planning.start_date) / 604800).ceil).each do |n| %>
-    <%= link_to "Week #{n}", planning_path(@planning, week: n, day: params[:day]), class: "text-center" %>
-  <% end %>
-</div>
-
-<div class="tabs">
-  <% (1..7).each do |n| %>
-    <div class="tab"><%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n) %></div>
+    <%= link_to "S#{n}", planning_path(@planning, week: n, day: params[:day]), class: "text-center" %>
   <% end %>
 </div>
 
 <div class="agenda-wrapper">
+  <div class="tabs">
+    <% (1..7).each do |n| %>
+      <%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n), class: "tab" %>
+    <% end %>
+  </div>
   <div class="container postes-list">
     <div class="row">
       <% @postes.each do |poste| %>
