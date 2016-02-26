@@ -60,7 +60,7 @@ User.all.each do |user|
   membership = Membership.new(
     user: user,
     shop: Shop.all.sample,
-    role: choose_weighted({ hr_manager: 1, line_manager: 10, basic_employee: 100 }))
+    role: choose_weighted({ "HR Manager" => 1, "Line Manager" => 10, "Employee" => 100 }))
   membership.save
 end
 
