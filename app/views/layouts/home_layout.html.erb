@@ -11,20 +11,15 @@
   </head>
   <body>
     <%= render 'shared/navbar' %>
+    <%= render 'shared/flashes' %>
 
     <% if user_signed_in? %>
       <div id="wrapper">
         <%= render 'shared/sidebar' %>
-        <div class="page-content-wrapper">
-          <%= render 'shared/flashes' %>
-          <%= yield %>
-        </div>
-      </div>
-    <% else %>
-      <div class="page-content-wrapper">
-        <%= render 'shared/flashes' %>
         <%= yield %>
       </div>
+    <% else %>
+      <%= yield %>
     <% end %>
     <%= javascript_include_tag 'application' %>
     <%= cloudinary_js_config %>
