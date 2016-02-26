@@ -1,0 +1,85 @@
+.card-postes {
+  background: white;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  transition: border-left 0.1s ease;
+  &:hover {
+    border-left: 4px solid black;
+  }
+}
+
+.card-postes-description {
+  font-size: 13px;
+  font-weight: bold;
+  color: #585858;
+  margin-bottom: 13px;
+  img {
+    font-size: 30px;
+    margin-right: 25px;
+    background-color: $blue;
+  }
+  .separator {
+    margin: 0 5px;
+    color: #EAEAEA;
+  }
+}
+.planning-owner {
+  font-size: 12px;
+  color: #9C9C9C;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.list-controls {
+  display: flex;
+  align-items: center;
+  a {
+    flex: 1 0 auto;
+  }
+  .btn {
+    border: none;
+    border-right: 1px solid #E3E3E3;
+    color: #999999;
+    font-size: 14px;
+    &:last-child {
+      border-right: none;
+    }
+    &:hover {
+      background: transparent;
+      color: black;
+    }
+  }
+}
+.poste-title {
+  color: #00BCD6;
+  margin-right: 20px;
+  padding-right: 50px;
+  padding-left: 20px;
+  text-align: center;
+
+}
+.planning-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #E8E8E8;
+  .btn {
+    background: transparent;
+    border: 1px solid #AFAFAF;
+    color: #AFAFAF;
+  }
+  .btn-plus {
+    background: $blue;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+  }
+  input[type="text"] {
+    width: 300px;
+  }
+}
