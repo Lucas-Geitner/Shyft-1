@@ -1,19 +1,30 @@
 #planner {
   font-size: 14px;
   margin-bottom: 20px;
+  margin-top: 10px;
+  margin-left: 5px;
   position: relative;
+}
+
+#planner tr > td:last-child {
+  border-right: none;
 }
 
 #planner td {
   height: 30px;
   min-width: 30px;
-  border: 1px solid $gray-lighter;
+  border-right: 1px solid $shyft-dark-blue;
+  border-top: 1px solid rgba(37,50,56,0.2);
   position: relative;
 }
 
 #planner th {
-  border: 1px solid $gray-lighter;
+  border-right: 1px solid $shyft-dark-blue;
   padding-left: 5px;
+  height: 40px;
+  &:last-child {
+    border-right: none;
+  }
 }
 
 #agenda {
@@ -27,6 +38,20 @@
 #forms {
   position: absolute;
   display: none;
+}
+
+#bin {
+  color: $gray-light;
+  height: 50px;
+  width: 50px;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 2px solid $gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+  margin-bottom: 25px;
 }
 
 .poste {
@@ -76,17 +101,6 @@
   padding-right: 5px;
 }
 
-#bin {
-  color: $gray-light;
-  height: 50px;
-  width: 50px;
-  font-size: 20px;
-  border-radius: 50%;
-  border: 2px solid $gray-light;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .item {
   position: absolute;
@@ -94,13 +108,8 @@
   z-index: 90;
 }
 
-.agenda-wrapper {
-  margin-left: 20px;
-  margin-top: 50px;
-}
-
 .postes-list {
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .postes-list > .row > div {
