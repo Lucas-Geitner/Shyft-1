@@ -1,22 +1,8 @@
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-lg-12">
-      <div class="panel panel-success">
-        <div class="panel-heading">
-          <h3 class="panel-title">Creer un nouveau poste</h3>
-        </div>
-        <div class="panel-body">
-          <%= simple_form_for(@poste) do |f| %>
-            <%= f.error_notification %>
-            <%= f.input :name %>
-            <%= f.submit 'Creer'%>
-          <% end %>
-          </div>
-      </div>
-    </div>
-  </div>
-
-
-
+<%= simple_form_for(@poste) do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :name %>
+  <%= f.submit 'Creer'%>
+<% end %>
 
 
 

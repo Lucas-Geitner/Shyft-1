@@ -1,2 +1,5 @@
-<h1>Postes#edit</h1>
-<p>Find me in app/views/postes/edit.html.erb</p>
+<%= simple_form_for(@poste) do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :name %>
+  <%= f.submit 'Modifier'%>
+<% end %>

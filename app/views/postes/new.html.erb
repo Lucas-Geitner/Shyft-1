@@ -1,23 +1,52 @@
 <div class="container-fluid">
-  <%= render 'form'%>
-  <h1>Liste des Postes</h1>
-
   <div class="row">
-    <% @postes.each do |poste|%>
-      <div class="card-postes text-inline">
-        <div class="card-postes-description">
-          <i class="fa fa-square fa-5x poste-title"></i>
-          <%= poste.name %>
-        </div>
-        <div class="card-planning-controls">
-          <div class="list-controls">
-            <%= link_to "Modifier", edit_poste_path(poste),class: "btn btn-default" %>
-            <%= link_to "Supprimer", poste_path(poste), method: :delete, data: {confirm: "are you sure?"}, class: "btn btn-default" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <div class="postes-header">
+      <button type="button" class="btn btn-plus" data-toggle="modal" data-target="#myModal">
+        Creer un poste <i class="fa fa-plus"></i>
+      </button>
+    </div>
   </div>
 
+  <div class="card-poste-container">
+    <div class="row">
+      <% @postes.each do |poste|%>
+
+        <div class="card-postes text-inline">
+          <div class="card-postes-description">
+            <div class="poste-title">
+             <%=render 'postes/poste_logo', poste: poste%>
+              <span><h2><%= poste.name %></h2></span>
+            </div>
+          </div>
+          <div class="card-planning-controls">
+            <div class="list-controls">
+              <%= link_to "Modifier", edit_poste_path(poste),class: "btn btn-default" %>
+              <%= link_to "Supprimer", poste_path(poste), method: :delete, data: {confirm: "are you sure?"}, class: "btn btn-default" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Nouveau poste</h4>
+      </div>
+      <div class="modal-body">
+      <!-- login -->
+      <%= render 'form'%>
+
+       <!-- login -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <!-- <button type="button" class="btn btn-primary">Creer</button> -->
+      </div>
+    </div>
+  </div>
+</div>
