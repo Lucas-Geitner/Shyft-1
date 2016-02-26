@@ -1,4 +1,4 @@
-.card-planning {
+.card-postes {
   background: white;
   padding: 15px 10px;
   display: flex;
@@ -11,15 +11,15 @@
   }
 }
 
-.card-planning-dates {
+.card-postes-description {
   font-size: 13px;
   font-weight: bold;
   color: #585858;
   margin-bottom: 13px;
-  i {
-    font-size: 17px;
-    margin-right: 5px;
-    color: #717171;
+  img {
+    font-size: 30px;
+    margin-right: 25px;
+    background-color: $blue;
   }
   .separator {
     margin: 0 5px;
@@ -31,27 +31,6 @@
   color: #9C9C9C;
   text-align: right;
   margin-bottom: 10px;
-}
-
-.card-planning-users {
-  display: flex;
-  align-items: center;
-  img {
-    margin: 0 3px;
-  }
-}
-
-.planning-user-plus {
-  width: 30px;
-  border: 2px solid #C1C1C1;
-  color: #C1C1C1;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-radius: 50%;
-  margin-left: 3px;
-  font-size: 14px;
 }
 .list-controls {
   display: flex;
@@ -73,7 +52,14 @@
     }
   }
 }
+.poste-title {
+  color: #00BCD6;
+  margin-right: 20px;
+  padding-right: 50px;
+  padding-left: 20px;
+  text-align: center;
 
+}
 .planning-header {
   display: flex;
   align-items: center;
@@ -95,22 +81,5 @@
   }
   input[type="text"] {
     width: 300px;
-  }
-}
-
-.skill-buttons {
-  margin-left: 22px;
-  display: flex;
-  align-items: center;
-  .skill-button {
-    font-size: 11px;
-    font-weight: lighter;
-    padding: 2px 10px !important;
-    border-radius: 30px;
-    transition: all 0.15s ease;
-    background: #BABABA;
-    color: #FFFFFF;
-    border-radius: 30px;
-    margin: 3px 1px;
   }
 }
