@@ -21,7 +21,10 @@
     <%= f.input :role, as: :select, collection: Membership::ROLES, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, prompt: "Pick a role" %>
   </div>
 
-  <%= f.association :postes, as: :check_boxes, input_html: { class: 'tgl tgl-flip' }, label_html: { class: 'tgl-btn', 'data-tg-off' => 'Nope', 'data-tg-on' => 'Yeah!' } %>
+  <% @shop.postes.each do |poste| %>
+    <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="postes[]">
+    <label class='tgl-btn' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
+  <% end %>
 
   <div class="row valign">
     <label for="user_contract" class="contol-label col-xs-4 vcenter">Contract</label>
@@ -31,6 +34,13 @@
   <div class="text-center">
     <%= f.button :submit, value: "Create", class: "btn-primary" %>
   </div>
+<% end %>
+
+
+<% content_for :scripts do %>
+  <script>
+
+  </script>
 <% end %>
 
 
