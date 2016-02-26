@@ -7,7 +7,11 @@
     <%= builder.input :role, type: :select, collection: Membership::ROLES %>
   <% end %>
   <%= f.fields_for ability do |builder| %>
-    <%= builder.input :poste, as: :check_boxes, collection: Poste.all %>
+    <div class="check-button">
+      <label class="checkbox inline">
+        <%= builder.input :poste, as: :check_boxes, collection: Poste.all %>
+      </label>
+    </div>
   <% end %>
   <%= f.input :contract, as: :attachinary %>
   <%= f.button :submit, value: "Create" %>
