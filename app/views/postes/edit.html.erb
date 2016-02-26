@@ -1,5 +1,15 @@
-<%= simple_form_for(@poste) do |f| %>
-  <%= f.error_notification %>
-  <%= f.input :name %>
-  <%= f.submit 'Modifier'%>
-<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
+      <%= simple_form_for(@poste) do |f| %>
+        <%= f.error_notification %>
+        <div class="form-inputs">
+        <%= f.input :name %>
+         </div>
+        <div class="form-actions">
+        <%= f.submit 'Modifier'%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

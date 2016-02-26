@@ -32,6 +32,9 @@ organisations.each do |org|
   Organisation.new(name: org).save
 end
 
+
+
+
 30.times do
   opening_time = Time.now.midnight + rand(6..11).hours
   closing_time = opening_time + rand(8..12).hours
