@@ -23,44 +23,63 @@
     font-weight: normal;
     margin: 0;
   }
-  #user_contract {
-    color: $gray-light;
-    font-weight: lighter;
-  }
-  .label-input-group {
-    height: 30px;
-    line-height: 30px;
-  }
-  .checkbox-group {
-    margin: 0 0 25px 16px;
-    p {
-      margin-bottom: 15px;
+}
+.valign {
+  height: 30px;
+  line-height: 30px;
+}
+.tgl-flip{
+  + .tgl-btn{
+    padding: 2px;
+    transition: all .2s ease;
+    font-family: sans-serif;
+    perspective: 100px;
+    &:after, &:before{
+      display: inline-block;
+      transition: all .4s ease;
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      line-height: 2em;
+      font-weight: bold;
+      color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      border-radius: 4px;
     }
-  }
-  .form-check-box {
-    margin: 0 0 0 10px;
-    color: $gray-light;
-    font-size: 12px;
-    .checkbox {
-      margin: 0;
-      label {
-        font-weight: lighter;
+    &:after{
+      content: attr(data-tg-on);
+      background: #02C66F;
+      transform: rotateY(-180deg);
+    }
+    &:before{
+      background: #FF3A19;
+      content: attr(data-tg-off);
+    }
+
+    &:active{
+      &:before{
+        transform: rotateY(-20deg);
       }
     }
   }
-}
-.btn-form {
-  color: #6A6A6A;
-  border: 2px solid #6A6A6A;
-  padding: 5px 15px;
-  border-radius: 50px;
-  font-weight: normal;
-  background: none;
-  transition: all 0.3s ease;
-}
-.btn-form:hover {
-  text-decoration: none;
-  color: #A0A0A0;
-  border: 2px solid #A0A0A0;
-  background: none;
+  &:checked{
+    + .tgl-btn{
+      &:before{
+        transform: rotateY(180deg);
+      }
+      &:after{
+        transform: rotateY(0);
+        left: 0;
+        background: #7FC6A6;
+      }
+      &:active{
+        &:after{
+          transform: rotateY(20deg);
+        }
+      }
+    }
+  }
 }
