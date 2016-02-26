@@ -1,20 +1,44 @@
 <%= simple_nested_form_for user, url: custom_path, remote: true do |f| %>
-  <%= f.input :first_name %>
-  <%= f.input :last_name %>
-  <%= f.input :email %>
-  <%= f.input :password %>
-  <%= f.fields_for membership do |builder| %>
-    <%= builder.input :role, type: :select, collection: Membership::ROLES %>
-  <% end %>
-  <%= f.fields_for ability do |builder| %>
-    <div class="check-button">
-      <label class="checkbox inline">
-        <%= builder.input :poste, as: :check_boxes, collection: Poste.all %>
-      </label>
-    </div>
-  <% end %>
-  <%= f.input :contract, as: :attachinary %>
-  <%= f.button :submit, value: "Create" %>
+  <div class="label-input-group">
+    <p class="col-xs-4">First name</p>
+    <%= f.input :first_name, label: false, placeholder: "Walter", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
+  </div>
+
+  <div class="label-input-group">
+    <p class="col-xs-4">Last name</p>
+    <%= f.input :last_name, label: false, placeholder: "White", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
+  </div>
+
+  <div class="label-input-group">
+    <p class="col-xs-4">Email</p>
+    <%= f.input :email, label: false, placeholder: "iluvmeth@gmail.com", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
+    <%= f.input :password, as: :hidden, value: "aaaaaaaa" %>
+  </div>
+
+  <div class="label-input-group">
+    <p class="col-xs-4">Role</p>
+    <%= f.fields_for membership do |builder| %>
+      <%= builder.input :role, label: false, wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" }, type: :select, collection: Membership::ROLES %>
+    <% end %>
+  </div>
+
+  <div class="checkbox-group">
+    <p>Skills</p>
+    <%= f.fields_for ability do |builder| %>
+      <% Poste.all.each do |poste| %>
+        <%= builder.input :poste, as: :boolean, inline_label: poste.name.capitalize, wrapper_html: { class: "form-check-box" } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="checkbox-group">
+    <p>Contract</p>
+    <%= f.input :contract, label: false, as: :attachinary %>
+  </div>
+
+  <div class="text-center">
+    <%= f.button :submit, value: "Create", class: "btn-primary" %>
+  </div>
 <% end %>
 
 
