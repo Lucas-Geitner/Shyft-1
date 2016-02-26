@@ -33,6 +33,7 @@ class PlanningsController < ApplicationController
 
   def create
     @planning = Planning.new(planning_params)
+    @planning.user = current_user
     @planning.save
     redirect_to planning_path(@shop, @planning)
   end
