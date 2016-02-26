@@ -1,10 +1,66 @@
+#page-content {
+  position: relative;
+}
 .fixed-form {
   position: fixed;
-  width: 24%;
-  right: 21px;
-  top: 81px;
-  bottom: 0;
+  width: 32%;
+  top: 85px;
+  right: 20px;
+  background: #FFFFFF;
+  overflow: scroll;
+  padding: 20px;
+  font-size: 14px;
+  box-shadow: -1px 1px 2px #D7D7D7;
+  h2 {
+    padding-bottom: 21px;
+    color: #555555;
+    font-size: 25px;
+    margin: 0;
+    text-align: center;
+  }
+  p {
+    color: $gray-light;
+    font-weight: normal;
+    margin: 0;
+  }
+  #user_contract {
+    color: $gray-light;
+    font-weight: lighter;
+  }
+  .label-input-group {
+    height: 30px;
+    line-height: 30px;
+  }
+  .checkbox-group {
+    margin: 0 0 25px 16px;
+    p {
+      margin-bottom: 15px;
+    }
+  }
+  .form-check-box {
+    margin: 0 0 0 10px;
+    color: $gray-light;
+    font-size: 12px;
+    .checkbox {
+      margin: 0;
+      label {
+        font-weight: lighter;
+      }
+    }
+  }
 }
-.scrolling-list {
-  margin-right: 33%;
+.btn-form {
+  color: #6A6A6A;
+  border: 2px solid #6A6A6A;
+  padding: 5px 15px;
+  border-radius: 50px;
+  font-weight: normal;
+  background: none;
+  transition: all 0.3s ease;
+}
+.btn-form:hover {
+  text-decoration: none;
+  color: #A0A0A0;
+  border: 2px solid #A0A0A0;
+  background: none;
 }
