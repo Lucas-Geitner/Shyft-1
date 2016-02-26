@@ -16,7 +16,7 @@ class PostesController < ApplicationController
 
   def update
     @poste = Poste.find(params[:id])
-    @poste.name = params[:name]
+    @poste.update(name: params[:poste][:name])
     redirect_to new_poste_path
   end
 
