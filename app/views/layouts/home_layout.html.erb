@@ -16,14 +16,10 @@
     <% if user_signed_in? %>
       <div id="wrapper">
         <%= render 'shared/sidebar' %>
-        <div class="page-content-wrapper">
-          <%= yield %>
-        </div>
-      </div>
-    <% else %>
-      <div class="page-content-wrapper">
         <%= yield %>
       </div>
+    <% else %>
+      <%= yield %>
     <% end %>
     <%= javascript_include_tag 'application' %>
     <%= cloudinary_js_config %>
