@@ -92,12 +92,14 @@
 
     $(function() {
       <% @planning.shifts.each do |shift| %>
-        <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
-          <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
-          <% if shift.starts_at.min > 0 %>
-            $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
-          <% else %>
-            $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+        <% if shift.starts_at %>
+          <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
+            <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
+            <% if shift.starts_at.min > 0 %>
+              $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+            <% else %>
+              $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+            <% end %>
           <% end %>
         <% end %>
       <% end %>

@@ -1,0 +1,47 @@
+.tabs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tabs a {
+  color: white;
+}
+.tabs a:hover {
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.8;
+}
+.tabs h3 {
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: 0;
+}
+.tabs p {
+  opacity: 0.5;
+  margin-bottom: 0;
+}
+.tab {
+  width: 100%;
+  background: $shyft-dark-blue;
+  text-align: center;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab:first-child {
+  border-radius: 10px 0 0 0;
+}
+.tab:last-child {
+  border-radius: 0 10px 0 0;
+}
+.tab.active, .week-buttons > a.active {
+  background: white;
+  color: $shyft-dark-blue;
+}
+
+.week-buttons > a.active:hover {
+  background-color: white;
+
+}
+
