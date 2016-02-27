@@ -8,8 +8,9 @@
   right: 20px;
   background: #FFFFFF;
   overflow: scroll;
-  padding: 20px;
+  padding: 25px 35px;
   font-size: 14px;
+  font-weight: lighter;
   box-shadow: -1px 1px 2px #D7D7D7;
   h2 {
     padding-bottom: 21px;
@@ -22,6 +23,18 @@
     color: $gray-light;
     font-weight: normal;
     margin: 0;
+  }
+  label {
+    color: #717171;
+  }
+  input {
+    border-radius: 3px;
+  }
+  .btn {
+    margin-top: 12px;
+  }
+  #skills-list {
+    margin: 100px 0 7px 0;
   }
 }
 .valign {
@@ -99,9 +112,7 @@
       background: none;
     }
     &:after{
-      // content: attr(data-tg-on);
-      // background: #02C66F;
-      background-image: url('https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png');
+      // background-image: url('https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png');
       background-size: 40px;
       background-repeat: no-repeat;
       background-position: center;

@@ -1,16 +1,14 @@
-<div>
-  <% if poste.name == "Kitchen" %>
-    <%= image_tag "Hamburger-48.png" %>
-  <% elsif poste.name == "Cashier" %>
-    <%= image_tag "Check-48.png" %>
-  <% elsif poste.name == "Dishwash" %>
-    <%= image_tag "Broom-48.png" %>
-  <% elsif poste.name == "Bar" %>
-    <%= image_tag "barista.png" %>
-  <% elsif poste.name == "Waiter" %>
-    <%= image_tag "Waiter-48.png" %>
-  <% else %>
-    <%= image_tag "Restaurant-48.png" %>
-  <% end %>
-</div>
+<% if poste.name == "Kitchen" %>
+  <%= image_tag "Hamburger-48.png" %>
+<% elsif poste.name == "Cashier" %>
+  <%= image_tag "Check-48.png" %>
+<% elsif poste.name == "Dishwash" %>
+  <%= image_tag "Broom-48.png" %>
+<% elsif poste.name == "Bar" %>
+  <%= image_tag "barista.png" %>
+<% elsif poste.name == "Waiter" %>
+  <%= image_tag "Waiter-48.png" %>
+<% else %>
+  <%= image_tag "Restaurant-48.png" %>
+<% end %>
 

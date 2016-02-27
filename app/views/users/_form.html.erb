@@ -12,19 +12,21 @@
 
   <div class="row valign">
     <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
-    <%= f.input :email, placeholder: "iluvmeth@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :email, placeholder: "wallie@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
     <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
   </div>
 
   <div class="row valign">
     <label for="user_role" class="contol-label col-xs-4 vcenter">Role</label>
-    <%= f.input :role, as: :select, collection: Membership::ROLES, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, prompt: "Pick a role" %>
+    <%= f.input :role, as: :select, collection: Membership::ROLES, label: false, wrapper_html: { class: "col-xs-8 vcenter", id: "toggle-hidden-fields" }, prompt: "Pick a role" %>
   </div>
 
-  <% @shop.postes.each do |poste| %>
-    <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="postes[]">
-    <label class='tgl-btn' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
-  <% end %>
+  <div id="skills-list" class="hidden">
+    <% @shop.postes.each do |poste| %>
+      <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="postes[]">
+      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= render 'users/poste_logo', poste: poste %>' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
+    <% end %>
+  </div>
 
   <div class="row valign">
     <label for="user_contract" class="contol-label col-xs-4 vcenter">Contract</label>
@@ -39,7 +41,16 @@
 
 <% content_for :scripts do %>
   <script>
+    <% @shop.postes.each do |poste| %>
+      var bg = $('#lb<%= poste.id.to_s %>').data('tg-on').trim();
+      $('body').append('<style>#lb<%= poste.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
+    <% end %>
 
+    // CONTINUE HERE!!!!!!!!!!
+
+    $('#toggle-hidden-fields').change(function(){
+      $('#skills-list').toggleClass('hidden', $(this).val() == 'Employee');
+    });
   </script>
 <% end %>
 
