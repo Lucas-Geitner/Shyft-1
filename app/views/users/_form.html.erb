@@ -1,4 +1,4 @@
-<%= simple_form_for user, url: custom_path do |f| %>
+<%= simple_nested_form_for user, url: custom_path do |f| %>
 
   <div class="row valign">
     <label for="user_first_name" class="contol-label col-xs-4 vcenter">First name</label>
@@ -17,13 +17,15 @@
   </div>
 
   <div class="row valign">
-    <label for="user_role" class="contol-label col-xs-4 vcenter">Role</label>
-    <%= f.input :role, as: :select, collection: Membership::ROLES, label: false, wrapper_html: { class: "col-xs-8 vcenter", id: "toggle-hidden-fields" }, prompt: "Pick a role" %>
+    <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Role</label>
+    <%= f.fields_for membership do |p| %>
+      <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Pick a role" %>
+    <% end %>
   </div>
 
-  <div id="skills-list" class="hidden">
+  <div id="skills-list">
     <% @shop.postes.each do |poste| %>
-      <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="postes[]">
+      <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="poste<%= poste.id.to_s %>">
       <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= render 'users/poste_logo', poste: poste %>' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
     <% end %>
   </div>
@@ -46,10 +48,15 @@
       $('body').append('<style>#lb<%= poste.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
     <% end %>
 
-    // CONTINUE HERE!!!!!!!!!!
-
-    $('#toggle-hidden-fields').change(function(){
-      $('#skills-list').toggleClass('hidden', $(this).val() == 'Employee');
+    $(function() {
+      $('#skills-list').hide();
+      $('#user_membership_role').change(function(){
+        if($('#user_membership_role').val() == 'Employee') {
+          $('#skills-list').slideDown();
+        } else {
+          $('#skills-list').slideUp();
+        }
+      });
     });
   </script>
 <% end %>

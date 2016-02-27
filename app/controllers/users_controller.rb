@@ -14,24 +14,27 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @shop = current_user.shops.first
-    @membership = @user.memberships.build(role: params[:role], shop: @shop)
+    @membership = @user.memberships.build(role: params[:user][:membership][:role], shop: @shop)
     @abilities = []
-    params[:user][:postes].reject(&:empty?).each do |i|
-      ability = @user.abilities.build(poste_id: i.to_i)
-      @abilities << ability
+    @shop.postes.each do |poste|
+      unless params["poste" + poste.id.to_s].nil?
+        ability = @user.abilities.build(poste: poste)
+        @abilities << ability
+      end
     end
 
-    # if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
     if @user.save
-      raise
       @user.invite!(current_user)
       @membership.save
       @abilities.each { |ability| ability.save }
-      redirect_to new_user
+      redirect_to new_user_path
     else
       raise
       redirect_to :back
     end
+
+    # JS - ignore for the moment
+    # if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
       # respond_to do |format|
       #   format.html { redirect_to user_path(@user) }
       #   format.js
@@ -57,6 +60,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :contract)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :contract, :role)
   end
 end
