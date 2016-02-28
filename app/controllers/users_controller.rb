@@ -4,11 +4,33 @@ class UsersController < ApplicationController
     @membership = Membership.new
     @ability = Ability.new
     @shop = current_user.shops.first
-    @shop_employees = @shop.users
+
+    hr_managers = []
+    line_managers = []
+    employees = []
+
+    @shop.users.each do |user|
+      case user.role
+      when "HR Manager" then hr_managers << user
+      when "Line Manager" then line_managers << user
+      else employees << user
+      end
+    end
+
+    @shop_employees = [hr_managers, line_managers, employees]
+    @error = false
   end
 
   def show
     @user = User.find(params[:id])
+    @shop = current_user.shops.first
+    @similar_users = []
+    unless @user.postes.empty?
+      @user.abilities.each do |ability|
+        @similar_users << @shop.users.joins(:abilities).where(abilities: {poste_id: ability.poste.id})
+      end
+      @similar_users = @similar_users.flatten.uniq.reject { |user| user == @user }
+    end
   end
 
   def create
@@ -30,7 +52,8 @@ class UsersController < ApplicationController
       redirect_to new_user_path
     else
       raise
-      redirect_to :back
+      @error = true
+      redirect_to new_user_path
     end
 
     # JS - ignore for the moment

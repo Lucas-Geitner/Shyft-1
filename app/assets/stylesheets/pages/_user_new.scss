@@ -1,0 +1,56 @@
+#page-content {
+  position: relative;
+}
+.fixed-content {
+  position: fixed;
+  width: 32%;
+  top: 85px;
+  right: 20px;
+  overflow: scroll;
+  box-shadow: 1px 1px 2px #D7D7D7;
+}
+.fixed-form {
+  width: 100%;
+  background: #FFFFFF;
+  padding: 25px 35px;
+  font-size: 14px;
+  font-weight: lighter;
+  h2 {
+    padding-bottom: 21px;
+    color: #555555;
+    font-size: 25px;
+    margin: 0;
+    text-align: center;
+  }
+  p {
+    color: $gray-light;
+    font-weight: normal;
+    margin: 0;
+  }
+  label {
+    color: #717171;
+  }
+  input {
+    border-radius: 3px;
+  }
+  .btn {
+    margin-top: 12px;
+  }
+  #skills-list {
+    margin: 100px 0 7px 0;
+  }
+}
+.valign {
+  height: 30px;
+  line-height: 30px;
+}
+
+#invalid-user-alert {
+  width: 100%;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+
+
+

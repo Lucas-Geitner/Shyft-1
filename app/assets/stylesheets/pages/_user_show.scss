@@ -1,0 +1,117 @@
+#user-info {
+  .user-details {
+    margin: 20px 0;
+    td:first-child {
+      width: 100px;
+      text-align: center;
+      .user-details-icon {
+        width: 50%;
+        margin: 0 auto;
+        background: #D2D2D2;
+        color: white;
+        height: 70px;
+        width: 70px;
+        line-height: 70px;
+        border-radius: 50%;
+        font-weight: lighter;
+        font-size: 35px;
+      }
+    }
+    h1 {
+      margin-top: 0;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+  .user-contact-info {
+    .contact-icon {
+      text-align: center;
+      width: 35px;
+    }
+    td {
+      height: 20px;
+      color: $blue;
+      font-size: 14px;
+      font-weight: lighter;
+      a:hover {
+        text-decoration: none;
+        color: #006F7D;
+      }
+    }
+  }
+  .user-skills {
+    background: white;
+    box-shadow: 1px 1px 2px #D7D7D7;
+    border-radius: 2px;
+    padding: 20px;
+    display: inline-block;
+    margin: 25px 0;
+    img {
+      width: 40px;
+    }
+    td {
+      text-align: center;
+      color: $gray-light;
+      font-size: 14px;
+      font-weight: lighter;
+    }
+    .td-spacer {
+      width: 20px;
+    }
+  }
+}
+
+#similar-users {
+  h2 {
+    color: $gray-light;
+    font-size: 20px;
+    margin: 10px 0 20px 0;
+  }
+  .similar-users-list {
+    width: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+  li {
+    vertical-align: top;
+  }
+  .employee-card {
+    width: 200px;
+    height: 200px;
+    background: white;
+    box-shadow: 1px 1px 2px #D7D7D7;
+    border-radius: 2px;
+    padding: 20px;
+    transition: border-left 0.1s ease;
+    &:hover {
+      border-left: 4px solid $blue;
+    }
+    #employee-card-name {
+      margin-top: 0;
+      font-size: 15px;
+      font-weight: bold;
+      color: #5C5C5C;
+    }
+    #employee-card-name-tr {
+      height: 35px;
+    }
+    #employee-card-skills-tr {
+      height: 70px;
+    }
+    ul {
+      white-space: normal;
+      li {
+        padding: 0;
+      }
+    }
+    a {
+      font-size: 12px !important;
+    }
+    #employee-card-table {
+      height: 100%;
+      border-collapse: collapse;
+    }
+  }
+}
+

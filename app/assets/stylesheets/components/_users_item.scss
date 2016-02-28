@@ -1,0 +1,89 @@
+.card-user {
+  background: white;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  transition: border-left 0.1s ease;
+  box-shadow: 1px 1px 2px #D7D7D7;
+  &:hover {
+    border-left: 4px solid $blue;
+  }
+}
+.card-manager {
+  background: $blue;
+  position: relative;
+  &:hover {
+    border-left: 4px solid #006F7D;
+  }
+  .card-user-description {
+    position: absolute;
+    top: 14px;
+  }
+  .card-user-name {
+    color: white;
+    i {
+      color: white;
+    }
+    .separator {
+      color: #006F7D;
+    }
+  }
+  .user-info {
+    color: white;
+  }
+  .list-controls .btn {
+    background: $blue;
+    color: white;
+    &:hover {
+      color: #006F7D;
+    }
+  }
+}
+.card-user-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #585858;
+  margin-bottom: 13px;
+  i {
+    font-size: 17px;
+    margin-right: 5px;
+    color: #717171;
+  }
+  .separator {
+    margin: 0 5px;
+    color: #EAEAEA;
+  }
+}
+.user-info {
+  font-size: 12px;
+  color: #9C9C9C;
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.skill-buttons {
+  display: flex;
+  align-items: center;
+}
+.skill-button {
+  font-size: 11px;
+  font-weight: lighter;
+  padding: 2px 10px !important;
+  border-radius: 30px;
+  transition: all 0.15s ease;
+  background: #BABABA;
+  color: #FFFFFF;
+  border-radius: 30px;
+  margin: 3px 1px;
+}
+.user-circle-users {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

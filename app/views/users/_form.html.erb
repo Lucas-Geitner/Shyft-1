@@ -13,12 +13,13 @@
   <div class="row valign">
     <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
     <%= f.input :email, placeholder: "wallie@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
-    <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
   </div>
+
+  <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
 
   <div class="row valign">
     <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Role</label>
-    <%= f.fields_for membership do |p| %>
+    <%= f.simple_fields_for membership do |p| %>
       <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Pick a role" %>
     <% end %>
   </div>
@@ -36,9 +37,10 @@
   </div>
 
   <div class="text-center">
-    <%= f.button :submit, value: "Create", class: "btn-primary" %>
+    <%= f.button :submit, value: "Create", class: "btn-primary", id: "submit-new-employee" %>
   </div>
 <% end %>
+
 
 
 <% content_for :scripts do %>
