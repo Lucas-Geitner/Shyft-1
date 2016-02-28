@@ -1,46 +1,64 @@
 <div class="row" id="page-content">
   <div class="scrolling-list col-xs-7">
-    <% @shop_employees.each do |employee| %>
-      <div class="card-planning">
-        <div class="card-planning-description">
-          <div class="card-planning-dates">
-            <span>
-              <i class="fa fa-user"></i>
-              <%= employee.first_name.capitalize + " " + employee.last_name.capitalize %>
-            </span>
-            <span class="separator">-</span>
-            <span>
-              <%= employee.memberships.first.role %>
-            </span>
+    <% @shop_employees.each do |employee_group| %>
+      <% employee_group.each do |employee| %>
+        <div class="<%= employee.role == "Line Manager" ? "card-user card-manager" : "card-user" %>">
+          <div class="card-user-description">
+            <div class="card-user-name">
+              <span>
+                <i class="fa fa-user"></i>
+                <%= employee.first_name.capitalize + " " + employee.last_name.capitalize %>
+              </span>
+              <span class="separator">-</span>
+              <span>
+                <%= employee.memberships.first.role %>
+              </span>
+            </div>
+            <div class="skill-buttons">
+              <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+                <div class="skill-button">
+                  <%= poste.name %>
+                </div>
+              <% end %>
+            </div>
           </div>
-          <div class="skill-buttons">
-            <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
-              <div class="skill-button">
-                <%= poste.name %>
-              </div>
-            <% end %>
+          <div class="card-user-controls">
+            <div class="user-info">
+              Insert some <strong>cool</strong> information here!
+            </div>
+            <div class="list-controls">
+              <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
+              <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
+            </div>
           </div>
         </div>
-        <div class="card-planning-controls">
-          <div class="planning-owner">
-            Insert some <strong>really</strong> cool information here!
-          </div>
-          <div class="list-controls">
-            <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
-            <%= link_to "Modifier", user_path(employee), class: "btn btn-default" %>
-            <%= link_to user_path(employee), class: "btn btn-default" do %>
-              <i class="fa fa-print"></i>
-            <% end %>
-          </div>
-        </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
 
+  <div class="fixed-content">
+    <div class="fixed-form">
+      <h2>Add an employee</h1>
+      <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
+    </div>
 
-  <div class="fixed-form">
-    <h2>Add an employee</h1>
-    <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
+    <div class="alert alert-warning alert-dismissible fade in" role="alert" id="invalid-user-alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Oups!</strong> The employee you are trying to create is not valid.
+    </div>
   </div>
 </div>
+
+
+<% content_for :scripts do %>
+  <script>
+    $('#invalid-user-alert').hide()
+    <% if @error %>
+      $('#invalid-user-alert').fadeIn()
+    <% else %>
+    <% end %>
+  </script>
+<% end %>
 
