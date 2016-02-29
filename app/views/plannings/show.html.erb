@@ -27,8 +27,14 @@
     <div class="tab-wrapper">
       <div class="tabs">
         <% (1..7).each do |n| %>
-          <%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n), class: "tab" %>
+          <%= link_to planning_path(@planning, week: @week, day: n), class: "tab" do %>
+            <div>
+              <%= (@planning.start_date + (n - 1).days).strftime('%A') %>
+              <div class="small-date"><%= (@planning.start_date + (n - 1).days).strftime('%d %b %Y') %></div>
+            </div>
+          <% end %>
         <% end %>
+        <%= link_to "Week view", week_view_path(@planning, week: @week), class: "tab" %>
       </div>
     </div>
 
