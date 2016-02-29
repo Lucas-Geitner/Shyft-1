@@ -20,7 +20,14 @@
     <div class="planning-owner">Last edited by <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> 3 days  ago</div>
     <div class="list-controls">
       <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
-      <%= link_to "Déclarer", planning_path(planning), class: "btn btn-default" %>
+      <% if planning.status == "Ongoing" %>
+        <%= simple_form_for planning, method: :patch, remote: true do |f| %>
+          <%= f.input :status, as: :hidden, input_html: {value: "Declared" }%>
+          <%= f.submit 'Déclarer', class: "btn btn-default"%>
+        <% end %>
+      <% else %>
+        <div class="skill-button-green">Déclaré</div>
+      <% end %>
       <%= link_to planning_path(planning), class: "btn btn-default" do %>
         <i class="fa fa-print"></i>
       <% end %>

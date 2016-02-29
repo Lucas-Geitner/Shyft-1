@@ -1,7 +1,7 @@
 class PlanningsController < ApplicationController
   def index
     if params[:date] && params[:date] != ""
-      @plannings = Planning.where("start_date < ? AND end_date > ? AND shop_id = ?", params[:date], params[:date], params[:shop_id])
+      @plannings = Planning.where("start_date < ? AND end_date > ? AND shop_id = ? AND status = ?", params[:date], params[:date], params[:shop_id], params[:status])
     else
       @plannings = Planning.where("shop_id = ?", params[:shop_id])
     end
@@ -35,25 +35,29 @@ class PlanningsController < ApplicationController
     @planning = Planning.new(planning_params)
     @planning.user = current_user
     @planning.shop = @shop
+    @planning.status = "Ongoing"
     @planning.save
-    redirect_to planning_path(@shop, @planning)
+
+    redirect_to planning_path(@planning)
+
   end
 
   def edit
-    @planning = planning.find(params[:id])
+    @planning = Planning.find(params[:id])
   end
 
   def update
-    @planning = planning.find(params[:id])
+    @planning = Planning.find(params[:id])
+    @planning.update(planning_params)
   end
 
   def destroy
-    @planning = planning.find(params[:id])
+    @planning = Planning.find(params[:id])
     @planning.destroy
     redirect_to(:back)
   end
 
   def planning_params
-    params.require(:planning).permit(:name, :start_date, :end_date, :user_id, :shop_id)
+    params.require(:planning).permit(:name, :start_date, :end_date, :user_id, :shop_id, :status)
   end
 end
