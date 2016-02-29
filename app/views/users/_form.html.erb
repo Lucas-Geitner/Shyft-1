@@ -1,44 +1,66 @@
-<%= simple_nested_form_for user, url: custom_path, remote: true do |f| %>
-  <div class="label-input-group">
-    <p class="col-xs-4">First name</p>
-    <%= f.input :first_name, label: false, placeholder: "Walter", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
+<%= simple_nested_form_for user, url: custom_path do |f| %>
+
+  <div class="row valign">
+    <label for="user_first_name" class="contol-label col-xs-4 vcenter">First name</label>
+    <%= f.input :first_name, placeholder: "Walter", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
-  <div class="label-input-group">
-    <p class="col-xs-4">Last name</p>
-    <%= f.input :last_name, label: false, placeholder: "White", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
+  <div class="row valign">
+    <label for="user_last_name" class="contol-label col-xs-4 vcenter">Last name</label>
+    <%= f.input :last_name, placeholder: "White", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
-  <div class="label-input-group">
-    <p class="col-xs-4">Email</p>
-    <%= f.input :email, label: false, placeholder: "iluvmeth@gmail.com", wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" } %>
-    <%= f.input :password, as: :hidden, value: "aaaaaaaa" %>
+  <div class="row valign">
+    <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
+    <%= f.input :email, placeholder: "wallie@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
-  <div class="label-input-group">
-    <p class="col-xs-4">Role</p>
-    <%= f.fields_for membership do |builder| %>
-      <%= builder.input :role, label: false, wrapper_html: { class: "col-xs-8" }, input_html: { style: "height: 30px; font-size: 14px;" }, type: :select, collection: Membership::ROLES %>
+  <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
+
+  <div class="row valign">
+    <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Role</label>
+    <%= f.simple_fields_for membership do |p| %>
+      <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Pick a role" %>
     <% end %>
   </div>
 
-  <div class="checkbox-group">
-    <p>Skills</p>
-    <%= f.fields_for ability do |builder| %>
-      <% Poste.all.each do |poste| %>
-        <%= builder.input :poste, as: :boolean, inline_label: poste.name.capitalize, wrapper_html: { class: "form-check-box" } %>
-      <% end %>
+  <div id="skills-list">
+    <% @shop.postes.each do |poste| %>
+      <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="poste<%= poste.id.to_s %>">
+      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= render 'users/poste_logo', poste: poste %>' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
     <% end %>
   </div>
 
-  <div class="checkbox-group">
-    <p>Contract</p>
-    <%= f.input :contract, label: false, as: :attachinary %>
+  <div class="row valign">
+    <label for="user_contract" class="contol-label col-xs-4 vcenter">Contract</label>
+    <%= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="text-center">
-    <%= f.button :submit, value: "Create", class: "btn-primary" %>
+    <%= f.button :submit, value: "Create", class: "btn-primary", id: "submit-new-employee" %>
   </div>
+<% end %>
+
+
+
+<% content_for :scripts do %>
+  <script>
+    <% @shop.postes.each do |poste| %>
+      var bg = $('#lb<%= poste.id.to_s %>').data('tg-on').trim();
+      $('body').append('<style>#lb<%= poste.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
+    <% end %>
+
+    $(function() {
+      $('#skills-list').hide();
+      $('#user_membership_role').change(function(){
+        if($('#user_membership_role').val() == 'Employee') {
+          $('#skills-list').slideDown();
+        } else {
+          $('#skills-list').slideUp();
+        }
+      });
+    });
+  </script>
 <% end %>
 
 

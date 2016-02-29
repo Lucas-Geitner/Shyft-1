@@ -20,20 +20,20 @@ def choose_weighted(weighted)
 end
 
 300.times do
+  first_name = Faker::Name.first_name
+  last_name = Faker::Name.last_name
+  email = Faker::Internet.email("#{first_name}.#{last_name}")
   user = User.new(
-    email: Faker::Internet.email,
+    email: email,
     password: "aaaaaaaa",
-    first_name: Faker::Name.first_name,
-    last_name:Faker::Name.last_name)
+    first_name: first_name,
+    last_name: last_name)
   user.save
 end
 
 organisations.each do |org|
   Organisation.new(name: org).save
 end
-
-
-
 
 30.times do
   opening_time = Time.now.midnight + rand(6..11).hours
@@ -64,7 +64,7 @@ User.all.each do |user|
   membership.save
 end
 
-User.joins(:memberships).where(memberships: {role: :line_manager}).each do |manager|
+User.joins(:memberships).where(memberships: {role: "Line Manager"}).each do |manager|
   start_date = Date.today + rand(4).months + rand(30).days
   end_date = start_date + 30.days
   rand(10).times do
@@ -77,7 +77,7 @@ User.joins(:memberships).where(memberships: {role: :line_manager}).each do |mana
   end
 end
 
-User.joins(:memberships).where(memberships: {role: :basic_employee}).each do |employee|
+User.joins(:memberships).where(memberships: {role: "Employee"}).each do |employee|
   Poste.all.sample(rand(1..Poste.count)).each do |poste|
     Ability.new(user: employee, poste: poste).save
   end
