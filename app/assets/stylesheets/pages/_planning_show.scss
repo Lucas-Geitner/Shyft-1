@@ -13,6 +13,12 @@
   align-items: center;
 }
 
+.week-buttons-container {
+  position: relative;
+  width: 100%;
+  height: 55px;
+}
+
 .week-buttons a {
   font-size: 14px;
   background-color: $gray-light;

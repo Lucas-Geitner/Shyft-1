@@ -1,0 +1,70 @@
+<div class="agenda-buttons text-right">
+  <div class="week-buttons-container">
+    <div class="week-buttons">
+      <% (1..((@planning.end_date - @planning.start_date) / 604800).ceil + 1).each do |n| %>
+        <%= link_to "S#{n}", week_view_path(@planning, week: n), class: "text-center" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-and-employees">
+  <div class="agenda-wrapper">
+    <div class="tab-wrapper">
+      <div class="tabs">
+        <% (1..7).each do |n| %>
+          <%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n), class: "tab" %>
+        <% end %>
+        <%= link_to "Week view", week_view_path(@planning, week: @week), class: "tab active" %>
+      </div>
+    </div>
+
+    <div id="agenda">
+      <table id="planner">
+        <tr>
+          <th>DAYS</th>
+          <th>Postes</th>
+          <% @range.each_with_index do |time, index| %>
+            <th colspan="2"><%= time %>h</th>
+          <% end %>
+        </tr>
+        <% (0...7).each do |day| %>
+          <% today = (@monday + day.days) %>
+          <% Poste.all.each_with_index do |poste, poste_index| %>
+            <tr>
+              <% if poste_index == 0 %>
+                <td rowspan="<%= Poste.count %>"><%= today.strftime("%A") %></td>
+              <% end %>
+              <td style="padding: 0 5px;"><%= poste.name %></td>
+              <% @range.each do |time| %>
+                <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell <%= 'greyish' if (today < @planning.start_date || today > @planning.end_date) %>" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px solid rgba(37,50,56,0.2)">
+                  <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
+                  <div class="blech">
+                  </div>
+                </td>
+                <td data-number="<%= number_of_dudes(@planning, (today + time.hours + 30.minutes), poste) %>" class= "time-cell <%= 'greyish' if today < @planning.start_date || today > @planning.end_date %>" id="<%= "#{time}.5/#{today.strftime("%A")}" %>">
+                  <%= get_div_width(@planning, (today + time.hours + 30.minutes), poste) unless get_div_width(@planning, (today + time.hours + 30.minutes), poste) == (get_div_width(@planning, (today + time.hours), poste) - 30) || get_div_width(@planning, (today + time.hours + 30.minutes), poste) == 0 %>
+                  <div class="blech">
+                  </div>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>
+
+<% content_for(:scripts) do %>
+  <script>
+    $(function () {
+      $('.week-buttons > a:contains("<%= "S#{@week}" %>")').addClass("active")
+      $(".time-cell").each(function() {
+        if ( /^\s*$/.test($(this).text()) == false ) {
+          $(this).append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width:' + $(this).text().match(/\d+/) + 'px;">' + this.dataset.number + '</div>')
+        }
+      })
+    });
+  </script>
+<% end %>

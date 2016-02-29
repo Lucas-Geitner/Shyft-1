@@ -29,6 +29,7 @@
         <% (1..7).each do |n| %>
           <%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n), class: "tab" %>
         <% end %>
+        <%= link_to "Week view", week_view_path(@planning, week: @week), class: "tab" %>
       </div>
     </div>
 
