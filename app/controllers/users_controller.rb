@@ -71,6 +71,9 @@ class UsersController < ApplicationController
     # end
   end
 
+  def total
+  end
+
   def edit
   end
 

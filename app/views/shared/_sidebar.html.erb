@@ -23,7 +23,9 @@
          <% end %>
       </li>
       <li>
-        <a href="#"><i class="fa fa-file-text-o icon"></i>Apercu Nbre heure</a>
+        <%= link_to shop_total_path(@shop) do %>
+          <i class="fa fa-file-text-o icon"></i>Apercu Nbre heure
+        <% end %>
       </li>
     <% else %>
       <li>
