@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :organisations, only: :create
   resources :shops, only: :create do
     resources :plannings, only: [:new, :create, :index]
+    get '/users/total' => 'users#total', as: :total
   end
 
   resources :plannings, only: [:show, :edit, :update, :destroy] do
