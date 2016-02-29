@@ -1,9 +1,9 @@
 class PlanningsController < ApplicationController
   def index
     if params[:date] && params[:date] != ""
-      @plannings = Planning.where("start_date < ? AND end_date > ?", params[:date], params[:date])
+      @plannings = Planning.where("start_date < ? AND end_date > ? AND shop_id = ?", params[:date], params[:date], params[:shop_id])
     else
-      @plannings = Planning.all
+      @plannings = Planning.where("shop_id = ?", params[:shop_id])
     end
     @planning = Planning.new
   end
@@ -34,6 +34,7 @@ class PlanningsController < ApplicationController
   def create
     @planning = Planning.new(planning_params)
     @planning.user = current_user
+    @planning.shop = @shop
     @planning.save
     redirect_to planning_path(@shop, @planning)
   end
