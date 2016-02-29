@@ -63,11 +63,13 @@ class UsersController < ApplicationController
     shop_employees.each do |employee|
       employee_shifts = Hash.new
       employee.shifts.each do |shift|
-        start_time = shift.starts_at
-        end_time = shift.ends_at
-        date = start_time.strftime("%A, %b %d")
-        shift_duration = (end_time - start_time) / 1.hour
-        employee_shifts[date] = shift_duration
+        if shift.starts_at.strftime("%B") == Date.today.strftime("%B")
+          start_time = shift.starts_at
+          end_time = shift.ends_at
+          date = start_time.strftime("%A, %b %d")
+          shift_duration = (end_time - start_time) / 1.hour
+          employee_shifts[date] = shift_duration
+        end
       end
       @employees_shifts[employee] = employee_shifts
     end

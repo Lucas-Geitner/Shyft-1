@@ -1,29 +1,89 @@
-<h1><%= Date.today.strftime("%B %Y") %></h1>
 
-<table>
-  <th>
-    <td>First name</td>
-    <td>Last name</td>
-    <td><%= Date.today.strftime("%B") %> total hours</td>
-    <td>Available hours</td>
-    <td>Difference</td>
-  </th>
-  <% i = 1 %>
-  <% @employees_shifts.each do |employee, shifts| %>
-    <% total = 0 %>
-    <% shifts.each do |date, duration| %>
-      <% total += duration %>
-    <% end %>
+<div class="panel panel-default total-hours">
+  <div class="panel-heading">
+    <h1><%= Date.today.strftime("%B %Y") %></h1>
+  </div>
+
+  <table class="table">
+
     <tr>
-      <td><%= i %></td>
-      <td><%= employee.first_name %></td>
-      <td><%= employee.last_name %></td>
-      <td><%= total %></td>
-      <td><%= available_hours = 35 %></td>
-      <td><%= total - available_hours %></td>
+      <th>Prénom</td>
+      <th>Nom de famille</td>
+      <th>Heures de travail</td>
+      <th>Heures disponibles</td>
+      <th>Difference</td>
     </tr>
-    <% i += 1 %>
-  <% end %>
-</table>
+
+    <% @employees_shifts.each do |employee, shifts| %>
+
+      <!-- get total hours worked for employee, get date and duration for popover -->
+      <% total = 0 %>
+      <% date_and_duration = "" %>
+      <% available_hours = 35 %>
+      <% shifts.each do |date, duration| %>
+        <% total += duration %>
+        <% date = date.to_s %>
+        <% duration = duration %>
+        <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
+        <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
+        <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+      <% end %>
+
+
+      <!-- create popover content -->
+      <% popover_content = "<div class='panel panel-default popover-table'>
+                              <div class='panel-heading'>
+                                Shifts
+                              </div>
+                              <table class=table>
+                                #{date_and_duration}
+                              </table>
+                            </div>" %>
+
+
+      <tr class="<%= 'over-hours-limit' if total - available_hours > 0 %>">
+        <td><%= employee.first_name %></td>
+        <td><%= employee.last_name %></td>
+        <!-- convert float to integer and rational and include popover for all shifts -->
+        <% if total % 1 != 0 %>
+          <td data-toggle="popover" data-content="<%= popover_content %>"><%= total.floor %> <sup><%= (total % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (total % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% else %>
+          <td data-toggle="popover" data-content="<%= popover_content %>"><%= total.floor %></td>
+        <% end %>
+        <td><%= available_hours %></td>
+        <!-- convert float to integer and rational -->
+        <% if (total - available_hours) % 1 != 0 %>
+          <td><%= (total - available_hours).floor %> <sup><%= ((total - available_hours) % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= ((total - available_hours) % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% else %>
+          <td><%= (total - available_hours).floor %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<% content_for :scripts do %>
+  <script>
+    $('[data-toggle="popover"]').popover({
+      container: 'body',
+      html: true,
+      trigger: 'hover',
+      delay: {"show": "300", "hide": "50"},
+      placement: 'bottom'
+    });
+  </script>
+<% end %>
+
+
+
 
 

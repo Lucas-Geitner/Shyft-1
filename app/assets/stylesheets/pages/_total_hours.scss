@@ -1,0 +1,63 @@
+.total-hours {
+  box-shadow: 1px 1px 2px #D7D7D7;
+  h1 {
+    margin: 5px 0;
+    font-size: 25px;
+    color: $blue;
+  }
+  td {
+    text-align: center;
+  }
+  th {
+    color: $gray-light;
+    font-size: 14px;
+    text-align: center;
+  }
+  tr {
+    font-weight: lighter;
+    &:nth-child(even) {
+      background: #F5F5F5;
+    }
+  }
+  .over-hours-limit {
+    td {
+      background: #FEE1ED;
+      border-top: 1px solid #FEA5AC;
+      border-bottom: 1px solid #FEA5AC;
+      &:first-child{
+        border-left: 1px solid #FEA5AC;
+      }
+      &:last-child {
+        border-right: 1px solid #FEA5AC;
+      }
+    }
+  }
+}
+.popover-table {
+  margin: 0;
+  border: none !important;
+  box-shadow: none;
+  .panel-heading {
+    background: none;
+    color: $gray-light;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+  }
+  td {
+    background: none;
+    color: $gray;
+    font-size: 12px;
+    font-weight: lighter;
+    text-align: center;
+    border-bottom: 1px solid white;
+    padding: 0;
+    &:first-child {
+      width: 105px;
+    }
+    &:last-child {
+      width: 70px;
+    }
+  }
+}
