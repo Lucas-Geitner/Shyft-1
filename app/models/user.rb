@@ -20,4 +20,8 @@ class User < ActiveRecord::Base
   def role
     self.memberships.first.role unless self.id.nil?
   end
+
+  def name
+    return self.first_name + " " + self.last_name
+  end
 end

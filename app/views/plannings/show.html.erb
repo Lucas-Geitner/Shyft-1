@@ -355,3 +355,7 @@
     });
   </script>
 <% end %>
+
+<% content_for :title_tag do %>
+Planning <%= @planning.id %> by <%= @planning.user.name %>
+<% end %>
