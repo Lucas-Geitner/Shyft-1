@@ -10,14 +10,6 @@
     <!-- Different navigation if login or not -->
     <% if user_signed_in? %>
 
-      <!-- Notification -->
-      <%= link_to "#", class: "navbar-wagon-item navbar-wagon-link" do %>
-        <div class="badge-container">
-          <i class="fa fa-envelope-o"></i>
-          <div class="badge badge-blue">3</div>
-        </div>
-      <% end %>
-
       <!-- Profile picture and dropdown -->
       <div class="navbar-wagon-item">
         <div class="dropdown">
@@ -41,6 +33,13 @@
           </ul>
         </div>
       </div>
+      <% p = Planning.where("shop_id = :shop_id AND start_date <= :today AND end_date >= :today", {shop_id: @shop.id, today: Date.today}) %>
+      <% if p.length > 0 %>
+        <%= link_to t(".top_call_to_action", default: "Planning actuel"), planning_path(p.first), class: "navbar-wagon-item navbar-wagon-button btn" %>
+      <% else %>
+        <%= link_to t(".top_call_to_action", default: "Mes plannings"), shop_plannings_path(@shop), class: "navbar-wagon-item navbar-wagon-button btn" %>
+      <% end %>
+    </div>
 
     <% else %>
 
@@ -50,8 +49,6 @@
     <% end %>
 
     <!-- Button (call-to-action) -->
-    <%= link_to t(".top_call_to_action", default: "Planning actuel"), "#", class: "navbar-wagon-item navbar-wagon-button btn" %>
-  </div>
 
   <!-- Dropdown list appearing on mobile only -->
   <div class="navbar-wagon-item hidden-md hidden-lg">
