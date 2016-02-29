@@ -36,7 +36,7 @@ class PlanningsController < ApplicationController
     @planning.user = current_user
     @planning.shop = @shop
     @planning.save
-    redirect_to planning_path(@shop, @planning)
+    redirect_to planning_path(@planning)
   end
 
   def edit
