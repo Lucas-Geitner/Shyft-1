@@ -1,0 +1,29 @@
+<h1><%= Date.today.strftime("%B %Y") %></h1>
+
+<table>
+  <th>
+    <td>First name</td>
+    <td>Last name</td>
+    <td><%= Date.today.strftime("%B") %> total hours</td>
+    <td>Available hours</td>
+    <td>Difference</td>
+  </th>
+  <% i = 1 %>
+  <% @employees_shifts.each do |employee, shifts| %>
+    <% total = 0 %>
+    <% shifts.each do |date, duration| %>
+      <% total += duration %>
+    <% end %>
+    <tr>
+      <td><%= i %></td>
+      <td><%= employee.first_name %></td>
+      <td><%= employee.last_name %></td>
+      <td><%= total %></td>
+      <td><%= available_hours = 35 %></td>
+      <td><%= total - available_hours %></td>
+    </tr>
+    <% i += 1 %>
+  <% end %>
+</table>
+
+

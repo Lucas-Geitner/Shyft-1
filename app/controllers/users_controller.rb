@@ -58,7 +58,19 @@ class UsersController < ApplicationController
   end
 
   def total
-
+    shop_employees = @shop_employees[2]
+    @employees_shifts = Hash.new
+    shop_employees.each do |employee|
+      employee_shifts = Hash.new
+      employee.shifts.each do |shift|
+        start_time = shift.starts_at
+        end_time = shift.ends_at
+        date = start_time.strftime("%A, %b %d")
+        shift_duration = (end_time - start_time) / 1.hour
+        employee_shifts[date] = shift_duration
+      end
+      @employees_shifts[employee] = employee_shifts
+    end
   end
 
   def edit
