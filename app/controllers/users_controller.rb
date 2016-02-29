@@ -1,29 +1,16 @@
 class UsersController < ApplicationController
+  before_action :set_shop, only: [:new, :show, :create, :total]
+  before_action :set_shop_employees, only: [:new, :total]
+
   def new
     @user = User.new
     @membership = Membership.new
     @ability = Ability.new
-    @shop = current_user.shops.first
-
-    hr_managers = []
-    line_managers = []
-    employees = []
-
-    @shop.users.each do |user|
-      case user.role
-      when "HR Manager" then hr_managers << user
-      when "Line Manager" then line_managers << user
-      else employees << user
-      end
-    end
-
-    @shop_employees = [hr_managers, line_managers, employees]
     @error = false
   end
 
   def show
     @user = User.find(params[:id])
-    @shop = current_user.shops.first
     @similar_users = []
     unless @user.postes.empty?
       @user.abilities.each do |ability|
@@ -35,7 +22,6 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @shop = current_user.shops.first
     @membership = @user.memberships.build(role: params[:user][:membership][:role], shop: @shop)
     @abilities = []
     @shop.postes.each do |poste|
@@ -72,6 +58,7 @@ class UsersController < ApplicationController
   end
 
   def total
+
   end
 
   def edit
@@ -84,6 +71,26 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_shop
+    @shop = current_user.shops.first
+  end
+
+  def set_shop_employees
+    hr_managers = []
+    line_managers = []
+    employees = []
+
+    @shop.users.each do |user|
+      case user.role
+      when "HR Manager" then hr_managers << user
+      when "Line Manager" then line_managers << user
+      else employees << user
+      end
+    end
+
+    @shop_employees = [hr_managers, line_managers, employees]
+  end
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :contract, :role)
