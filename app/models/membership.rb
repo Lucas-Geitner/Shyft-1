@@ -1,5 +1,6 @@
 class Membership < ActiveRecord::Base
   belongs_to :user
   belongs_to :shop
-  ROLES = ["Line Manager", "RH Manager", "Basic Employee"]
+  ROLES = ["HR Manager", "Line Manager", "Employee"]
+  validates :role, inclusion: { in: ROLES }
 end
