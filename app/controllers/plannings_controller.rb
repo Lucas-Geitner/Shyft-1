@@ -37,9 +37,7 @@ class PlanningsController < ApplicationController
     @planning.shop = @shop
     @planning.status = "Ongoing"
     @planning.save
-
     redirect_to planning_path(@planning)
-
   end
 
   def edit
@@ -56,6 +54,27 @@ class PlanningsController < ApplicationController
     @planning.destroy
     redirect_to(:back)
   end
+
+  def week_view
+    @planning = Planning.find(params[:id])
+    @week = params[:week] ? params[:week].to_i : 1
+    @week_start = @planning.start_date + (7 * (@week - 1).days)
+    @monday = @week_start
+    until @monday.strftime("%A") == "Monday" do
+      @monday = @monday - 1.days
+    end
+    @shop = @planning.shop
+    @start_time = @shop.opening_time.hour
+    @end_time = @shop.closing_time.hour
+    if @end_time < @start_time
+      @range = (@start_time..23).to_a
+      (0..@end_time).to_a.each { |t| @range << t }
+    else
+      @range = (@start_time..@end_time).to_a
+    end
+  end
+
+  private
 
   def planning_params
     params.require(:planning).permit(:name, :start_date, :end_date, :user_id, :shop_id, :status)

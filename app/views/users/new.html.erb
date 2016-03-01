@@ -15,7 +15,7 @@
               </span>
             </div>
             <div class="skill-buttons">
-              <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+              <% Poste.joins(:abilities).where(abilities: {user: employee}).uniq.each do |poste| %>
                 <div class="skill-button">
                   <%= poste.name %>
                 </div>
@@ -62,3 +62,6 @@
   </script>
 <% end %>
 
+<% content_for :title_tag do %>
+Mes employés
+<% end %>

@@ -6,13 +6,13 @@
       <span><%= planning.end_date.strftime("%A, %b %e") %></span>
     </div>
     <div class="card-planning-users">
-        <%planning.users.first(4).each do |user|%>
+        <%planning.users.uniq.first(4).each do |user|%>
           <div class="user-circle" style ="background-color:<%=COLORS.sample%>; color:white;">
             <%= user.first_name.split("").first%>
           </div>
         <% end %>
-        <% if planning.users.count >4 %>
-          <div class="user-circle" style ="border: 2px solid #C1C1C1;color: #C1C1C1;">+<%= planning.users.count - 4%></div>
+        <% if planning.users.uniq.count >4 %>
+          <div class="user-circle" style ="border: 2px solid #C1C1C1;color: #C1C1C1;">+<%= planning.users.uniq.count - 4%></div>
         <% end %>
     </div>
   </div>

@@ -20,8 +20,26 @@
 }
 
 /* Navbar logo */
-.navbar-wagon-brand img {
-  width: 50px;
+.navbar-wagon-brand {
+  img {
+    width: 50px;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}
+.skello-logo {
+  font-family: 'Lilita One', cursive;
+  color: white;
+  span {
+    // display: inline-block;
+    // -moz-transform: scaleX(-1);
+    // -o-transform: scaleX(-1);
+    // -webkit-transform: scaleX(-1);
+    // transform: scaleX(-1);
+    // filter: FlipH;
+    color: $blue;
+  }
 }
 
 /* Navbar right section (with form, links, button) */

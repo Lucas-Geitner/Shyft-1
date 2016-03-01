@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   get 'memberships/create'
 
-  get 'plannings/:planning_id/scheduler_test/test' => 'scheduler_test#test'
+  get 'plannings/:id/week' => 'plannings#week_view', as: :week_view
   post 'plannings/:planning_id/shifts/find_and_destroy' => 'shifts#find_and_destroy', as: :find_and_destroy
   post 'plannings/:planning_id/shifts/find_and_update' => 'shifts#find_and_update', as: :find_and_update
 
@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :organisations, only: :create
   resources :shops, only: :create do
     resources :plannings, only: [:new, :create, :index]
+    get '/users/total' => 'users#total', as: :total
   end
 
   resources :plannings, only: [:show, :edit, :update, :destroy] do
