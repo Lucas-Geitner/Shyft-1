@@ -1,5 +1,5 @@
 <div class="text-center week-name">
-  <p>
+  <h1>
     <% unless @week == 1 %>
       <%= link_to planning_path(@planning, week: (@week - 1), day: params[:day]), class: "text-center" do %>
         <i class="fa fa-caret-left"></i>
@@ -11,7 +11,7 @@
         <i class="fa fa-caret-right"></i>
       <% end %>
     <% end %>
-  </p>
+  </h1>
 </div>
 
 <div class="agenda-buttons text-right">

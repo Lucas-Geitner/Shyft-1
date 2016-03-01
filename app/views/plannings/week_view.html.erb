@@ -1,5 +1,5 @@
 <div class="text-center week-name">
-  <p>
+  <h1>
     <% unless @week == 1 %>
       <%= link_to week_view_path(@planning, week: (@week - 1)), class: "text-center" do %>
         <i class="fa fa-caret-left"></i>
@@ -11,7 +11,7 @@
         <i class="fa fa-caret-right"></i>
       <% end %>
     <% end %>
-  </p>
+  </h1>
 </div>
 
 <div class="agenda-buttons text-right">
@@ -36,25 +36,36 @@
         </tr>
         <% (0...7).each do |day| %>
           <% today = (@monday + day.days) %>
-          <% Poste.all.each_with_index do |poste, poste_index| %>
+          <% if (today < @planning.start_date || today > @planning.end_date) %>
             <tr>
-              <% if poste_index == 0 %>
-                <td rowspan="<%= Poste.count %>"><%= today.strftime("%A") %></td>
-              <% end %>
-              <td style="padding: 0 5px;"><%= poste.name %></td>
+              <td><%= today.strftime("%A") %></td>
+              <td class="greyish"></td>
               <% @range.each do |time| %>
-                <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell <%= 'greyish' if (today < @planning.start_date || today > @planning.end_date) %>" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px solid rgba(37,50,56,0.2)">
-                  <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
-                  <div class="blech">
-                  </div>
-                </td>
-                <td data-number="<%= number_of_dudes(@planning, (today + time.hours + 30.minutes), poste) %>" class= "time-cell <%= 'greyish' if today < @planning.start_date || today > @planning.end_date %>" id="<%= "#{time}.5/#{today.strftime("%A")}" %>">
-                  <%= get_div_width(@planning, (today + time.hours + 30.minutes), poste) unless get_div_width(@planning, (today + time.hours + 30.minutes), poste) == (get_div_width(@planning, (today + time.hours), poste) - 30) || get_div_width(@planning, (today + time.hours + 30.minutes), poste) == 0 %>
-                  <div class="blech">
-                  </div>
-                </td>
+                <td class="time-cell greyish" style="border-right: 1px solid rgba(37,50,56,0.2)"><div class="blech"></div></td>
+                <td class= "time-cell greyish"><div class="blech"></div></td>
               <% end %>
             </tr>
+          <% else %>
+            <% Poste.all.each_with_index do |poste, poste_index| %>
+              <tr>
+                <% if poste_index == 0 %>
+                  <td rowspan="<%= Poste.count %>"><%= today.strftime("%A") %></td>
+                <% end %>
+                <td style="padding: 0 5px;"><%= poste.name %></td>
+                <% @range.each do |time| %>
+                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px solid rgba(37,50,56,0.2)">
+                    <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
+                    <div class="blech">
+                    </div>
+                  </td>
+                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours + 30.minutes), poste) %>" class= "time-cell" id="<%= "#{time}.5/#{today.strftime("%A")}" %>">
+                    <%= get_div_width(@planning, (today + time.hours + 30.minutes), poste) unless get_div_width(@planning, (today + time.hours + 30.minutes), poste) == (get_div_width(@planning, (today + time.hours), poste) - 30) || get_div_width(@planning, (today + time.hours + 30.minutes), poste) == 0 %>
+                    <div class="blech">
+                    </div>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
           <% end %>
         <% end %>
       </table>

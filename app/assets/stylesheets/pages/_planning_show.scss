@@ -1,5 +1,11 @@
-.week-name i {
-  margin: 0 8px;
+.week-name {
+  h1 {
+    font-size: 30px;
+  }
+  a i {
+    color: $gray-light;
+    margin: 0 8px;
+  }
 }
 
 .agenda-buttons {
