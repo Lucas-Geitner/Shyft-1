@@ -8,7 +8,7 @@ class PlanningsController < ApplicationController
       @plannings = Planning.where("shop_id = ?", params[:shop_id])
     end
     @planning = Planning.new
-    @plannings_actuels = Planning.where("start_date < ? AND end_date > ? AND shop_id = ? ", Date.today, Date.today, params[:shop_id])
+    @plannings_actuels = Planning.where("start_date <= ? AND end_date >= ? AND shop_id = ? ", Date.today, Date.today, params[:shop_id])
     @plannings_futures = Planning.where("start_date > ?  AND shop_id = ? ", Date.today, params[:shop_id])
     @plannings_archives = Planning.where("end_date < ? AND shop_id = ? ", Date.today, params[:shop_id])
   end
