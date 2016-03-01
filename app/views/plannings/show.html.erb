@@ -76,8 +76,31 @@
           <%= f.input :user, input_html: { id: "destroy_user" }, as: :hidden  %>
         <% end %>
       </div>
-      <div id="bin">
+    </div>
+    <div class="container">
+      <div class="row">
+        <div id="bin" class= "col-xs-6 col-sm-6">
         <i class="fa fa-trash"></i>
+        </div >
+        <div class="col-xs-6 col-sm-6 sol-sm-offset-12">
+          <% if @planning.status == "Ongoing" %>
+            <%= simple_form_for @planning, method: :patch, remote: true do |f| %>
+              <%= f.input :status, as: :hidden, input_html: {value: "Declared" }%>
+              <%= f.input :status, as: :hidden, input_html: {value: "Confirmed" }%>
+              <%= f.submit 'Déclarer', class: "btn btn-default"%>
+              <%= f.submit 'Confirmer', class: "btn btn-default"%>
+            <% end %>
+          <% elsif @planning.status == "Declared" && @planning.status != "Confirmed"%>
+            <div class="skill-button-green">Déclaré</div>
+            <%= simple_form_for @planning, method: :patch, remote: true do |f| %>
+              <%= f.input :status, as: :hidden, input_html: {value: "Confirmed" }%>
+              <%= f.submit 'Confirmer', class: "btn btn-default"%>
+              <% end %>
+            <% elsif @planning.status == "Confirmed" && "Declared"%>
+             <div class="skill-button-green">Confirmé</div>
+             <div class="skill-button-green">Déclaré</div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
