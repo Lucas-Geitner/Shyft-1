@@ -40,7 +40,6 @@
       <% else %>
         <%= link_to t(".top_call_to_action", default: "Mes plannings"), shop_plannings_path(@shop), class: "navbar-wagon-item navbar-wagon-button btn" %>
       <% end %>
-    </div>
 
     <% else %>
 
@@ -48,6 +47,7 @@
       <%= link_to t(".sign_in", default: "Login"), new_user_session_path, class: "navbar-wagon-item navbar-wagon-link" %>
 
     <% end %>
+  </div>
 
     <!-- Button (call-to-action) -->
 
