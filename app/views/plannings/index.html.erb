@@ -4,6 +4,11 @@
   <div class="row">
     <div class="planning-header">
       <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
+        <select name="status" class="btn btn-plus" value="Selectionner">
+           <option value="Declared">Déclaré</option>
+            <option value="Confirmed">Confirmé</option>
+            <option value="Ongoing">En cours</option>
+        </select>
         <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
         <input type="submit" class="btn btn-lg" value="Rechercher">
       </form>
@@ -12,7 +17,6 @@
       </button>
     </div>
   </div>
-
 
   <div class="row">
     <%@plannings.each do |p|%>
@@ -41,6 +45,19 @@
     </div>
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <script>
+    $(function() {
+      $(".list-controls form input.btn").click(function(e) {
+        var planningNum = $(this).parent().attr("id").match(/\d+/)
+        console.log(planningNum);
+        $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
+        $(this).hide();
+      });
+    });
+  </script>
+<% end %>
 
 <% content_for :title_tag do %>
 My plannings
