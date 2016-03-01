@@ -80,7 +80,7 @@
       $(".list-controls form input.btn").click(function(e) {
         var planningNum = $(this).parent().attr("id").match(/\d+/)
         console.log(planningNum);
-        $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
+        $(this).parent().parent().append("<a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a><div class='skill-button-green'>Déclaré</div>");
         $(this).hide();
       });
     });
