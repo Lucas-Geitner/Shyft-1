@@ -17,24 +17,14 @@
 <div class="agenda-buttons text-right">
   <div class="week-buttons-container">
     <div class="week-buttons">
-      <% (1..((@planning.end_date - @planning.start_date) / 604800).ceil + 1).each do |n| %>
-        <%= link_to "S#{n}", week_view_path(@planning, week: n), class: "text-center" %>
-      <% end %>
+      <%= link_to "Aperçu journée", planning_path(@planning, week: @week, day: params[:day]), class: "text-center" %>
+      <%= link_to "Aperçu semaine", week_view_path(@planning, week: @week), class: "tab active" %>
     </div>
   </div>
 </div>
 
 <div class="agenda-and-employees">
   <div class="agenda-wrapper">
-    <div class="tab-wrapper">
-      <div class="tabs">
-        <% (1..7).each do |n| %>
-          <%= link_to "#{(@planning.start_date + (n - 1).days).strftime('%A')}", planning_path(@planning, week: @week, day: n), class: "tab" %>
-        <% end %>
-        <%= link_to "Week view", week_view_path(@planning, week: @week), class: "tab active" %>
-      </div>
-    </div>
-
     <div id="agenda">
       <table id="planner">
         <tr>
