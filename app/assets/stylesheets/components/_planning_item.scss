@@ -1,18 +1,44 @@
 .card-planning {
+  min-height: 89px;
   background: white;
-  padding: 15px 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.07);
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 5px;
   transition: border-left 0.1s ease;
-  &:hover {
-    border-left: 4px solid $blue;
+  border-left: 4px solid transparent;
+  margin-bottom: 20px;
+
+  .separator {
+    height: 2px;
+    width: 13px;
+    background: #DADADA;
+    display: inline-block;
+    margin: 0 10px;
+  }
+
+  &.prevision {
+    &:hover {
+    border-color: orange;
+    }
+  }
+  &.ongoing{
+    &:hover {
+    border-color: $blue;
+    }
+  }
+  &.archive {
+    &:hover {
+    border-color: $green;
+    }
   }
 }
 
 .card-planning-dates {
   font-size: 13px;
+  display: flex;
+  align-items: center;
   font-weight: bold;
   color: #585858;
   margin-bottom: 13px;
@@ -30,7 +56,6 @@
   font-size: 12px;
   color: #9C9C9C;
   text-align: right;
-  margin-bottom: 10px;
 }
 
 .card-planning-users {
@@ -56,12 +81,12 @@
 .list-controls {
   display: flex;
   align-items: center;
+
   a {
     flex: 1 0 auto;
   }
   .btn {
     border: none;
-    border-right: 1px solid #E3E3E3;
     color: #999999;
     font-size: 14px;
     &:last-child {
@@ -73,10 +98,48 @@
     }
   }
 }
+.planning-header-options {
+  margin-left: 0px;
+  margin-top: 30px;
+  justify-content: space-between;
+  padding: 0px 0px;
+  ;
+  .btn {
+    background: transparent;
+    border: 1px solid #AFAFAF;
+    color: #AFAFAF;
+  }
+  .btn-search-custom {
+    background: $blue;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 2px;
+
+    &.orange {
+      background: $orange !important;
+
+    }
+    &.green {
+       background: $green !important;
+    }
+  }
+}
+.btn-plus {
+  background: white;
+  color: black;
+  border-radius: 40px;
+  float: right;
+  margin-right: 10px;
+  font-weight: 100;
+  margin-top: 17px;
+  padding: 10px 23px;
+  border: 1px solid rgba(0, 0, 0, 0.11)
+}
 
 .planning-header {
   display: flex;
-  align-items: center;
+  align-items: border-right;
   justify-content: space-between;
   padding: 20px 0px;
   margin-bottom: 20px;
@@ -85,13 +148,6 @@
     background: transparent;
     border: 1px solid #AFAFAF;
     color: #AFAFAF;
-  }
-  .btn-plus {
-    background: $blue;
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 40px;
   }
   input[type="text"] {
     width: 300px;
@@ -109,13 +165,37 @@
 }
 
 .skill-button-green {
-  font-size: 11px;
-  font-weight: lighter;
-  padding: 2px 10px !important;
-  border-radius: 30px;
+  font-size: 16px;
+  padding: 2px 25px !important;
   transition: all 0.15s ease;
-  background: $green;
+  background: #01BCD4;
   color: #FFFFFF;
-  border-radius: 30px;
-  margin: 3px 1px;
+  align-self: stretch;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.card-planning-description {
+  padding: 15px;
+}
+
+.card-planning-controls {
+  background: white;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+
+  .planning-owner {
+    color: rgba(156, 156, 156, 0.41);
+  }
+
+  .list-controls {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+  }
 }
