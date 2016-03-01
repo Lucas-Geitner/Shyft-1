@@ -30,7 +30,7 @@
           <%= link_to planning_path(@planning, week: @week, day: n), class: "tab" do %>
             <div>
               <%= (@planning.start_date + (n - 1).days).strftime('%A') %>
-              <div class="small-date"><%= (@planning.start_date + (n - 1).days).strftime('%d %b %Y') %></div>
+              <div class="small-date"><%= (@planning.start_date + ((n - 1) + ((@week - 1) * 7)).days).strftime('%d %b %Y') %></div>
             </div>
           <% end %>
         <% end %>
