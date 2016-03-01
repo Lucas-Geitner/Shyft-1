@@ -17,4 +17,14 @@ module PlanningsHelper
     Shift.where("planning_id = :planning_id AND starts_at <= :start_time AND ends_at > :end_time AND poste_id = :poste_id",
   {planning_id: planning.id, start_time: time, end_time: time, poste_id: poste.id}).count
   end
+
+  def planning_color(planning)
+    if planning.start_date > Date.today
+      return "prevision"
+    elsif planning.end_date < Date.today
+      return "archive"
+    else
+      return "ongoing"
+    end
+  end
 end

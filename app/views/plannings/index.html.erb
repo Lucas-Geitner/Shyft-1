@@ -2,45 +2,73 @@
 <div class="container-fluid">
 
   <div class="row">
-    <div class="planning-header">
-      <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
-        <select name="status" class="btn btn-plus" value="Selectionner">
-           <option value="Declared">Déclaré</option>
-            <option value="Confirmed">Confirmé</option>
-            <option value="Ongoing">En cours</option>
-        </select>
-        <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
-        <input type="submit" class="btn btn-lg" value="Rechercher">
-      </form>
-      <button type="button" class="btn btn-plus" data-toggle="modal" data-target="#myModal">
-        Add a planning <i class="fa fa-plus"></i>
-      </button>
+    <button type="button" class="btn btn-plus" data-toggle="modal" data-target="#myModal">
+        Créer un planning
+    </button>
+    <div class="planning-header-options">
+      <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#Mesplannings" aria-controls="home" role="tab" data-toggle="tab">Mes plannings</a></li>
+          <li role="presentation"><a href="#Mesarchives" aria-controls="profile" role="tab" data-toggle="tab">Mes archives</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="Mesplannings">
+            <div class="row">
+              <div class="planning-header">
+                <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
+                  <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
+                  <input type="submit" class="btn btn-lg" value="Rechercher">
+                </form>
+              </div>
+            </div>
+            <h3 style="color: rgba(17, 18, 19, 0.76);padding-bottom: 15px;">Plannings en cours</h3>
+            <% @plannings_actuels.each do |p|%>
+            <%= render partial: "planning_item", locals: {planning: p}%>
+            <% end %>
+            <h3 style="color: rgba(17, 18, 19, 0.76);padding-bottom: 15px;">Plannings en prévisions</h3>
+            <% @plannings_futures.each do |p|%>
+            <%= render partial: "planning_item", locals: {planning: p}%>
+            <% end %>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="Mesarchives">
+            <div class="row">
+              <div class="planning-header">
+                <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
+                  <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
+                  <input type="submit" class="btn btn-lg" value="Rechercher">
+                </form>
+              </div>
+            </div>
+            <% @plannings_archives.each do |p|%>
+            <%= render partial: "planning_item", locals: {planning: p}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="row">
-    <%@plannings.each do |p|%>
-      <%= render partial: "planning_item", locals: {planning: p}%>
-    <%end%>
-  </div>
-</div>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Nouveau planning</h4>
+        </div>
+        <div class="modal-body">
+        <!-- login -->
+        <%= render 'form'%>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Nouveau planning</h4>
-      </div>
-      <div class="modal-body">
-      <!-- login -->
-      <%= render 'form'%>
-
-       <!-- login -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-        <!-- <button type="button" class="btn btn-primary">Creer</button> -->
+         <!-- login -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <!-- <button type="button" class="btn btn-primary">Creer</button> -->
+        </div>
       </div>
     </div>
   </div>
