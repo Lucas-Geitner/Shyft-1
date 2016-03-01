@@ -1,44 +1,28 @@
 
-<div id="user-info">
+<div id="user-info" class="text-center">
 
-  <table class="user-details">
-    <tr>
-      <td>
-        <div class="user-details-icon-container">
-          <div class="user-details-icon">
-            <%= @user.first_name[0]+ @user.last_name[0] %>
-          </div>
-        </div>
-      </td>
-      <td>
-        <h1 class="user-details-name"><%= @user.first_name + " " + @user.last_name %></h1>
-        <p class="user-details-role"><%= @user.memberships.first.role %></p>
-      </td>
-    </tr>
-  </table>
+  <div class="user-details-wrapper">
+    <div class="user-details-container">
+      <div class="user-details-icon">
+        <%= @user.first_name[0]+ @user.last_name[0] %>
+      </div>
+      <h1 class="user-details-name"><%= @user.first_name + " " + @user.last_name %></h1>
+      <p class="user-details-role"><%= @user.memberships.first.role %></p>
+    </div>
+  </div>
 
-  <table class="user-contact-info">
-    <tr>
-      <td class="contact-icon">
+  <div class="user-contact-and-skills-wrapper">
+    <div class="user-contact-info">
+      <p>
         <i class="fa fa-envelope-o"></i>
-      </td>
-      <td>
         <%= @user.email %>
-      </td>
-    </tr>
-    <tr>
-      <td class="contact-icon">
+      </p>
+      <p>
         <i class="fa fa-phone"></i>
-      </td>
-      <td>
         <%= Faker::PhoneNumber.cell_phone %>
-      </td>
-    </tr>
-    <tr>
-      <td class="contact-icon">
+      </p>
+      <p>
         <i class="fa fa-file-text-o"></i>
-      </td>
-      <td>
         <% if @user.contract? %>
           <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
             View <%= @user.first_name %>'s contract
@@ -49,86 +33,117 @@
             <%#= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "" } %>
           <%# end %>
         <% end %>
-      </td>
-    </tr>
-  </table>
+      </p>
+    </div>
 
+    <% unless @user.postes.empty? %>
+      <div class="user-skills">
+        <table>
+          <tr>
+            <% @user.postes.each_with_index do |poste, i| %>
+              <td>
+                <img src="<%= render 'users/poste_logo', poste: poste %>" alt="<%= poste.name %>">
+              </td>
+              <% unless i == @user.postes.size - 1 %>
+                <td class="td-spacer"></td>
+              <% end %>
+            <% end %>
+          </tr>
+          <tr>
+            <% @user.postes.each_with_index do |poste, i| %>
+              <td>
+                <%= poste.name %>
+              </td>
+              <% unless i == @user.postes.size - 1 %>
+                <td class="td-spacer"></td>
+              <% end %>
+            <% end %>
+          </tr>
+        </table>
+      </div>
+    <% end %>
+
+    <% unless @employees_shifts[@user].empty? %>
+      <div class="user-shifts-wrapper">
+        <div class="user-shifts">
+          <p>Shifts en <%= Date.today.strftime("%B").downcase %></p>
+          <% @employees_shifts[@user].each do |date, duration| %>
+            <table>
+              <tr>
+                <td>
+                  <%= date %>
+                </td>
+                <td>
+                  <% if duration % 1 != 0 %>
+                    <%= duration.floor %> <sup><%= (duration % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (duration % 1).to_r.to_s.scan(/\d/)[1] %></sub> h
+                  <% else %>
+                    <%= duration.floor %> h
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="similar-users-wrapper">
   <% unless @user.postes.empty? %>
-    <div class="user-skills">
-      <table>
-        <tr>
-          <% @user.postes.each_with_index do |poste, i| %>
-            <td>
-              <img src="<%= render 'users/poste_logo', poste: poste %>" alt="<%= poste.name %>">
-            </td>
-            <% unless i == @user.postes.size - 1 %>
-              <td class="td-spacer"></td>
-            <% end %>
+    <div id="similar-users">
+      <h2 class="text-center">Other employees like <%= @user.first_name %></h2>
+      <div class="similar-users-list">
+        <ul class="list-inline">
+          <% @similar_users.each do |employee| %>
+            <li>
+              <div class="employee-card">
+
+                <table id="employee-card-table">
+
+                  <tr id="employee-card-name-tr" valign="top">
+                    <td>
+                      <p id="employee-card-name"><%= employee.first_name + " " + employee.last_name %></p>
+                    </td>
+                  </tr>
+
+                  <tr id="employee-card-skills-tr" valign="top">
+                    <td>
+                      <ul class="list-inline">
+                        <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+                          <li class="skill-button-list">
+                            <div class="skill-button">
+                              <%= poste.name %>
+                            </div>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </td>
+                  </tr>
+
+                  <tr valign="bottom">
+                    <td>
+                      <div class="list-controls">
+                        <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
+                        <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
+                      </div>
+                    </td>
+                  </tr>
+
+                </table>
+
+              </div>
+            </li>
           <% end %>
-        </tr>
-        <tr>
-          <% @user.postes.each_with_index do |poste, i| %>
-            <td>
-              <%= poste.name %>
-            </td>
-            <% unless i == @user.postes.size - 1 %>
-              <td class="td-spacer"></td>
-            <% end %>
-          <% end %>
-        </tr>
-      </table>
+        </ul>
+      </div>
     </div>
-  </div>
-
-  <div id="similar-users">
-    <h2>Other employees like <%= @user.first_name %></h2>
-    <div class="similar-users-list">
-      <ul class="list-inline">
-        <% @similar_users.each do |employee| %>
-          <li>
-            <div class="employee-card">
-
-              <table id="employee-card-table">
-
-                <tr id="employee-card-name-tr" valign="top">
-                  <td>
-                    <p id="employee-card-name"><%= employee.first_name + " " + employee.last_name %></p>
-                  </td>
-                </tr>
-
-                <tr id="employee-card-skills-tr" valign="top">
-                  <td>
-                    <ul class="list-inline">
-                      <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
-                        <li class="skill-button-list">
-                          <div class="skill-button">
-                            <%= poste.name %>
-                          </div>
-                        </li>
-                      <% end %>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr valign="bottom">
-                  <td>
-                    <div class="list-controls">
-                      <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
-                      <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
-                    </div>
-                  </td>
-                </tr>
-
-              </table>
-
-            </div>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <% content_for :title_tag do %>
-Profil de <%= @user.name %>
+  Profil de <%= @user.name %>
 <% end %>
+
+
+
