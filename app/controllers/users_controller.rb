@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_shop, only: [:new, :show, :create, :total]
-  before_action :set_shop_employees, only: [:new, :total]
+  before_action :set_shop_employees, only: [:new, :show, :total]
+  before_action :set_employees_shifts, only: [:show, :total]
 
   def new
     @user = User.new
@@ -58,21 +59,7 @@ class UsersController < ApplicationController
   end
 
   def total
-    shop_employees = @shop_employees[2]
-    @employees_shifts = Hash.new
-    shop_employees.each do |employee|
-      employee_shifts = Hash.new
-      employee.shifts.each do |shift|
-        if shift.starts_at.strftime("%B") == Date.today.strftime("%B")
-          start_time = shift.starts_at
-          end_time = shift.ends_at
-          date = start_time.strftime("%A, %b %d")
-          shift_duration = (end_time - start_time) / 1.hour
-          employee_shifts[date] = shift_duration
-        end
-      end
-      @employees_shifts[employee] = employee_shifts
-    end
+
   end
 
   def edit
@@ -104,6 +91,23 @@ class UsersController < ApplicationController
     end
 
     @shop_employees = [hr_managers, line_managers, employees]
+  end
+
+  def set_employees_shifts
+    @employees_shifts = Hash.new
+    @shop_employees[2].each do |employee|
+      employee_shifts = Hash.new
+      employee.shifts.each do |shift|
+        if shift.starts_at.strftime("%B") == Date.today.strftime("%B")
+          start_time = shift.starts_at
+          end_time = shift.ends_at
+          date = start_time.strftime("%A, %b %d")
+          shift_duration = (end_time - start_time) / 1.hour
+          employee_shifts[date] = shift_duration
+        end
+      end
+      @employees_shifts[employee] = employee_shifts
+    end
   end
 
   def user_params
