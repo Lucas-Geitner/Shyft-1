@@ -3,4 +3,6 @@ class Planning < ActiveRecord::Base
   belongs_to :user
   has_many :shifts
   has_many :users, through: :shifts
+  STATUS = ["Ongoing", "Declared", "Confirmed"]
+  validates :status, inclusion: { in: STATUS }
 end
