@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229134359) do
+ActiveRecord::Schema.define(version: 20160301111329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 20160229134359) do
   end
 
   add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
+
+  create_table "declared_plannings", force: :cascade do |t|
+    t.integer  "planning_id"
+    t.json     "shifts"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "declared_plannings", ["planning_id"], name: "index_declared_plannings_on_planning_id", using: :btree
 
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id"
@@ -147,6 +156,7 @@ ActiveRecord::Schema.define(version: 20160229134359) do
 
   add_foreign_key "abilities", "postes"
   add_foreign_key "abilities", "users"
+  add_foreign_key "declared_plannings", "plannings"
   add_foreign_key "memberships", "shops"
   add_foreign_key "memberships", "users"
   add_foreign_key "organisation_memberships", "organisations"
