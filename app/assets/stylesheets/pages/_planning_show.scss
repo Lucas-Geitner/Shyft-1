@@ -1,3 +1,7 @@
+.week-name i {
+  margin: 0 8px;
+}
+
 .agenda-buttons {
   position: relative;
   display: flex;
@@ -49,7 +53,7 @@
 .agenda-wrapper {
   background: white;
   border-radius: 10px;
-  width: 80vw;
+  width: 75vw;
   margin-left: 10px;
 }
 

@@ -1,3 +1,17 @@
+<div class="text-center week-name">
+  <p>
+    <% unless @week == 1 %>
+      <%= link_to planning_path(@planning, week: (@week - 1), day: params[:day]), class: "text-center" do %>
+        <i class="fa fa-caret-left"></i>
+      <% end %>
+    <% end %>
+    Semaine du <%= (@planning.start_date + ((@week - 1) * 7).days).strftime("%e %B %Y") %>
+    <%= link_to planning_path(@planning, week: (@week + 1), day: params[:day]), class: "text-center" do %>
+      <i class="fa fa-caret-right"></i>
+    <% end %>
+  </p>
+</div>
+
 <div class="agenda-buttons text-right">
   <div class="container postes-list">
     <div class="row">
