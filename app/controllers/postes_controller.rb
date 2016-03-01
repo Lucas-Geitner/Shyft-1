@@ -1,7 +1,18 @@
 class PostesController < ApplicationController
   def new
     @poste = Poste.new
-    @postes = Poste.all
+    @postes = Hash.new
+    Poste.all.each do |poste|
+      case poste.name.capitalize
+      when "Kitchen" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
+      when "Cashier" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
+      when "Dishwash" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Household/broom-96.png'
+      when "Bar" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
+      when "Waiter" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/waiter-96.png'
+      else logo = 'https://maxcdn.icons8.com/Color/PNG/96/City/restaurant-96.png'
+      end
+      @postes[poste] = logo
+    end
   end
 
   def create

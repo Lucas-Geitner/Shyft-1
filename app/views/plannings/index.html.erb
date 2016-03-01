@@ -73,6 +73,20 @@
     </div>
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <script>
+    $(function() {
+      $(".list-controls form input.btn").click(function(e) {
+        var planningNum = $(this).parent().attr("id").match(/\d+/)
+        console.log(planningNum);
+        $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
+        $(this).hide();
+      });
+    });
+  </script>
+<% end %>
+
 <% content_for :title_tag do %>
 My plannings
 <% end %>

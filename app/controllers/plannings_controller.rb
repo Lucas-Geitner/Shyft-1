@@ -1,3 +1,5 @@
+require 'csv'
+
 class PlanningsController < ApplicationController
   def index
     if params[:date] && params[:date] != ""
@@ -77,9 +79,49 @@ class PlanningsController < ApplicationController
     end
   end
 
+  def declare
+    @planning = Planning.find(params[:id])
+    @planning.update(status: "Declared")
+    declared_planning = DeclaredPlanning.new(planning: @planning)
+    hash = {}
+    @planning.shifts.each do |shift|
+      parameters = {
+        user: shift.user_id,
+        poste: shift.poste_id,
+        planning: shift.planning_id,
+        starts_at: shift.starts_at,
+        ends_at: shift.ends_at
+      }
+      hash[shift.id] = parameters
+    end
+    declared_planning.shifts = hash
+    declared_planning.save
+    send_data to_csv(@planning, declared_planning), filename: "planning#{@planning.id}.csv"
+  end
+
+  def export
+    @planning = Planning.find(params[:id])
+    declared_planning = DeclaredPlanning.find_by_planning_id(@planning.id)
+    send_data to_csv(@planning, declared_planning), filename: "planning#{@planning.id}.csv"
+  end
+
   private
+
+  def to_csv(planning, declared_planning)
+    CSV.generate do |csv|
+      csv << ['Planning for ' + planning.start_date.strftime("%a, %e %b %Y") + ' - ' + planning.end_date.strftime("%a, %e %b %Y")]
+      csv << ['User name', 'Poste', 'From', 'To']
+      declared_planning["shifts"].sort_by { |k, v| DateTime.strptime(v["starts_at"], '%Y-%m-%dT%H:%M:%S.000Z') }.each do |shift|
+        shift = shift[1]
+        csv << [User.find(shift["user"]).name, Poste.find(shift["poste"]).name, shift["starts_at"], shift['ends_at']]
+      end
+    end
+  end
 
   def planning_params
     params.require(:planning).permit(:name, :start_date, :end_date, :user_id, :shop_id, :status)
   end
 end
+
+# declared_planning["shifts"].sort_by { |k, v| DateTime.strptime(v["starts_at"], '%Y-%m-%dT%H:%M:%S.000Z') }
+
