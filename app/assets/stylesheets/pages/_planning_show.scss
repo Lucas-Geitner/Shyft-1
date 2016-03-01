@@ -1,3 +1,13 @@
+.week-name {
+  h1 {
+    font-size: 30px;
+  }
+  a i {
+    color: $gray-light;
+    margin: 0 8px;
+  }
+}
+
 .agenda-buttons {
   position: relative;
   display: flex;
@@ -6,7 +16,7 @@
 .week-buttons {
   position: absolute;
   right: 40px;
-  width: 170px;
+  width: 250px;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -24,7 +34,7 @@
   background-color: $gray-light;
   width: 100%;
   height: 100%;
-  color: $gray-dark;
+  color: $gray-lighter;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,7 +59,7 @@
 .agenda-wrapper {
   background: white;
   border-radius: 10px;
-  width: 80vw;
+  width: 75vw;
   margin-left: 10px;
 }
 

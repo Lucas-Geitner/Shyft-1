@@ -1,3 +1,19 @@
+<div class="text-center week-name">
+  <h1>
+    <% unless @week == 1 %>
+      <%= link_to planning_path(@planning, week: (@week - 1), day: params[:day]), class: "text-center" do %>
+        <i class="fa fa-caret-left"></i>
+      <% end %>
+    <% end %>
+    Semaine du <%= (@planning.start_date + ((@week - 1) * 7).days).strftime("%e %B %Y") %>
+    <% unless @week >= ((@planning.end_date - @planning.start_date) / 604800).ceil %>
+      <%= link_to planning_path(@planning, week: (@week + 1), day: params[:day]), class: "text-center" do %>
+        <i class="fa fa-caret-right"></i>
+      <% end %>
+    <% end %>
+  </h1>
+</div>
+
 <div class="agenda-buttons text-right">
   <div class="container postes-list">
     <div class="row">
@@ -9,9 +25,8 @@
     </div>
   </div>
   <div class="week-buttons">
-    <% (1..((@planning.end_date - @planning.start_date) / 604800).ceil).each do |n| %>
-      <%= link_to "S#{n}", planning_path(@planning, week: n, day: params[:day]), class: "text-center" %>
-    <% end %>
+    <%= link_to "Aperçu journée", planning_path(@planning, week: @week, day: params[:day]), class: "text-center active" %>
+    <%= link_to "Aperçu semaine", week_view_path(@planning, week: @week), class: "tab" %>
   </div>
 </div>
 
@@ -30,11 +45,10 @@
           <%= link_to planning_path(@planning, week: @week, day: n), class: "tab" do %>
             <div>
               <%= (@planning.start_date + (n - 1).days).strftime('%A') %>
-              <div class="small-date"><%= (@planning.start_date + (n - 1).days).strftime('%d %b %Y') %></div>
+              <div class="small-date"><%= (@planning.start_date + ((n - 1) + ((@week - 1) * 7)).days).strftime('%d %b %Y') %></div>
             </div>
           <% end %>
         <% end %>
-        <%= link_to "Week view", week_view_path(@planning, week: @week), class: "tab" %>
       </div>
     </div>
 
