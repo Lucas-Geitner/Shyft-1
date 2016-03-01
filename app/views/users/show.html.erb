@@ -1,133 +1,138 @@
+<div id="user-profile">
+  <div id="user-profile-info">
 
-<div id="user-info">
-
-  <table class="user-details">
-    <tr>
-      <td>
-        <div class="user-details-icon-container">
-          <div class="user-details-icon">
-            <%= @user.first_name[0]+ @user.last_name[0] %>
-          </div>
-        </div>
-      </td>
-      <td>
-        <h1 class="user-details-name"><%= @user.first_name + " " + @user.last_name %></h1>
-        <p class="user-details-role"><%= @user.memberships.first.role %></p>
-      </td>
-    </tr>
-  </table>
-
-  <table class="user-contact-info">
-    <tr>
-      <td class="contact-icon">
-        <i class="fa fa-envelope-o"></i>
-      </td>
-      <td>
-        <%= @user.email %>
-      </td>
-    </tr>
-    <tr>
-      <td class="contact-icon">
-        <i class="fa fa-phone"></i>
-      </td>
-      <td>
-        <%= Faker::PhoneNumber.cell_phone %>
-      </td>
-    </tr>
-    <tr>
-      <td class="contact-icon">
-        <i class="fa fa-file-text-o"></i>
-      </td>
-      <td>
-        <% if @user.contract? %>
-          <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
-            View <%= @user.first_name %>'s contract
-          <% end %>
-        <% else %>
-          Upload <%= @user.first_name %>'s contract
-          <%# simple_form_for user_path(@user), method: :patch do |f| %>
-            <%#= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "" } %>
-          <%# end %>
-        <% end %>
-      </td>
-    </tr>
-  </table>
-
-  <% unless @user.postes.empty? %>
-    <div class="user-skills">
-      <table>
-        <tr>
-          <% @user.postes.each_with_index do |poste, i| %>
-            <td>
-              <img src="<%= render 'users/poste_logo', poste: poste %>" alt="<%= poste.name %>">
-            </td>
-            <% unless i == @user.postes.size - 1 %>
-              <td class="td-spacer"></td>
-            <% end %>
-          <% end %>
-        </tr>
-        <tr>
-          <% @user.postes.each_with_index do |poste, i| %>
-            <td>
-              <%= poste.name %>
-            </td>
-            <% unless i == @user.postes.size - 1 %>
-              <td class="td-spacer"></td>
-            <% end %>
-          <% end %>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div id="similar-users">
-    <h2>Other employees like <%= @user.first_name %></h2>
-    <div class="similar-users-list">
-      <ul class="list-inline">
-        <% @similar_users.each do |employee| %>
-          <li>
-            <div class="employee-card">
-
-              <table id="employee-card-table">
-
-                <tr id="employee-card-name-tr" valign="top">
-                  <td>
-                    <p id="employee-card-name"><%= employee.first_name + " " + employee.last_name %></p>
-                  </td>
-                </tr>
-
-                <tr id="employee-card-skills-tr" valign="top">
-                  <td>
-                    <ul class="list-inline">
-                      <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
-                        <li class="skill-button-list">
-                          <div class="skill-button">
-                            <%= poste.name %>
-                          </div>
-                        </li>
-                      <% end %>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr valign="bottom">
-                  <td>
-                    <div class="list-controls">
-                      <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
-                      <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
-                    </div>
-                  </td>
-                </tr>
-
-              </table>
-
+    <table class="user-details">
+      <tr>
+        <td>
+          <div class="user-details-icon-container">
+            <div class="user-details-icon">
+              <%= @user.first_name[0]+ @user.last_name[0] %>
             </div>
-          </li>
-        <% end %>
-      </ul>
+          </div>
+        </td>
+        <td>
+          <h1 class="user-details-name"><%= @user.first_name + " " + @user.last_name %></h1>
+          <p class="user-details-role"><%= @user.memberships.first.role %></p>
+        </td>
+      </tr>
+    </table>
+
+    <table class="user-contact-info">
+      <tr>
+        <td class="contact-icon">
+          <i class="fa fa-envelope-o"></i>
+        </td>
+        <td>
+          <%= @user.email %>
+        </td>
+      </tr>
+      <tr>
+        <td class="contact-icon">
+          <i class="fa fa-phone"></i>
+        </td>
+        <td>
+          <%= Faker::PhoneNumber.cell_phone %>
+        </td>
+      </tr>
+      <tr>
+        <td class="contact-icon">
+          <i class="fa fa-file-text-o"></i>
+        </td>
+        <td>
+          <% if @user.contract? %>
+            <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
+              View <%= @user.first_name %>'s contract
+            <% end %>
+          <% else %>
+            Upload <%= @user.first_name %>'s contract
+            <%# simple_form_for user_path(@user), method: :patch do |f| %>
+              <%#= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "" } %>
+            <%# end %>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+
+    <% unless @user.postes.empty? %>
+      <div class="user-skills">
+        <table>
+          <tr>
+            <% @user.postes.each_with_index do |poste, i| %>
+              <td>
+                <img src="<%= render 'users/poste_logo', poste: poste %>" alt="<%= poste.name %>">
+              </td>
+              <% unless i == @user.postes.size - 1 %>
+                <td class="td-spacer"></td>
+              <% end %>
+            <% end %>
+          </tr>
+          <tr>
+            <% @user.postes.each_with_index do |poste, i| %>
+              <td>
+                <%= poste.name %>
+              </td>
+              <% unless i == @user.postes.size - 1 %>
+                <td class="td-spacer"></td>
+              <% end %>
+            <% end %>
+          </tr>
+        </table>
+      </div>
     </div>
+
+    <div id="similar-users">
+      <h2>Other employees like <%= @user.first_name %></h2>
+      <div class="similar-users-list">
+        <ul class="list-inline">
+          <% @similar_users.each do |employee| %>
+            <li>
+              <div class="employee-card">
+
+                <table id="employee-card-table">
+
+                  <tr id="employee-card-name-tr" valign="top">
+                    <td>
+                      <p id="employee-card-name"><%= employee.first_name + " " + employee.last_name %></p>
+                    </td>
+                  </tr>
+
+                  <tr id="employee-card-skills-tr" valign="top">
+                    <td>
+                      <ul class="list-inline">
+                        <% Poste.joins(:abilities).where(abilities: {user: employee}).each do |poste| %>
+                          <li class="skill-button-list">
+                            <div class="skill-button">
+                              <%= poste.name %>
+                            </div>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </td>
+                  </tr>
+
+                  <tr valign="bottom">
+                    <td>
+                      <div class="list-controls">
+                        <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
+                        <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
+                      </div>
+                    </td>
+                  </tr>
+
+                </table>
+
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="user-profile-availabilities">
+
   </div>
-<% end %>
+</div>
 
 <% content_for :title_tag do %>
 Profil de <%= @user.name %>

@@ -9,13 +9,13 @@
 
   <div class="card-poste-container">
     <div class="row">
-      <% @postes.each do |poste|%>
+      <% @postes.each do |poste, logo|%>
 
         <div class="card-postes text-inline">
           <div class="card-postes-description">
             <div class="poste-title">
               <div>
-                <%=render 'postes/poste_logo', poste: poste%>
+                <%= image_tag logo %>
               </div>
               <span><h2><%= poste.name %></h2></span>
             </div>
