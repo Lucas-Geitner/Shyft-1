@@ -1,3 +1,19 @@
+<div class="text-center week-name">
+  <p>
+    <% unless @week == 1 %>
+      <%= link_to week_view_path(@planning, week: (@week - 1)), class: "text-center" do %>
+        <i class="fa fa-caret-left"></i>
+      <% end %>
+    <% end %>
+    Semaine du <%= (@planning.start_date + ((@week - 1) * 7).days).strftime("%e %B %Y") %>
+    <% unless @week >= ((@planning.end_date - @planning.start_date) / 604800).ceil + 1 %>
+      <%= link_to week_view_path(@planning, week: (@week + 1)), class: "text-center" do %>
+        <i class="fa fa-caret-right"></i>
+      <% end %>
+    <% end %>
+  </p>
+</div>
+
 <div class="agenda-buttons text-right">
   <div class="week-buttons-container">
     <div class="week-buttons">
