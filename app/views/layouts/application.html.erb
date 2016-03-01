@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>skello - <%= yield(:title_tag).presence || "No hassle time management" %></title>
+    <title>Skello - <%= yield(:title_tag).presence || "Hassle free time management" %></title>
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>
     <meta property="og:title" content="<%= yield(:title_tag).presence || "Hassle free time management" %>" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="description" content="Shyft: No hassle time management">
+    <meta name="description" content="Skello: Hassle free time management">
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
   <body>
