@@ -12,15 +12,20 @@
 
   <div class="row valign">
     <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
-    <%= f.input :email, placeholder: "wallie@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :email, placeholder: "cdushnok@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
 
   <div class="row valign">
+    <label for="user_phone" class="contol-label col-xs-4 vcenter">Téléphone</label>
+    <%= f.input :email, placeholder: "06 42 53 64 75", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+  </div>
+
+  <div class="row valign">
     <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Rôle</label>
     <%= f.simple_fields_for membership do |p| %>
-      <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Pick a role" %>
+      <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Choisir un rôle" %>
     <% end %>
   </div>
 

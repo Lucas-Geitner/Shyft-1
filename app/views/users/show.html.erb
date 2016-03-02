@@ -81,22 +81,44 @@
 
       <!-- contract -->
       <% if @user.contract %>
+
         <div class="flexbox">
           <div class="flex-item">
             <i class="fa fa-file-text-o"></i>
           </div>
-          <div class="flex-item" id="contract">
+          <div class="flex-item" id="view-contract-prompt">
             <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
               View <%= @user.first_name %>'s contract
             <% end %>
           </div>
+          <div class="flex-item hidden" id="upload-contract-prompt">
+            Upload <%= @user.first_name %>'s contract
+          </div>
+          <div class="flex-item hidden" id="save-contract-prompt">
+            Save <%= @user.first_name %>'s contract
+          </div>
+          <div class="flex-item hidden" id="upload-contract">
+            <i class="fa fa-upload"></i>
+          </div>
+          <div class="flex-item hidden" id="save-contract">
+            <i class="fa fa-save"></i>
+          </div>
+          <div class="flex-item" id="delete-contract">
+            <i class="fa fa-trash"></i>
+          </div>
         </div>
+        <%= simple_form_for @user, method: "patch" do |f|  %>
+          <%= f.input :contract, as: :attachinary, label: false, id: "upload-contract"  %>
+          <%= f.button :submit, id: "submit-contract" %>
+        <% end %>
+
       <% else %>
+
         <div class="flexbox">
           <div class="flex-item">
             <i class="fa fa-file-text-o"></i>
           </div>
-          <div class="flex-item" id="contract">
+          <div class="flex-item" id="upload-contract-prompt">
             Upload <%= @user.first_name %>'s contract
           </div>
           <div class="flex-item hidden" id="save-contract-prompt">
@@ -108,13 +130,16 @@
           <div class="flex-item hidden" id="save-contract">
             <i class="fa fa-save"></i>
           </div>
+          <div class="flex-item hidden" id="delete-contract">
+            <i class="fa fa-trash"></i>
+          </div>
         </div>
         <%= simple_form_for @user, method: "patch" do |f|  %>
           <%= f.input :contract, as: :attachinary, label: false, id: "upload-contract"  %>
           <%= f.button :submit, id: "submit-contract" %>
         <% end %>
-      <% end %>
 
+      <% end %>
     </div>
   </div>
 
@@ -191,7 +216,7 @@
       })
       $("#save-email").on("click", function() {
         $.ajax({
-          type: "PATCH",
+          method: "PATCH",
           data: {user: {email: $("#email-input").val()}},
           url: "<%= user_path(@user) %>",
           success: function() {
@@ -211,7 +236,7 @@
       })
       $("#save-phone").on("click", function() {
         $.ajax({
-          type: "PATCH",
+          method: "PATCH",
           data: {user: {phone: $("#phone-input").val()}},
           url: "<%= user_path(@user) %>",
           success: function() {
@@ -226,14 +251,22 @@
       $("#upload-contract").on("click", function() {
         $("#user_contract").trigger("click")
         $(this).addClass("hidden")
-        $("#contract").addClass("hidden")
+        $("#upload-contract-prompt").addClass("hidden")
         $("#save-contract-prompt").removeClass("hidden")
         $("#save-contract").removeClass("hidden")
       })
       $("#save-contract").on("click", function() {
         $("#submit-contract").trigger("click")
-        $("#save-contract-prompt").addClass("hidden")
-        $(this).addClass("hidden")
+      })
+      $("#delete-contract").on("click", function() {
+        $.ajax({
+          method: "PATCH",
+          dataType: "script",
+          url: "<%= shop_destroy_contract_path(@shop, @user) %>",
+          success: function() {
+            console.log("IT WORKSSSS")
+          }
+        })
       })
     })
   </script>
