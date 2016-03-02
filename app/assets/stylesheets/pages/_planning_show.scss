@@ -14,6 +14,7 @@
   };
   a li {
     color: $gray-dark;
+    font-weight: lighter;
     height: 30px;
     display: flex;
     justify-content: space-between;
@@ -108,7 +109,7 @@
     align-items: center;
     justify-content: center;
     &:hover {
-      background-color: rgb(135,135,135);
+      opacity: 0.8;
       text-decoration: none;
     };
     &:first-child {

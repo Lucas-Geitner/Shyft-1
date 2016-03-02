@@ -5,7 +5,8 @@
         <i class="fa fa-caret-left"></i>
       <% end %>
     <% end %>
-    Semaine du <%= (@planning.start_date + ((@week - 1) * 7).days).strftime("%e %B %Y") %>
+    <% first_day = @planning.start_date + ((@week - 1) * 7).days %>
+    Semaine du <%= first_day.strftime("%e") + " " + french_months(first_day.strftime("%B")) + " " + first_day.strftime("%Y") %>
     <% unless @week >= ((@planning.end_date - @planning.start_date) / 604800).ceil %>
       <%= link_to planning_path(@planning, week: (@week + 1), day: params[:day]), class: "text-center" do %>
         <i class="fa fa-caret-right"></i>
@@ -35,10 +36,11 @@
     <div class="tab-wrapper">
       <div class="tabs">
         <% (1..7).each do |n| %>
-          <%= link_to planning_path(@planning, week: @week, day: n), class: "tab" do %>
+          <% day_n = (@planning.start_date + ((n - 1) + ((@week - 1) * 7)).days) %>
+          <%= link_to planning_path(@planning, week: @week, day: n), class: "tab #{"active" if day_n == @today }" do %>
             <div>
-              <%= (@planning.start_date + (n - 1).days).strftime('%A') %>
-              <div class="small-date"><%= (@planning.start_date + ((n - 1) + ((@week - 1) * 7)).days).strftime('%d %b %Y') %></div>
+              <%= french_days(day_n.strftime('%A')) %>
+              <div class="small-date"><%= day_n.strftime('%d') + " " + french_months(day_n.strftime('%b')) %></div>
             </div>
           <% end %>
         <% end %>
@@ -83,6 +85,11 @@
           <% end %>
         </div>
         <table id="planner">
+          <tr>
+            <% @range.each do |time| %>
+              <th colspan="2"></td>
+            <% end %>
+          </tr>
           <% @employees.each do |employee| %>
             <tr>
               <% @range.each do |time| %>
@@ -120,7 +127,7 @@
       <div id="bin">
         <i class="fa fa-trash"></i>
       </div>
-      <div>
+      <div class="flex-align">
         <% if @planning.status == "Ongoing" %>
           <%= simple_form_for(@planning, url: declare_path(@planning), method: :patch) do |f| %>
             <%= f.submit 'Sauvegarder', class: "btn btn-default save-button"%>
@@ -188,8 +195,6 @@
           <% end %>
         <% end %>
       <% end %>
-      $('.tab:contains("<%= @today.strftime("%A") %>")').addClass("active")
-      $('.week-buttons > a:contains("<%= "S#{@week}" %>")').addClass("active")
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
       $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")

@@ -27,4 +27,35 @@ module PlanningsHelper
       return "ongoing"
     end
   end
+
+  def french_months(date)
+    case date
+      when "January" then "janvier"
+      when "February" then "février"
+      when "March" then "mars"
+      when "April" then "avril"
+      when "May" then "mai"
+      when "June" then "juin"
+      when "Juillet" then "juillet"
+      when "August" then "août"
+      when "September" then "septembre"
+      when "October" then "octobre"
+      when "November" then "novembre"
+      when "December" then "décembre"
+      else date
+    end
+  end
+
+  def french_days(date)
+    case date
+      when "Monday" then "lundi"
+      when "Tuesday" then "mardi"
+      when "Wednesday" then "mercredi"
+      when "Thursday" then "jeudi"
+      when "Friday" then "vendredi"
+      when "Saturday" then "samedi"
+      when "Sunday" then "dimanche"
+      else date
+    end
+  end
 end
