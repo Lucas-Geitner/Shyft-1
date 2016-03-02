@@ -120,8 +120,8 @@
 .similar-users-wrapper  {
   margin: 0 -20px -20px -20px;
   padding: 40px 0;
-  background: white;
-  box-shadow: 0 -1px 2px #E0E0E0;
+  background: none;
+  // box-shadow: 0 -1px 2px #E0E0E0;
 }
 #similar-users {
   margin-left: 20px;
@@ -142,13 +142,13 @@
   .employee-card {
     width: 200px;
     height: 200px;
-    background: #F1F1F1;
+    background: white;
     box-shadow: 1px 1px 2px #E0E0E0;
     border-radius: 2px;
     padding: 20px;
     transition: all 0.1s ease;
     &:hover {
-      background: #ECECEC;
+      background: #EFFBFA;
     }
     #employee-card-name {
       margin-top: 0;
