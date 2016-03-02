@@ -5,7 +5,7 @@
     background-position: center;
     background-size: 100%;
     box-shadow: 0 1px 2px #E0E0E0;
-    padding: 30px 0 40px 0;
+    padding: 30px 0 65px 0;
     color: white;
   }
   .user-details-container {
@@ -26,27 +26,34 @@
     }
   }
   .user-contact-and-skills-wrapper {
-    padding: 40px 0;
+    padding: 0 0 40px 0;
   }
   .user-contact-info {
-    color: $blue;
+    // width: 20%;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    color: $gray-light;
     font-size: 14px;
-    font-weight: lighter;
+    // font-weight: lighter;
     p {
       margin: 3px;
     }
-    a:hover {
-      text-decoration: none;
-      color: #006F7D;
+    a {
+      color: $gray-light;
+      &:hover {
+        text-decoration: none;
+        color: $gray;
+      }
     }
   }
   .user-skills {
     background: white;
-    box-shadow: 1px 1px 2px #E0E0E0;
+    box-shadow: 0 1px 2px #E0E0E0;
     border-radius: 2px;
     padding: 20px;
     display: inline-block;
-    margin-top: 25px;
+    margin-top: -50px;
     img {
       width: 40px;
     }
@@ -59,6 +66,10 @@
     .td-spacer {
       width: 20px;
     }
+  }
+  .edit_user {
+    visibility: hidden;
+    height: 0;
   }
   .user-shifts-wrapper {
     text-align: center;
@@ -85,6 +96,23 @@
         &:last-child {
           width: 50px;
         }
+      }
+    }
+  }
+  .dates-worked {
+    margin-left: -20px;
+    margin-right: -20px;
+    background: red;
+    height: 150px;
+  }
+  .total-hours {
+    p {
+      color: $gray-light;
+      font-weight: lighter;
+      margin-bottom: 3px;
+      font-size: 14px;
+      span {
+        font-weight: bold;
       }
     }
   }
@@ -148,8 +176,43 @@
       border-collapse: collapse;
     }
     .btn {
-      background: #F1F1F1;
+      background: none;
     }
   }
 }
+.flexbox {
+  // display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 41px;
+  margin: 0px;
+  line-height: 41px;
+  .flex-item {
+  //   flex: 1 1 auto;
+  display: inline;
+  }
+  #email-input,
+  #phone-input {
+    padding: 10px;
+    border: none;
+    border-bottom: solid 2px #c9c9c9;
+    transition: border 0.3s;
+    height: 41px;
+    &:focus,
+    .focus {
+      border-bottom: solid 2px #969696;
+    }
+  }
+}
+.fa-pencil,
+.fa-upload,
+.fa-save {
+  color: #CACACA;
+  margin-left: 5px;
+  &:hover {
+    color: #B0B0B0;
+    cursor: pointer;
+  }
+}
+
 

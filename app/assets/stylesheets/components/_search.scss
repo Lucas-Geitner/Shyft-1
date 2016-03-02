@@ -1,0 +1,19 @@
+.search-container  {
+  display: flex;
+  border-radius: 8px;
+  margin: auto;
+
+
+  .input-lg {
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+  }
+
+  .btn-lg {
+    color: white;
+    border: 0;
+    background: #01BCD4;
+    border-left: 1px solid rgba(0, 0, 0, 0.09);
+  }
+}

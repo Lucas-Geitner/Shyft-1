@@ -1,8 +1,9 @@
-<div class="card-planning">
+<div class="card-planning <%= planning_color(planning) %>">
+
   <div class="card-planning-description">
     <div class="card-planning-dates">
-      <span><i class="fa fa-calendar"></i> <%= planning.start_date.strftime("%A, %b %e") %></span>
-      <span class="separator">-</span>
+      <span><%= planning.start_date.strftime("%A, %b %e") %></span>
+      <span class="separator"></span>
       <span><%= planning.end_date.strftime("%A, %b %e") %></span>
     </div>
     <div class="card-planning-users">
@@ -25,10 +26,10 @@
           <%= f.submit 'Sauvegarder & Exporter', class: "btn btn-default"%>
         <% end %>
       <% else %>
-        <div class="skill-button-green">Déclaré</div>
         <%= link_to export_path(planning), class: "btn btn-default" do %>
           <i class="fa fa-print"></i>
         <% end %>
+        <div class="skill-button-green">Déclaré</div>
       <% end %>
     </div>
   </div>

@@ -4,12 +4,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   transition: border-left 0.1s ease;
   box-shadow: 1px 1px 2px #D7D7D7;
+  border-left: 4px solid transparent;
   &:hover {
-    border-left: 4px solid $blue;
+    border-left: 4px solid black;
   }
+}
+.scrolling-list {
+  margin-top: 53px;
 }
 .card-manager {
   background: $blue;
