@@ -13,17 +13,18 @@
   }
 }
 .scrolling-list {
-  margin-top: 53px;
+  margin-top: 33px;
 }
 .card-manager {
-  background: $blue;
+  background: #BABABA;
   position: relative;
   &:hover {
-    border-left: 4px solid #006F7D;
+    border-left: 4px solid #1D292D;
   }
   .card-user-description {
-    position: absolute;
-    top: 14px;
+    // position: absolute;
+    // top: 14px;
+    align-self: flex-start;
   }
   .card-user-name {
     color: white;
@@ -31,7 +32,7 @@
       color: white;
     }
     .separator {
-      color: #006F7D;
+      color: #1D292D;
     }
   }
   .user-info {
@@ -40,11 +41,14 @@
     text-align: right;
     margin-bottom: 10px;
   }
+  .card-user-controls {
+
+  }
   .list-controls .btn {
-    background: $blue;
+    background: none;
     color: white;
     &:hover {
-      color: #006F7D;
+      color: #1D292D;
     }
   }
 }
