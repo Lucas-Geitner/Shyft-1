@@ -3,14 +3,16 @@ require 'csv'
 class PlanningsController < ApplicationController
   def index
     if params[:date] && params[:date] != ""
-      @plannings = Planning.where("start_date < ? AND end_date > ? AND shop_id = ? ", params[:date], params[:date], params[:shop_id])
+      @plannings_actuels = Planning.where("start_date <= ? AND end_date >= ? AND start_date <= ? AND end_date >= ? AND shop_id = ? ", params[:date], params[:date], Date.today, Date.today, params[:shop_id])
+      @plannings_futures = Planning.where("start_date <= ? AND end_date >= ? AND start_date >= ?  AND shop_id = ? ", params[:date], params[:date], Date.today, params[:shop_id])
+      @plannings_archives = Planning.where("start_date <= ? AND end_date >= ? AND end_date < ? AND shop_id = ? ", params[:date], params[:date], Date.today, params[:shop_id])
     else
-      @plannings = Planning.where("shop_id = ?", params[:shop_id])
+      @plannings_actuels = Planning.where("start_date <= ? AND end_date >= ? AND shop_id = ? ", Date.today, Date.today, params[:shop_id])
+      @plannings_futures = Planning.where("start_date >= ?  AND shop_id = ? ", Date.today, params[:shop_id])
+      @plannings_archives = Planning.where("end_date < ? AND shop_id = ? ", Date.today, params[:shop_id])
     end
     @planning = Planning.new
-    @plannings_actuels = Planning.where("start_date <= ? AND end_date >= ? AND shop_id = ? ", Date.today, Date.today, params[:shop_id])
-    @plannings_futures = Planning.where("start_date > ?  AND shop_id = ? ", Date.today, params[:shop_id])
-    @plannings_archives = Planning.where("end_date < ? AND shop_id = ? ", Date.today, params[:shop_id])
+
   end
 
   def new

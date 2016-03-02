@@ -20,8 +20,8 @@
             <div class="row">
               <div class="planning-header">
                 <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
-                  <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
-                  <input type="submit" class="btn btn-lg" value="Rechercher">
+                  <input name="date" class="datepicker form-control input-lg" placeholder="<%= params[:date].present? ? params[:date] : "12/11/2016" %>">
+                  <input type="submit" class="btn btn-lg" value="Rechercher" style ="font-size: 15px">
                 </form>
               </div>
             </div>
@@ -40,7 +40,7 @@
                 <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
                   <input name="archives" class="hidden" value="true">
                   <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
-                  <input type="submit" class="btn btn-lg" value="Rechercher">
+                  <input type="submit" class="btn btn-lg" value="Rechercher" style ="font-size: 15px">
                 </form>
               </div>
             </div>
