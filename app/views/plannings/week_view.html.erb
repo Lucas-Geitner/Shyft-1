@@ -45,7 +45,7 @@
           <% today = (@monday + day.days) %>
           <% if (today < @planning.start_date || today > @planning.end_date) %>
             <tr>
-              <td><%= today.strftime("%A") %></td>
+              <td class="week-view-day"><%= french_days(today.strftime("%A")).upcase %></td>
               <td class="greyish"></td>
               <% @range.each do |time| %>
                 <td class="time-cell greyish" style="border-right: 1px solid rgba(37,50,56,0.2)"><div class="blech"></div></td>
@@ -56,16 +56,16 @@
             <% Poste.all.each_with_index do |poste, poste_index| %>
               <tr>
                 <% if poste_index == 0 %>
-                  <td rowspan="<%= Poste.count %>"><%= today.strftime("%A") %></td>
+                  <td class="week-view-day" rowspan="<%= Poste.count %>"><%= french_days(today.strftime("%A")).upcase %></td>
                 <% end %>
-                <td style="padding: 0 5px;"><%= poste.name %></td>
+                <td style="padding: 0 5px; <%= "border-top:  1px solid rgba(37, 50, 56, 0.4)" if poste_index == 0 %>"><%= poste.name %></td>
                 <% @range.each do |time| %>
-                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px dotted rgba(37,50,56,0.2)">
+                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="<%= "border-top:  1px solid rgba(37, 50, 56, 0.4)" if poste_index == 0 %>">
                     <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
                     <div class="blech">
                     </div>
                   </td>
-                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours + 30.minutes), poste) %>" class= "time-cell" id="<%= "#{time}.5/#{today.strftime("%A")}" %>">
+                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours + 30.minutes), poste) %>" class="time-cell" style="border-left: 1px dotted rgba(37,50,56,0.2); <%= "border-top:  1px solid rgba(37, 50, 56, 0.4)" if poste_index == 0 %>" id="<%= "#{time}.5/#{today.strftime("%A")}" %>">
                     <%= get_div_width(@planning, (today + time.hours + 30.minutes), poste) unless get_div_width(@planning, (today + time.hours + 30.minutes), poste) == (get_div_width(@planning, (today + time.hours), poste) - 30) || get_div_width(@planning, (today + time.hours + 30.minutes), poste) == 0 %>
                     <div class="blech">
                     </div>
