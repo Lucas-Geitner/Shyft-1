@@ -49,25 +49,50 @@
       <div class="employee-names">
         <ul class="list-unstyled text-right">
           <% @employees.each do |employee| %>
-            <li><%= employee.first_name %></li>
+            <% employee_postes = "" %>
+            <% employee.postes.uniq.each do |p| %>
+              <% employee_postes += "<td>#{p.name}</td>" %>
+            <% end %>
+            <% popover_content = "<div class='panel panel-default popover-table'>
+                              <div class='panel-heading'>
+                                Postes
+                              </div>
+                              <table class=table>
+                                <tr>
+                                  #{employee_postes}
+                                </tr>
+                              </table>
+                            </div>" %>
+            <%= link_to user_path(employee) do %>
+              <li data-toggle="popover" data-content="<%= popover_content %>">
+                <div class="user-details-icon">
+                  <%= employee.first_name[0]+ employee.last_name[0] %>
+                </div>
+                <div>
+                  <%= employee.first_name %>
+                </div>
+              </li>
+            <% end %>
           <% end %>
         </ul>
       </div>
-      <table id="planner">
-        <tr>
+      <div style="position: relative;">
+        <div class="time-headers">
           <% @range.each do |time| %>
-            <th colspan="2"><%= time %>h</th>
+            <div class="time-header"><%= time %>:00</div>
           <% end %>
-        </tr>
-        <% @employees.each do |employee| %>
-          <tr>
-            <% @range.each do |time| %>
-              <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>" style="border-right: 1px solid rgba(37,50,56,0.2)"><div class="blech"></div></td>
-              <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>"><div class="blech"></div></td>
-            <% end %>
-          </tr>
-        <% end %>
-      </table>
+        </div>
+        <table id="planner">
+          <% @employees.each do |employee| %>
+            <tr>
+              <% @range.each do |time| %>
+                <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      </div>
       <div id="forms">
         <!-- Create -->
         <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
@@ -138,6 +163,13 @@
 
 
     $(function() {
+      $('[data-toggle="popover"]').popover({
+        container: 'body',
+        html: true,
+        trigger: 'hover',
+        delay: {"show": "300", "hide": "50"},
+        placement: 'bottom'
+      });
       $("#edit_planning_<%= @planning.id %> input").click(function(e) {
         var planningNum = $(this).parent().attr("id").match(/\d+/)
         console.log(planningNum);
