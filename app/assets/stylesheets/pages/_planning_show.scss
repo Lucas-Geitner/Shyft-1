@@ -1,10 +1,40 @@
-.week-name {
-  h1 {
-    font-size: 30px;
-  }
-  a i {
-    color: $gray-light;
-    margin: 0 8px;
+.week-name h1, .agenda-buttons, .agenda-and-employees {
+  font-family: "Lato", Arial, sans-serif;
+}
+
+.agenda-and-employees {
+  display: flex;
+}
+
+.employee-names {
+  margin-top: 85px;
+  margin-right: 30px;
+  a:hover {
+    text-decoration: none;
+  };
+  a li {
+    color: $gray-dark;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .user-details-icon {
+      margin-right: 10px;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #D2D2D2;
+      font-weight: lighter;
+      font-size: 13px;
+      color: white;
+      border-radius: 50%;
+    };
+    &:hover .user-details-icon {
+      background-color: $shyft-dark-blue;
+      color: white;
+    };
   }
 }
 
@@ -13,14 +43,82 @@
   display: flex;
 }
 
+.agenda-wrapper {
+  background: white;
+  border-radius: 10px;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.bin-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.save-button {
+  margin-right: 20px;
+  border-radius: 10em;
+  background-color: white;
+  border: 2px solid $green;
+  color: $green;
+  font-weight: bolder;
+  &:hover {
+    background-color: $green;
+    color: white;
+    border: 0;
+  };
+}
+
+.small-date {
+  font-size: 10px;
+  color: $gray-light;
+}
+
+.time-header {
+  width: 60px;
+  text-align: center;
+  font-weight: lighter;
+  border-right: 1px solid $gray-lighter;
+}
+
+.time-headers {
+  display: flex;
+  position: absolute;
+  top: 40px;
+  left: -25px;
+}
+
 .week-buttons {
   position: absolute;
-  right: 40px;
+  right: 0;
   width: 250px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  a {
+    font-size: 14px;
+    background-color: $shyft-dark-blue;
+    width: 100%;
+    height: 100%;
+    color: $gray-lighter;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background-color: rgb(135,135,135);
+      text-decoration: none;
+    };
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    };
+    &:last-child {
+      border-radius: 0 8px 8px 0;
+      border-right: none;
+    };
+  }
 }
 
 .week-buttons-container {
@@ -29,54 +127,14 @@
   height: 55px;
 }
 
-.week-buttons a {
-  font-size: 14px;
-  background-color: $gray-light;
-  width: 100%;
-  height: 100%;
-  color: $gray-lighter;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid $gray;
-}
-
-.week-buttons a:hover {
-  background-color: rgb(135,135,135);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.week-buttons a:first-child {
-  border-radius: 8px 0 0 8px;
-}
-
-.week-buttons a:last-child {
-  border-radius: 0 8px 8px 0;
-  border-right: none;
-}
-
-.agenda-wrapper {
-  background: white;
-  border-radius: 10px;
-  width: 75vw;
-  margin-left: 10px;
-}
-
-.small-date {
-  font-size: 10px;
-  color: $gray-light;
-}
-
-.agenda-and-employees {
-  display: flex;
-}
-
-.employee-names {
-  margin-top: 100px;
-}
-
-.employee-names li {
-  height: 30px;
-  vertical-align: middle;
+.week-name {
+  h1 {
+    font-size: 25px;
+    font-weight: lighter;
+    margin-top: 10px;
+  }
+  a i {
+    color: $gray-light;
+    margin: 0 8px;
+  }
 }

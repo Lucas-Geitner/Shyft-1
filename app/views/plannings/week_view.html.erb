@@ -31,7 +31,7 @@
           <th>DAYS</th>
           <th>Postes</th>
           <% @range.each_with_index do |time, index| %>
-            <th colspan="2"><%= time %>h</th>
+            <th colspan="2"><%= time %></th>
           <% end %>
         </tr>
         <% (0...7).each do |day| %>
@@ -53,7 +53,7 @@
                 <% end %>
                 <td style="padding: 0 5px;"><%= poste.name %></td>
                 <% @range.each do |time| %>
-                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px solid rgba(37,50,56,0.2)">
+                  <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="border-right: 1px dotted rgba(37,50,56,0.2)">
                     <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
                     <div class="blech">
                     </div>
