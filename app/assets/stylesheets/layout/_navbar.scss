@@ -56,6 +56,24 @@
   padding: 0 20px;
 }
 
+#navbar-avatar {
+  text-align: center;
+  position: fixed;
+  right: 180px;
+  top: 15px;
+  #user-details-icon {
+    margin: 0 auto;
+    background: #D2D2D2;
+    color: white;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    font-weight: lighter;
+    font-size: 20px;
+  }
+}
+
 /* Navbar standard link */
 .navbar-wagon-link {
   color: white;
