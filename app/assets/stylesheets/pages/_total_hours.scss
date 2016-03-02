@@ -4,7 +4,7 @@
   h1 {
     margin: 5px 0;
     font-size: 25px;
-    color: $blue;
+    color: #788186;
   }
   td {
     text-align: center;
@@ -61,4 +61,8 @@
       width: 70px;
     }
   }
+}
+
+#user-show-table {
+  margin-top: 0;
 }
