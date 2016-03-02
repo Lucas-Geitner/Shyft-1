@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_shop, only: [:new, :show, :create, :total]
-  before_action :set_user, only: [:show, :update]
+  before_action :set_user, only: [:show, :update, :destroy]
   before_action :set_shop_employees, only: [:new, :show, :total]
   before_action :set_employees_shifts, only: [:show, :total]
 
@@ -66,10 +66,15 @@ class UsersController < ApplicationController
 
   def update
     @user.update(user_params)
-    redirect_to user_path(@user)
+
+    unless request.xhr?
+      redirect_to user_path(@user)
+    end
   end
 
   def destroy
+    @user.destroy
+    redirect_to new_user_path
   end
 
   private

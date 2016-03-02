@@ -1,0 +1,52 @@
+<% total_hours = 140 %>
+<% total = 0 %>
+<% @employees_shifts[@user].each do |date, duration| %>
+  <% total += duration %>
+<% end %>
+
+<div class="panel panel-default total-hours">
+  <div class="panel-heading">
+    <h1><%= Date.today.strftime("%B %Y") %></h1>
+  </div>
+  <div class="panel-body">
+    <p>Heures de travail disponibles: <span><%= total_hours %></span></p>
+    <p>
+      Heures de travail effectuées:
+      <span>
+        <% if total % 1 != 0 %>
+          <td><%= total.floor %> <sup><%= (total % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (total % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% else %>
+          <td><%= total.floor %></td>
+        <% end %>
+      </span>
+    </p>
+  </div>
+
+  <table class="table">
+
+    <tr>
+      <th>Date</td>
+      <th>Heures de travail</td>
+      <th>Heures restantes</td>
+    </tr>
+    <% hours_left = total_hours %>
+    <% @employees_shifts[@user].each do |date, duration| %>
+      <tr>
+        <td><%= date %></td>
+        <% if duration % 1 != 0 %>
+          <td><%= duration.floor %> <sup><%= (duration % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (duration % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% else %>
+          <td><%= duration.floor %></td>
+        <% end %>
+        <% hours_left -= duration %>
+        <% if hours_left % 1 != 0 %>
+          <td><%= hours_left.floor %> <sup><%= (hours_left % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (hours_left % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% else %>
+          <td><%= hours_left.floor %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+

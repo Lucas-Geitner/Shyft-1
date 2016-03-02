@@ -105,6 +105,17 @@
     background: red;
     height: 150px;
   }
+  .total-hours {
+    p {
+      color: $gray-light;
+      font-weight: lighter;
+      margin-bottom: 3px;
+      font-size: 14px;
+      span {
+        font-weight: bold;
+      }
+    }
+  }
 }
 .similar-users-wrapper  {
   margin: 0 -20px -20px -20px;
@@ -165,7 +176,7 @@
       border-collapse: collapse;
     }
     .btn {
-      background: #F1F1F1;
+      background: none;
     }
   }
 }
@@ -173,10 +184,24 @@
   // display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
+  height: 41px;
+  margin: 0px;
+  line-height: 41px;
   .flex-item {
   //   flex: 1 1 auto;
   display: inline;
+  }
+  #email-input,
+  #phone-input {
+    padding: 10px;
+    border: none;
+    border-bottom: solid 2px #c9c9c9;
+    transition: border 0.3s;
+    height: 41px;
+    &:focus,
+    .focus {
+      border-bottom: solid 2px #969696;
+    }
   }
 }
 .fa-pencil,

@@ -116,43 +116,12 @@
       <% end %>
 
     </div>
-
-    <% unless @employees_shifts[@user].empty? %>
-      <div class="user-shifts-wrapper">
-        <div class="user-shifts">
-          <p>Shifts en <%= Date.today.strftime("%B").downcase %></p>
-          <% @employees_shifts[@user].each do |date, duration| %>
-            <table>
-              <tr>
-                <td>
-                  <%= date %>
-                </td>
-                <td>
-                  <% if duration % 1 != 0 %>
-                    <%= duration.floor %> <sup><%= (duration % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (duration % 1).to_r.to_s.scan(/\d/)[1] %></sub> h
-                  <% else %>
-                    <%= duration.floor %> h
-                  <% end %>
-                </td>
-              </tr>
-            </table>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
   </div>
 
-  <div class="dates-worked">
-    <ul class="list-inline">
-      <% Date.new(Date.today.year, Date.today.month, -1).day.times do |i| %>
-        <li>
-          <% date = Date.new(Date.today.year, Date.today.month, i + 1).strftime("%A, %b %d") %>
-          <%= date %>
-          <%= @employees_shifts[@user].key?(date) %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+  <% unless @employees_shifts[@user].empty? %>
+    <%= render  'users/table' %>
+  <% end %>
+
 </div>
 
 <div class="similar-users-wrapper">
