@@ -27,8 +27,8 @@
               Insert some <strong>cool</strong> information here!
             </div>
             <div class="list-controls">
-              <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
-              <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
+              <%= link_to "Voir", user_path(employee), class: "btn btn-default" %>
+              <%= link_to "Supprimer", user_path(employee), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer #{employee.first_name}?" }, class: "btn btn-default" %>
             </div>
           </div>
         </div>

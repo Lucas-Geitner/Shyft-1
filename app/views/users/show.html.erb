@@ -12,30 +12,6 @@
   </div>
 
   <div class="user-contact-and-skills-wrapper">
-    <div class="user-contact-info">
-      <p>
-        <i class="fa fa-envelope-o"></i>
-        <%= @user.email %>
-      </p>
-      <p>
-        <i class="fa fa-phone"></i>
-        <%= Faker::PhoneNumber.cell_phone %>
-      </p>
-      <p>
-        <i class="fa fa-file-text-o"></i>
-        <% if @user.contract? %>
-          <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
-            View <%= @user.first_name %>'s contract
-          <% end %>
-        <% else %>
-          Upload <%= @user.first_name %>'s contract
-          <%# simple_form_for user_path(@user), method: :patch do |f| %>
-            <%#= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "" } %>
-          <%# end %>
-        <% end %>
-      </p>
-    </div>
-
     <% unless @user.postes.empty? %>
       <div class="user-skills">
         <table>
@@ -63,30 +39,89 @@
       </div>
     <% end %>
 
-    <% unless @employees_shifts[@user].empty? %>
-      <div class="user-shifts-wrapper">
-        <div class="user-shifts">
-          <p>Shifts en <%= Date.today.strftime("%B").downcase %></p>
-          <% @employees_shifts[@user].each do |date, duration| %>
-            <table>
-              <tr>
-                <td>
-                  <%= date %>
-                </td>
-                <td>
-                  <% if duration % 1 != 0 %>
-                    <%= duration.floor %> <sup><%= (duration % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (duration % 1).to_r.to_s.scan(/\d/)[1] %></sub> h
-                  <% else %>
-                    <%= duration.floor %> h
-                  <% end %>
-                </td>
-              </tr>
-            </table>
-          <% end %>
+    <div class="user-contact-info">
+
+      <!-- email -->
+      <div class="flexbox">
+        <div class="flex-item">
+          <i class="fa fa-envelope-o"></i>
+        </div>
+        <div class="flex-item" id="email">
+          <%= @user.email %>
+        </div>
+        <div class="flex-item hidden" id="email-input-container">
+          <input type="text" value="<%= @user.email %>" id="email-input">
+        </div>
+        <div class="flex-item" id="edit-email">
+          <i class="fa fa-pencil"></i>
+        </div>
+        <div class="flex-item hidden" id="save-email">
+          <i class="fa fa-save"></i>
         </div>
       </div>
-    <% end %>
+
+      <!-- phone -->
+      <div class="flexbox">
+        <div class="flex-item">
+          <i class="fa fa-phone"></i>
+        </div>
+        <div class="flex-item" id="phone">
+          <%= @user.phone %>
+        </div>
+        <div class="flex-item hidden" id="phone-input-container">
+          <input type="text" value="<%= @user.phone %>" id="phone-input">
+        </div>
+        <div class="flex-item" id="edit-phone">
+          <i class="fa fa-pencil"></i>
+        </div>
+        <div class="flex-item hidden" id="save-phone">
+          <i class="fa fa-save"></i>
+        </div>
+      </div>
+
+      <!-- contract -->
+      <% if @user.contract %>
+        <div class="flexbox">
+          <div class="flex-item">
+            <i class="fa fa-file-text-o"></i>
+          </div>
+          <div class="flex-item" id="contract">
+            <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
+              View <%= @user.first_name %>'s contract
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="flexbox">
+          <div class="flex-item">
+            <i class="fa fa-file-text-o"></i>
+          </div>
+          <div class="flex-item" id="contract">
+            Upload <%= @user.first_name %>'s contract
+          </div>
+          <div class="flex-item hidden" id="save-contract-prompt">
+            Save <%= @user.first_name %>'s contract
+          </div>
+          <div class="flex-item" id="upload-contract">
+            <i class="fa fa-upload"></i>
+          </div>
+          <div class="flex-item hidden" id="save-contract">
+            <i class="fa fa-save"></i>
+          </div>
+        </div>
+        <%= simple_form_for @user, method: "patch" do |f|  %>
+          <%= f.input :contract, as: :attachinary, label: false, id: "upload-contract"  %>
+          <%= f.button :submit, id: "submit-contract" %>
+        <% end %>
+      <% end %>
+
+    </div>
   </div>
+
+  <% unless @employees_shifts[@user].empty? %>
+    <%= render  'users/table' %>
+  <% end %>
+
 </div>
 
 <div class="similar-users-wrapper">
@@ -145,5 +180,62 @@
   Profil de <%= @user.name %>
 <% end %>
 
+<% content_for :scripts do %>
+  <script>
+    $(document).ready(function() {
+      $("#edit-email").on("click", function() {
+        $(this).addClass("hidden")
+        $("#save-email").removeClass("hidden")
+        $("#email").addClass("hidden")
+        $("#email-input-container").removeClass("hidden")
+      })
+      $("#save-email").on("click", function() {
+        $.ajax({
+          type: "PATCH",
+          data: {user: {email: $("#email-input").val()}},
+          url: "<%= user_path(@user) %>",
+          success: function() {
+            $("#edit-email").removeClass("hidden")
+            $("#save-email").addClass("hidden")
+            $("#email").text($("#email-input").val()).removeClass("hidden")
+            $("#email-input-container").addClass("hidden")
+          }
+        })
+      })
 
+      $("#edit-phone").on("click", function() {
+        $(this).addClass("hidden")
+        $("#save-phone").removeClass("hidden")
+        $("#phone").addClass("hidden")
+        $("#phone-input-container").removeClass("hidden")
+      })
+      $("#save-phone").on("click", function() {
+        $.ajax({
+          type: "PATCH",
+          data: {user: {phone: $("#phone-input").val()}},
+          url: "<%= user_path(@user) %>",
+          success: function() {
+            $("#edit-phone").removeClass("hidden")
+            $("#save-phone").addClass("hidden")
+            $("#phone").text($("#phone-input").val()).removeClass("hidden")
+            $("#phone-input-container").addClass("hidden")
+          }
+        })
+      })
+
+      $("#upload-contract").on("click", function() {
+        $("#user_contract").trigger("click")
+        $(this).addClass("hidden")
+        $("#contract").addClass("hidden")
+        $("#save-contract-prompt").removeClass("hidden")
+        $("#save-contract").removeClass("hidden")
+      })
+      $("#save-contract").on("click", function() {
+        $("#submit-contract").trigger("click")
+        $("#save-contract-prompt").addClass("hidden")
+        $(this).addClass("hidden")
+      })
+    })
+  </script>
+<% end %>
 

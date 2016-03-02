@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
-  has_many :memberships
-  has_many :organisation_memberships
+  has_many :memberships, dependent: :destroy
+  has_many :organisation_memberships, dependent: :destroy
   has_many :plannings
-  has_many :shifts
-  has_many :abilities
+  has_many :shifts, dependent: :destroy
+  has_many :abilities, dependent: :destroy
   has_many :postes, through: :abilities
   has_many :shops, through: :memberships
   has_many :plannings, through: :shops
