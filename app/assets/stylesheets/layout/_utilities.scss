@@ -27,4 +27,33 @@
   outline: none;
 }
 
+.plannings-index {
+  .sidebar-nav {
+    li:nth-child(2) {
+      background: #F1F1F1;
+    }
+  }
+}
+
+.users-new {
+  .sidebar-nav {
+    li:nth-child(3) {
+      background: #F1F1F1;
+    }
+  }
+}
+.postes-new{
+  .sidebar-nav {
+    li:nth-child(4) {
+      background: #F1F1F1;
+    }
+  }
+}
+.users-total {
+  .sidebar-nav {
+    li:nth-child(5) {
+      background: #F1F1F1;
+    }
+  }
+}
 

@@ -10,13 +10,13 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#Mesplannings" aria-controls="home" role="tab" data-toggle="tab">Mes plannings</a></li>
-          <li role="presentation"><a href="#Mesarchives" aria-controls="profile" role="tab" data-toggle="tab">Mes archives</a></li>
+          <li role="presentation" class="<%= 'active' unless params[:archives] %>"><a href="#Mesplannings" aria-controls="home" role="tab" data-toggle="tab">Mes plannings</a></li>
+          <li role="presentation" class="<%= 'active' if params[:archives] %>"><a href="#Mesarchives" aria-controls="profile" role="tab" data-toggle="tab">Mes archives</a></li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="Mesplannings">
+          <div role="tabpanel" class="tab-pane <%= "active" unless params[:archives]%>" id="Mesplannings">
             <div class="row">
               <div class="planning-header">
                 <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
@@ -34,10 +34,11 @@
             <%= render partial: "planning_item", locals: {planning: p}%>
             <% end %>
           </div>
-          <div role="tabpanel" class="tab-pane" id="Mesarchives">
+          <div role="tabpanel" class="tab-pane <%= "active" if params[:archives]%>" id="Mesarchives">
             <div class="row">
               <div class="planning-header">
                 <form action="/shops/<%= @shop.id %>/plannings" class="search-container form-inline">
+                  <input name="archives" class="hidden" value="true">
                   <input name="date" class="datepicker form-control input-lg" placeholder="12/11/2016">
                   <input type="submit" class="btn btn-lg" value="Rechercher">
                 </form>
