@@ -27,14 +27,20 @@
 <div class="agenda-and-employees">
   <div class="agenda-wrapper">
     <div id="agenda">
-      <table id="planner">
-        <tr>
-          <th>DAYS</th>
-          <th>Postes</th>
-          <% @range.each_with_index do |time, index| %>
-            <th colspan="2"><%= time %></th>
+      <div style="position: relative;">
+        <div class="week-view-headers">
+          <% @range.each do |time| %>
+            <div class="time-header"><%= time %>:00</div>
           <% end %>
-        </tr>
+        </div>
+        <table id="planner">
+          <tr>
+            <th style="border: 0;"></th>
+            <th style="border: 0;"></th>
+            <% @range.each do |time| %>
+              <th colspan="2"></td>
+            <% end %>
+          </tr>
         <% (0...7).each do |day| %>
           <% today = (@monday + day.days) %>
           <% if (today < @planning.start_date || today > @planning.end_date) %>

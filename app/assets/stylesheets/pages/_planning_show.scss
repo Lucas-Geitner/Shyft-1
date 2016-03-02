@@ -1,3 +1,8 @@
+#week-view-headers {
+  position: absolute;
+  left: 120;
+}
+
 .week-name h1, .agenda-buttons, .agenda-and-employees {
   font-family: "Lato", Arial, sans-serif;
 }
@@ -89,6 +94,13 @@
   position: absolute;
   top: 40px;
   left: -25px;
+}
+
+.week-view-headers {
+  position: absolute;
+  top: 40px;
+  left: 120px;
+  display: flex;
 }
 
 .week-buttons {
