@@ -26,6 +26,7 @@ end
   user = User.new(
     email: email,
     password: "aaaaaaaa",
+    phone: Faker::PhoneNumber.cell_phone,
     first_name: first_name,
     last_name: last_name)
   user.save
