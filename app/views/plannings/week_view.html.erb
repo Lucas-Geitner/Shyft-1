@@ -5,7 +5,8 @@
         <i class="fa fa-caret-left"></i>
       <% end %>
     <% end %>
-    Semaine du <%= (@planning.start_date + ((@week - 1) * 7).days).strftime("%e %B %Y") %>
+    <% first_day = @planning.start_date + ((@week - 1) * 7).days %>
+    Semaine du <%= first_day.strftime("%e") + " " + french_months(first_day.strftime("%B")) + " " + first_day.strftime("%Y") %>
     <% unless @week >= ((@planning.end_date - @planning.start_date) / 604800).ceil + 1 %>
       <%= link_to week_view_path(@planning, week: (@week + 1)), class: "text-center" do %>
         <i class="fa fa-caret-right"></i>

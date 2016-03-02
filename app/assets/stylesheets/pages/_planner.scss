@@ -1,7 +1,13 @@
 #planner {
   font-size: 14px;
-  margin: 85px 0 50px 5px;
+  margin: 65px 0 50px 5px;
   position: relative;
+  background-color: rgb(250,250,250);
+  th {
+    height: 20px;
+    border-left: 1px solid rgba(37, 50, 56, 0.4);
+    background-color: white;
+  }
   td {
     height: 30px;
     min-width: 30px;
@@ -86,7 +92,7 @@
   font-size: 12px;
   font-weight: bold;
   z-index: 2;
-  border-radius: 8px;
+  border-radius: 10em;
   > span {
     position: absolute;
     top: 2px;
