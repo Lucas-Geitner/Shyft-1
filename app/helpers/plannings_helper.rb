@@ -36,7 +36,7 @@ module PlanningsHelper
       when "April" then "avril"
       when "May" then "mai"
       when "June" then "juin"
-      when "Juillet" then "juillet"
+      when "July" then "juillet"
       when "August" then "août"
       when "September" then "septembre"
       when "October" then "octobre"
