@@ -1,38 +1,35 @@
 #planner {
   font-size: 14px;
-  margin-bottom: 20px;
-  margin-top: 10px;
-  margin-left: 5px;
+  margin: 50px 0 50px 5px;
   position: relative;
-}
-
-#planner tr > td:last-child {
-  border-right: none;
-}
-
-#planner td {
-  height: 30px;
-  min-width: 30px;
-  border-right: 1px solid $shyft-dark-blue;
-  border-top: 1px solid rgba(37,50,56,0.2);
-  position: relative;
-}
-
-#planner th {
-  border-right: 1px solid $shyft-dark-blue;
-  padding-left: 5px;
-  height: 40px;
-  &:last-child {
+  th {
+    border-right: 1px solid $shyft-dark-blue;
+    padding-left: 5px;
+    height: 40px;
+    &:first-child {
+      padding-right: 10px;
+    };
+    &:last-child {
+      border-right: none;
+    }
+  }
+  td {
+    height: 30px;
+    min-width: 30px;
+    border-right: 1px solid $shyft-dark-blue;
+    border-top: 1px solid rgba(37,50,56,0.2);
+    position: relative;
+  }
+  tr > td:last-child {
     border-right: none;
   }
 }
 
 #agenda {
+  display: flex;
+  justify-content: center;
   overflow-y: hidden;
   overflow-x: auto;
-}
-#planner th:first-child {
-  padding-right: 10px;
 }
 
 #forms {
@@ -51,7 +48,46 @@
   justify-content: center;
   align-items: center;
   margin-left: 20px;
-  margin-bottom: 25px;
+}
+
+.blech {
+  margin-left: 2px;
+  height: 1px;
+  width: 80%;
+}
+
+.dragged-poste {
+  opacity: 0.4;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grab {
+  cursor: grab;
+}
+
+.greyish {
+  background-color: $gray;
+  opacity: 0.4;
+}
+
+.half-hour {
+  font-size: 8px;
+  color: $gray-light;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+  z-index: 90;
+}
+
+.name-padding-right {
+  padding-right: 5px;
 }
 
 .poste {
@@ -64,12 +100,18 @@
   font-weight: bold;
   z-index: 2;
   border-radius: 8px;
+  > span {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+  }
 }
 
-.poste > span {
-  position: absolute;
-  top: 2px;
-  left: 2px;
+.postes-list {
+  padding-bottom: 20px;
+  > .row > div {
+    padding-top: 10px;
+  }
 }
 
 .ui-resizable-se {
@@ -79,53 +121,4 @@
     width: 10px;
     height: 10px;
     cursor: se-resize;
-}
-
-.blech {
-  margin-left: 2px;
-  height: 1px;
-  width: 80%;
-}
-
-.half-hour {
-  font-size: 8px;
-  color: $gray-light;
-}
-
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.name-padding-right {
-  padding-right: 5px;
-}
-
-
-.item {
-  position: absolute;
-  top: 0;
-  z-index: 90;
-}
-
-.postes-list {
-  padding-bottom: 20px;
-}
-
-.postes-list > .row > div {
-  padding-top: 10px;
-}
-
-.dragged-poste {
-  opacity: 0.4;
-}
-
-.grab {
-  cursor: grab;
-}
-
-.greyish {
-  background-color: $gray;
-  opacity: 0.4;
 }

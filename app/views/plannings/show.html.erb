@@ -31,13 +31,6 @@
 </div>
 
 <div class="agenda-and-employees">
-  <div class="employee-names">
-    <ul class="list-unstyled text-right">
-      <% @employees.each do |employee| %>
-        <li><%= employee.first_name %></li>
-      <% end %>
-    </ul>
-  </div>
   <div class="agenda-wrapper">
     <div class="tab-wrapper">
       <div class="tabs">
@@ -53,6 +46,13 @@
     </div>
 
     <div id="agenda">
+      <div class="employee-names">
+        <ul class="list-unstyled text-right">
+          <% @employees.each do |employee| %>
+            <li><%= employee.first_name %></li>
+          <% end %>
+        </ul>
+      </div>
       <table id="planner">
         <tr>
           <% @range.each do |time| %>
@@ -91,23 +91,21 @@
         <% end %>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div id="bin" class= "col-xs-6 col-sm-6">
+    <div class="bin-row">
+      <div id="bin">
         <i class="fa fa-trash"></i>
-        </div >
-        <div class="col-xs-6 col-sm-6 sol-sm-offset-12">
-          <% if @planning.status == "Ongoing" %>
-            <%= simple_form_for(@planning, url: declare_path(@planning), method: :patch) do |f| %>
-            <%= f.submit 'Sauvegarder & Exporter', class: "btn btn-default"%>
-            <% end %>
-          <% elsif @planning.status == "Declared" %>
-            <div class="skill-button-green">Déclaré</div>
-            <%= link_to export_path(@planning), class: "btn btn-default" do %>
-              <i class="fa fa-print"></i>
-            <% end %>
+      </div>
+      <div>
+        <% if @planning.status == "Ongoing" %>
+          <%= simple_form_for(@planning, url: declare_path(@planning), method: :patch) do |f| %>
+            <%= f.submit 'Sauvegarder', class: "btn btn-default save-button"%>
           <% end %>
-        </div>
+        <% elsif @planning.status == "Declared" %>
+          <div class="skill-button-green">Déclaré</div>
+          <%= link_to export_path(@planning), class: "btn btn-default" do %>
+            <i class="fa fa-print"></i>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

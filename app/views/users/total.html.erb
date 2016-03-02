@@ -19,7 +19,7 @@
       <!-- get total hours worked for employee, get date and duration for popover -->
       <% total = 0 %>
       <% date_and_duration = "" %>
-      <% available_hours = 35 %>
+      <% available_hours = 10 %>
       <% shifts.each do |date, duration| %>
         <% total += duration %>
         <% date = date.to_s %>
@@ -50,7 +50,9 @@
                             </div>" %>
 
 
-      <tr class="<%= 'over-hours-limit' if total - available_hours > 0 %>">
+      <!--<tr class="<%= 'over-hours-limit' if total - available_hours > 0 %>">-->
+      <% remaining_hours = total - available_hours %>
+      <tr class="<%= hours_card_class(remaining_hours) %>">
         <td><%= employee.first_name %></td>
         <td><%= employee.last_name %></td>
         <!-- convert float to integer and rational and include popover for all shifts -->
@@ -61,10 +63,10 @@
         <% end %>
         <td><%= available_hours %></td>
         <!-- convert float to integer and rational -->
-        <% if (total - available_hours) % 1 != 0 %>
-          <td><%= (total - available_hours).floor %> <sup><%= ((total - available_hours) % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= ((total - available_hours) % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
+        <% if remaining_hours % 1 != 0 %>
+          <td class="<%= remaining_hours_class(remaining_hours) %>"><%= remaining_hours.floor %> <sup><%= (remaining_hours % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (remaining_hours % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
         <% else %>
-          <td><%= (total - available_hours).floor %></td>
+          <td class="<%= remaining_hours_class(remaining_hours) %>"><%= remaining_hours.floor %></td>
         <% end %>
       </tr>
     <% end %>
