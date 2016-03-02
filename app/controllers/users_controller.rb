@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_shop, only: [:new, :show, :create, :total]
+  before_action :set_user, only: [:show, :update]
   before_action :set_shop_employees, only: [:new, :show, :total]
   before_action :set_employees_shifts, only: [:show, :total]
 
@@ -11,7 +12,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
     @similar_users = []
     unless @user.postes.empty?
       @user.abilities.each do |ability|
@@ -38,7 +38,6 @@ class UsersController < ApplicationController
       @abilities.each { |ability| ability.save }
       redirect_to new_user_path
     else
-      raise
       @error = true
       redirect_to new_user_path
     end
@@ -66,12 +65,22 @@ class UsersController < ApplicationController
   end
 
   def update
+    @user.update(user_params)
+    redirect_to user_path(@user)
   end
 
   def destroy
   end
 
   private
+
+  def user_params
+    params.require(:user).permit(:email, :contract)
+  end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 
   def set_shop
     @shop = current_user.shops.first
