@@ -24,7 +24,7 @@
           </div>
           <div class="card-user-controls">
             <div class="user-info">
-              Insert some <strong>cool</strong> information here!
+               Insert some<strong>cool</strong> information!
             </div>
             <div class="list-controls">
               <%= link_to "Voir", user_path(employee), class: "btn btn-default" %>
@@ -38,16 +38,9 @@
 
   <div class="fixed-content">
     <div class="fixed-form">
-      <h2>Add an employee</h1>
+      <h2>Ajouter un employé</h1>
       <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
     </div>
-
-    <!-- <div class="alert alert-warning alert-dismissible fade in" role="alert" id="invalid-user-alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>Oups!</strong> The employee you are trying to create is not valid.
-    </div> -->
   </div>
 </div>
 

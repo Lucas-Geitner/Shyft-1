@@ -1,13 +1,13 @@
 <%= simple_nested_form_for user, url: custom_path do |f| %>
 
   <div class="row valign">
-    <label for="user_first_name" class="contol-label col-xs-4 vcenter">First name</label>
-    <%= f.input :first_name, placeholder: "Walter", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <label for="user_first_name" class="contol-label col-xs-4 vcenter">Prénom</label>
+    <%= f.input :first_name, placeholder: "Coluche", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="row valign">
-    <label for="user_last_name" class="contol-label col-xs-4 vcenter">Last name</label>
-    <%= f.input :last_name, placeholder: "White", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <label for="user_last_name" class="contol-label col-xs-4 vcenter">Nom</label>
+    <%= f.input :last_name, placeholder: "Du Shnok", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="row valign">
@@ -18,7 +18,7 @@
   <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
 
   <div class="row valign">
-    <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Role</label>
+    <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Rôle</label>
     <%= f.simple_fields_for membership do |p| %>
       <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Pick a role" %>
     <% end %>
@@ -32,12 +32,12 @@
   </div>
 
   <div class="row valign">
-    <label for="user_contract" class="contol-label col-xs-4 vcenter">Contract</label>
+    <label for="user_contract" class="contol-label col-xs-4 vcenter">Contrat</label>
     <%= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="text-center">
-    <%= f.button :submit, value: "Create", class: "btn-primary", id: "submit-new-employee" %>
+    <%= f.button :submit, value: "Créer", class: "btn-primary", id: "submit-new-employee" %>
   </div>
 <% end %>
 

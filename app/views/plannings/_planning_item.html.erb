@@ -18,12 +18,12 @@
     </div>
   </div>
   <div class="card-planning-controls">
-    <div class="planning-owner">Last edited by <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> 3 days  ago</div>
+    <div class="planning-owner">Dernier changement fait par <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> il y a 3 jours</div>
     <div class="list-controls">
       <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
       <% if planning.status == "Ongoing" %>
         <%= simple_form_for(planning, url: declare_path(planning), method: :patch) do |f| %>
-          <%= f.submit 'Sauvegarder & Exporter', class: "btn btn-default"%>
+          <%= f.submit 'Sauvegarder', class: "btn btn-default"%>
         <% end %>
       <% else %>
         <%= link_to export_path(planning), class: "btn btn-default" do %>
