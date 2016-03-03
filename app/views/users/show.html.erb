@@ -119,10 +119,10 @@
             <i class="fa fa-file-text-o"></i>
           </div>
           <div class="flex-item" id="upload-contract-prompt">
-            Upload <%= @user.first_name %>'s contract
+            Uploader le contrat de <%= @user.first_name %>
           </div>
           <div class="flex-item hidden" id="save-contract-prompt">
-            Save <%= @user.first_name %>'s contract
+            Sauvergarder le contrat de <%= @user.first_name %>
           </div>
           <div class="flex-item" id="upload-contract">
             <i class="fa fa-upload"></i>
@@ -155,7 +155,7 @@
 <div class="similar-users-wrapper">
   <% unless @user.postes.empty? %>
     <div id="similar-users">
-      <h2 class="text-center">Other employees like <%= @user.first_name %></h2>
+      <h2 class="text-center">Employés similaire à <%= @user.first_name %></h2>
       <div class="similar-users-list">
         <ul class="list-inline">
           <% @similar_users.each do |employee| %>
@@ -188,7 +188,7 @@
                     <td>
                       <div class="list-controls">
                         <%= link_to "Profile", user_path(employee), class: "btn btn-default" %>
-                        <%= link_to "Availabilities", user_path(employee), class: "btn btn-default" %>
+                        <%= link_to "Disponibilités", user_path(employee), class: "btn btn-default" %>
                       </div>
                     </td>
                   </tr>
