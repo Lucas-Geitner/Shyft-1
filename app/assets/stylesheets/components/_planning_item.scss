@@ -1,7 +1,7 @@
 .card-planning {
   min-height: 89px;
   background: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.07);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,7 +17,6 @@
     display: inline-block;
     margin: 0 10px;
   }
-
   &.prevision {
     &:hover {
     border-color: orange;
@@ -143,7 +142,7 @@
   align-items: border-right;
   justify-content: space-between;
   padding: 20px 0px;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   .btn {
     background: transparent;
     border: 1px solid #AFAFAF;
@@ -197,5 +196,40 @@
     display: flex;
     align-items: center;
     align-self: stretch;
+  }
+}
+
+#nav-tabs-planning {
+  border-bottom: 3px solid #DFDFDF;
+  color: &gray-light;
+  font-weight: lighter;
+  li {
+    margin-bottom: -3px;
+    a {
+      padding: 11px;
+      color: $gray-light;
+      border: none;
+      &:hover {
+        transition: all 0.15s ease;
+        background: none;
+        border: none;
+        color: $gray;
+      }
+    }
+  }
+  .active {
+    margin-bottom: -3px;
+    a {
+      background: none;
+      border: none;
+      border-bottom: 3px solid $blue !important;
+      color: $gray-light;
+      padding: 11px;
+      &:hover {
+        background: none;
+        border: none;
+        color: $gray-light;
+      }
+    }
   }
 }

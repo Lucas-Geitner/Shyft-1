@@ -48,13 +48,13 @@ module PlanningsHelper
 
   def french_days(date)
     case date
-      when "Monday" then "lundi"
-      when "Tuesday" then "mardi"
-      when "Wednesday" then "mercredi"
-      when "Thursday" then "jeudi"
-      when "Friday" then "vendredi"
-      when "Saturday" then "samedi"
-      when "Sunday" then "dimanche"
+      when "Monday" then "Lundi"
+      when "Tuesday" then "Mardi"
+      when "Wednesday" then "Mercredi"
+      when "Thursday" then "Jeudi"
+      when "Friday" then "Vendredi"
+      when "Saturday" then "Samedi"
+      when "Sunday" then "Dimanche"
       else date
     end
   end
