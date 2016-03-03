@@ -32,6 +32,7 @@ class UsersController < ApplicationController
       end
     end
 
+
     if @user.save
       @user.invite!(current_user)
       @membership.save
