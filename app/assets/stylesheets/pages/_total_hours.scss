@@ -20,33 +20,36 @@
       background: #F5F5F5;
     }
   }
-  .over-hours-limit {
-    td {
-      background: #FEE1ED;
-      border-top: 1px solid #FEA5AC;
-      border-bottom: 1px solid #FEA5AC;
-      &:first-child{
-        border-left: 1px solid #FEA5AC;
-      }
-      &:last-child {
-        border-right: 1px solid #FEA5AC;
-      }
+}
+
+.over-hours-limit {
+  td {
+    background: #FEE1ED;
+    border-top: 1px solid #FEA5AC;
+    border-bottom: 1px solid #FEA5AC;
+    &:first-child{
+      border-left: 1px solid #FEA5AC;
     }
-  }
-  .card-almost-limit {
-    td {
-      background: rgba(255, 165, 0, 0.2);
-      border-top: 1px solid orange;
-      border-bottom: 1px solid orange;
-      &:first-child{
-        border-left: 1px solid orange;
-      }
-      &:last-child {
-        border-right: 1px solid orange;
-      }
+    &:last-child {
+      border-right: 1px solid #FEA5AC;
     }
   }
 }
+
+.card-almost-limit {
+  td {
+    background: rgba(255, 165, 0, 0.2);
+    border-top: 1px solid orange;
+    border-bottom: 1px solid orange;
+    &:first-child{
+      border-left: 1px solid orange;
+    }
+    &:last-child {
+      border-right: 1px solid orange;
+    }
+  }
+}
+
 .popover-table {
   margin: 0;
   border: none !important;
@@ -89,4 +92,24 @@
 }
 #user-show-table {
   margin-top: 0;
+}
+
+.admin-month-table {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  a i {
+    color: $gray-light;
+    padding-top: 5px;
+    margin: 0 10px;
+    font-size: 20px;
+  }
+}
+
+.legend {
+  width: 300px;
+  font-size: 12px;
+  table {
+    padding: 10px 20px;
+  };
 }
