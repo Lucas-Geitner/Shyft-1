@@ -47,6 +47,7 @@
 .agenda-buttons {
   position: relative;
   display: flex;
+  height: 120px;
 }
 
 .agenda-wrapper {
@@ -121,25 +122,35 @@
   justify-content: center;
   align-items: center;
   a {
-    font-size: 14px;
-    background-color: $shyft-dark-blue;
+    font-size: 16px;
+    font-weight: lighter;
+    background: none;
     width: 100%;
     height: 100%;
-    color: $gray-lighter;
+    color: $gray-light !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: -6px;
     &:hover {
       opacity: 0.8;
       text-decoration: none;
     };
     &:first-child {
-      border-radius: 8px 0 0 8px;
+      border-radius: 0;
     };
     &:last-child {
-      border-radius: 0 8px 8px 0;
+      border-radius: 0;
       border-right: none;
-    };
+    }
+  }
+  border-bottom: 3px solid #DFDFDF;
+  .active {
+    background: none;
+    border-bottom: 3px solid $blue;
+    &:hover {
+      background: none;
+    }
   }
 }
 
@@ -154,9 +165,20 @@
     font-size: 25px;
     font-weight: lighter;
     margin-top: 10px;
-  }
-  a i {
     color: $gray-light;
-    margin: 0 8px;
+  }
+  a .fa-caret-right {
+    color: #D8D8D8;
+    margin-left: 15px;
+  }
+  a .fa-caret-left {
+    color: #D8D8D8;
+    margin-right: 15px;
+  }
+  a:hover {
+    text-decoration: none;
+    .fa {
+      color: #C2C2C2;
+    }
   }
 }
