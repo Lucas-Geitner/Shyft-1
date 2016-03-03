@@ -34,10 +34,9 @@ class UsersController < ApplicationController
 
 
     if @user.save
-      @user.invite!(current_user)
       @membership.save
       @abilities.each { |ability| ability.save }
-      redirect_to(:back)
+      redirect_to new_user_path
     else
       @error = true
       redirect_to new_user_path
