@@ -133,6 +133,9 @@
           <div class="flex-item hidden" id="delete-contract">
             <i class="fa fa-trash"></i>
           </div>
+          <div id="escapingBallG" class="hidden">
+            <div id="escapingBall_1" class="escapingBallG"></div>
+          </div>
         </div>
         <%= simple_form_for @user, method: "patch" do |f|  %>
           <%= f.input :contract, as: :attachinary, label: false, id: "upload-contract"  %>
