@@ -7,6 +7,7 @@ gem 'figaro'
 gem 'jbuilder', '~> 2.0'
 gem 'devise'
 gem 'devise_invitable', '~> 1.5.2'
+gem 'postmark-rails'
 gem 'redis'
 gem "rails_admin"
 gem 'sass-rails'

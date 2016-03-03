@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Erreur 404, page introuvable</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/ >
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <style>
   body {
+    text-align: center;
+    margin: 60px 0 0 0;
+    color: #2E2F30;
+    font-family: arial, sans-serif;
+  }
+  div.dialog {
+    width: 100vw;
+    background: #E0E0E0;
+    padding: 20px 0;
+    margin-top: 30px;
+    color: gray;
+  }
+  div.dialog > div {
+  }
+  h1 {
+    font-size: 20px;
+    color: #730E15;
+    line-height: 1.5em;
+  }
+  p {
+    margin: 5px;
+    font-weight: light
+  }
+  img {
+    width: 250px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -15,11 +43,17 @@
 
 <body>
   <!-- This file lives in public/404.html -->
-  <div>
-    <h1>Erreur 404 - page introuvable</h1>
-    <p>Nous n'avons pas trouvé la page que vous cherchiez.</p>
-    <p>Si cette erreur persiste, n'hésitez pas à nous envoyer un message sur</p>
-    <p>admin@skello.com</p>
+  <img src="waitress.jpg" alt="waitress">
+  <div class="dialog">
+    <div>
+      <h1>Erreur 404 - page introuvable</h1>
+      <p>Nous n'avons pas trouvé la page que vous cherchiez.</p>
+      <p>Si cette erreur persiste, n'hésitez pas à nous envoyer un message sur</p>
+      <p>admin@skello.com</p>
+      <div>
+        <i class="fa fa-calendar"></i>
+      </div>
+    </div>
   </div>
 </body>
 </html>
