@@ -101,7 +101,9 @@
 }
 
 .postes-list {
-  padding-bottom: 20px;
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 25px;
   > .row > div {
     padding-top: 10px;
   }

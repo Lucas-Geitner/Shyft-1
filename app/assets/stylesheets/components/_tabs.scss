@@ -35,13 +35,8 @@
 .tab:last-child {
   border-radius: 0 10px 0 0;
 }
-.tab.active, .week-buttons > a.active {
-  background: white;
-  color: $shyft-dark-blue;
-}
-
-.week-buttons > a.active:hover {
+.tab.active {
   background-color: white;
-
+  color: $shyft-dark-blue;
 }
 
