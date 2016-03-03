@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       @user.invite!(current_user)
       @membership.save
       @abilities.each { |ability| ability.save }
-      redirect_to new_user_path
+      redirect_to(:back)
     else
       @error = true
       redirect_to new_user_path
