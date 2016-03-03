@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   before_action :set_shop, only: [:new, :show, :create, :total]
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
   before_action :set_shop_employees, only: [:new, :show, :total]
-  before_action :set_employees_shifts, only: [:show, :total]
 
   def new
     @user = User.new
@@ -12,6 +11,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    set_employees_shifts(Date.today)
     @similar_users = []
     unless @user.postes.empty?
       @user.abilities.each do |ability|
@@ -58,7 +58,9 @@ class UsersController < ApplicationController
   end
 
   def total
-
+    @month = params[:month] ? params[:month].to_i : 0
+    @today = Date.today + @month.months
+    set_employees_shifts(@today)
   end
 
   def edit
@@ -115,12 +117,12 @@ class UsersController < ApplicationController
     @shop_employees = [hr_managers, line_managers, employees]
   end
 
-  def set_employees_shifts
+  def set_employees_shifts(blech)
     @employees_shifts = Hash.new
     @shop_employees[2].each do |employee|
       employee_shifts = Hash.new
       employee.shifts.each do |shift|
-        if shift.starts_at.strftime("%B") == Date.today.strftime("%B")
+        if shift.starts_at.strftime("%B") == blech.strftime("%B")
           start_time = shift.starts_at
           end_time = shift.ends_at
           date = start_time.strftime("%A, %b %d")
