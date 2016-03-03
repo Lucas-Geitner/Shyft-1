@@ -205,12 +205,19 @@
   }
   .fa-pencil,
   .fa-upload,
-  .fa-save,
   .fa-trash {
     color: #CACACA;
     margin-left: 5px;
     &:hover {
       color: #B0B0B0;
+      cursor: pointer;
+    }
+  }
+  .fa-save {
+    color: $blue;
+    margin-left: 5px;
+    &:hover {
+      color: #00A4B9;
       cursor: pointer;
     }
   }

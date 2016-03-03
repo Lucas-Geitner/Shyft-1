@@ -88,14 +88,14 @@
           </div>
           <div class="flex-item" id="view-contract-prompt">
             <%= link_to "http://res.cloudinary.com/quitteriemm/image/upload/v1456335174/#{@user.contract.public_id}.pdf" do %>
-              View <%= @user.first_name %>'s contract
+              Voir le contrat de <%= @user.first_name %>
             <% end %>
           </div>
           <div class="flex-item hidden" id="upload-contract-prompt">
-            Upload <%= @user.first_name %>'s contract
+            Uploader le contrat de <%= @user.first_name %>
           </div>
           <div class="flex-item hidden" id="save-contract-prompt">
-            Save <%= @user.first_name %>'s contract
+            Sauvegarder le contrat de <%= @user.first_name %>
           </div>
           <div class="flex-item hidden" id="upload-contract">
             <i class="fa fa-upload"></i>
@@ -121,8 +121,11 @@
           <div class="flex-item" id="upload-contract-prompt">
             Uploader le contrat de <%= @user.first_name %>
           </div>
+          <div class="flex-item hidden" id="uploading-contract">
+            Upload du contrat en cours
+          </div>
           <div class="flex-item hidden" id="save-contract-prompt">
-            Sauvergarder le contrat de <%= @user.first_name %>
+            Sauvegarder le contrat de <%= @user.first_name %>
           </div>
           <div class="flex-item" id="upload-contract">
             <i class="fa fa-upload"></i>
@@ -251,12 +254,20 @@
         })
       })
 
+
+      $("#user_contract").on("fileuploaddone", function() {
+        $("#escapingBallG").addClass("hidden");
+        $("#uploading-contract").addClass("hidden")
+        $("#save-contract-prompt").removeClass("hidden")
+        $("#save-contract").removeClass("hidden")
+      })
+
       $("#upload-contract").on("click", function() {
         $("#user_contract").trigger("click")
         $(this).addClass("hidden")
         $("#upload-contract-prompt").addClass("hidden")
-        $("#save-contract-prompt").removeClass("hidden")
-        $("#save-contract").removeClass("hidden")
+        $("#uploading-contract").removeClass("hidden")
+        $("#escapingBallG").removeClass("hidden")
       })
       $("#save-contract").on("click", function() {
         $("#submit-contract").trigger("click")
