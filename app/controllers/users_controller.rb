@@ -31,7 +31,7 @@ class UsersController < ApplicationController
         @abilities << ability
       end
     end
-    raise
+
 
     if @user.save
       @user.invite!(current_user)
