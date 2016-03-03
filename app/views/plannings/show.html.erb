@@ -20,7 +20,7 @@
     <div class="row">
       <% @postes.each do |poste| %>
         <div class="col-xs-6 col-sm-1">
-          <div class="poste resizable grab flex-center" style="background-color: <%= COLORS.sample %>"><%= poste.name %></div>
+          <div class="poste resizable grab flex-center" style="background-color: <%= poste.color %>"><%= poste.name %></div>
         </div>
       <% end %>
     </div>

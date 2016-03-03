@@ -6,7 +6,13 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 organisations = ["McDonald's", "Quick", "Exki"]
-postes = %w(Kitchen Cashier Bar Dishwash)
+postes = {
+  Cuisine: "#ffb444",
+  Caisse: "#3772ff",
+  Bar: "#e44545",
+  Plonge: "#a56fd6",
+  Service: "#2bda62"
+}
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -48,8 +54,8 @@ end
   shop.save
 end
 
-postes.each do |poste|
-  Poste.new(name: poste).save
+postes.each do |poste, color|
+  Poste.new(name: poste, color: color).save
 end
 
 User.all.each do |user|
