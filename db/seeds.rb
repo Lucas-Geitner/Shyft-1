@@ -9,7 +9,7 @@ organisations = ["McDonald's", "Quick", "Exki"]
 postes = {
   Cuisine: "#ffb444",
   Caisse: "#3772ff",
-  Bar: "#e44545",
+  McCafe: "#e44545",
   Plonge: "#a56fd6",
   Service: "#2bda62"
 }
