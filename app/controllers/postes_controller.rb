@@ -3,11 +3,11 @@ class PostesController < ApplicationController
     @poste = Poste.new
     @postes = Hash.new
     Poste.all.each do |poste|
-      case poste.name.capitalize
+      case poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
       when "Plonge" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Household/broom-96.png'
-      when "Bar" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
+      when "McCafe" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
       when "Service" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/waiter-96.png'
       else logo = 'https://maxcdn.icons8.com/Color/PNG/96/City/restaurant-96.png'
       end
