@@ -18,7 +18,7 @@
 <div class="agenda-buttons text-right">
   <div class="container postes-list">
     <div class="row">
-      <% @postes.each do |poste| %>
+      <% @postes.each do |poste, logo| %>
         <div class="col-xs-6 col-sm-1">
           <div class="poste resizable grab flex-center" style="background-color: <%= poste.color %>"><%= poste.name %></div>
         </div>
@@ -52,19 +52,21 @@
         <ul class="list-unstyled text-right">
           <% @employees.each do |employee| %>
             <% employee_postes = "" %>
-            <% employee.postes.uniq.each do |p| %>
-              <% employee_postes += "<td>#{p.name}</td>" %>
+            <% @postes.each do |poste, logo| %>
+              <% if employee.postes.exists?(poste) %>
+                <% employee_postes += "<img src='#{logo}' alt='#{poste.name}' />" %>
+              <% end %>
             <% end %>
             <% popover_content = "<div class='panel panel-default popover-table'>
-                              <div class='panel-heading'>
-                                Postes
-                              </div>
-                              <table class=table>
-                                <tr>
-                                  #{employee_postes}
-                                </tr>
-                              </table>
-                            </div>" %>
+                                    <div class='panel-heading'>
+                                      Postes
+                                    </div>
+                                    <div class='postes-flex'>
+                                      <div class='postes-flex-item'>
+                                        #{employee_postes}
+                                      </div>
+                                    </div>
+                                  </div>" %>
             <%= link_to user_path(employee) do %>
               <li data-toggle="popover" data-content="<%= popover_content %>">
                 <div class="user-details-icon">
