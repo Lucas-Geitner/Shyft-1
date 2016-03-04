@@ -182,3 +182,13 @@
     }
   }
 }
+
+.postes-flex {
+  display: flex;
+  justify-content: center;
+  .postes-flex-item {
+    img {
+      width: 35px;
+    }
+  }
+}
