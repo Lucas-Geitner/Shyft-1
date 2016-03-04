@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Erreur 404, page introuvable</title>
+  <title>Erreur 404</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/ >
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -33,10 +33,28 @@
   }
   img {
     width: 250px;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  }
+  a {
+    text-decoration: none;
+    color: #0D89CE;
+  }
+  a:hover {
+    text-decoration: none;
+    color: #0974AF;
+  }
+  #mail {
+    margin-top: 20px;
+  }
+  #calendar i {
+    color: #2E2F30;
+  }
+  #calendar > div {
+    height: 40px;
+    line-height: 40px;
+    width: 40px;
+    background: white;
+    border-radius: 50%;
+    margin: 20px auto 0 auto;
   }
   </style>
 </head>
@@ -48,11 +66,12 @@
     <div>
       <h1>Erreur 404 - page introuvable</h1>
       <p>Nous n'avons pas trouvé la page que vous cherchiez.</p>
-      <p>Si cette erreur persiste, n'hésitez pas à nous envoyer un message sur</p>
-      <p>admin@skello.com</p>
-      <div>
-        <i class="fa fa-calendar"></i>
-      </div>
+      <p>Si cette erreur persiste, n'hésitez pas à nous envoyer un message sur <a href="#">admin@skello.com</a></p>
+      <a href="/" id="calendar">
+        <div id="calendar">
+          <i class="fa fa-calendar"></i>
+        </div>
+      </a>
     </div>
   </div>
 </body>
