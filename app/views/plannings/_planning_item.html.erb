@@ -8,8 +8,8 @@
     </div>
     <div class="card-planning-users">
         <%planning.users.uniq.first(4).each do |user|%>
-          <div class="user-circle" style ="background-color:<%=COLORS.sample%>; color:white;">
-            <%= user.first_name.split("").first%>
+          <div class="user-circle" style ="background-color:<%= color_by_letter(user) %>; color:white;">
+            <%= user.first_name.split("").first %>
           </div>
         <% end %>
         <% if planning.users.uniq.count >4 %>

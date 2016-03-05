@@ -76,4 +76,11 @@ module PlanningsHelper
       else date
     end
   end
+
+  def color_by_letter(user)
+    alpha = ("a".."z").to_a
+    letter = user.first_name[0].downcase
+    index = alpha.find_index(letter)
+    return COLORS[index % COLORS.length]
+  end
 end
