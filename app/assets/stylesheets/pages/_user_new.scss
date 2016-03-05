@@ -3,6 +3,9 @@
 }
 .fixed-content {
   position: fixed;
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   width: 32%;
   top: 118px;
   right: 20px;
@@ -39,6 +42,7 @@
     margin: 100px 0 7px 0;
   }
 }
+
 .valign {
   height: 30px;
   line-height: 30px;
