@@ -46,6 +46,24 @@ module PlanningsHelper
     end
   end
 
+  def french_mn(date)
+    case date
+      when "Jan" then "jan"
+      when "Feb" then "fev"
+      when "Mar" then "mar"
+      when "Apr" then "avr"
+      when "May" then "mai"
+      when "Jun" then "juin"
+      when "Jul" then "juil"
+      when "Aug" then "août"
+      when "Sep" then "sep"
+      when "Oct" then "oct"
+      when "Nov" then "nov"
+      when "Dec" then "déc"
+      else date
+    end
+  end
+
   def french_days(date)
     case date
       when "Monday" then "Lundi"

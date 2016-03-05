@@ -18,7 +18,8 @@
     </div>
   </div>
   <div class="card-planning-controls">
-    <div class="planning-owner">Dernier changement fait par <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> il y a 3 jours</div>
+    <% last_update = to_days(DateTime.now.to_i - planning.updated_at.to_i) %>
+    <div class="planning-owner">Dernier changement fait par <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> il y a <%= last_update == 1 ? "#{last_update} jour" : "#{last_update} jours" %></div>
     <div class="list-controls">
       <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
       <% if planning.status == "Ongoing" %>
