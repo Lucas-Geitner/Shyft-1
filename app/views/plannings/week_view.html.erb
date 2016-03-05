@@ -88,6 +88,11 @@
         if ( /^\s*$/.test($(this).text()) == false ) {
           $(this).append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width:' + $(this).text().match(/\d+/) + 'px;">' + this.dataset.number + '</div>')
         }
+      <% Poste.all.each do |poste| %>
+        blech = $('td:contains("<%= poste.name %>")').parent().find('.item').each(function(key, item) {
+          $(item).css({"background-color": "<%= poste.color %>"})
+        })
+      <% end %>
       })
     });
   </script>
