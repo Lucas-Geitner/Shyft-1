@@ -2,7 +2,7 @@ class PostesController < ApplicationController
   def new
     @poste = Poste.new
     @postes = Hash.new
-    Poste.all.each do |poste|
+    Poste.all.sort_by { |p| p.name }.each do |poste|
       case poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
