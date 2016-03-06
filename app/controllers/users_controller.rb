@@ -106,7 +106,7 @@ class UsersController < ApplicationController
     line_managers = []
     employees = []
 
-    @shop.users.each do |user|
+    @shop.users.sort_by { |u| u.last_name.capitalize }.each do |user|
       case user.role
       when "HR Manager" then hr_managers << user
       when "Line Manager" then line_managers << user
