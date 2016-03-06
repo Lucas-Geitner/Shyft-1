@@ -70,8 +70,13 @@ class PlanningsController < ApplicationController
 
   def destroy
     @planning = Planning.find(params[:id])
+    archived_planning = @planning.end_date < Time.now
     @planning.destroy
-    redirect_to(:back)
+    if archived_planning == true
+      redirect_to(shop_plannings_path(@shop, archives: true))
+    else
+      redirect_to(:back)
+    end
   end
 
   def week_view

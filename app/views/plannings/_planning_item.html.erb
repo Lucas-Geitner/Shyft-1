@@ -34,6 +34,9 @@
     </div>
     <div class="list-controls">
       <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
+      <%= link_to planning_path(planning), method: :delete, class: "btn btn-default" do %>
+        <i class="fa fa-trash"></i>
+      <% end %>
       <% if planning.status == "Ongoing" %>
         <%= simple_form_for(planning, url: declare_path(planning), method: :patch) do |f| %>
           <%= f.submit 'Sauvegarder', class: "btn btn-default"%>
