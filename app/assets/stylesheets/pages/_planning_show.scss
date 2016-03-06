@@ -64,6 +64,16 @@
   margin-bottom: 30px;
 }
 
+.postes-flex {
+  display: flex;
+  justify-content: center;
+  .postes-flex-item {
+    img {
+      width: 35px;
+    }
+  }
+}
+
 .save-button {
   margin-right: 20px;
   border-radius: 10em;
@@ -179,16 +189,6 @@
     text-decoration: none;
     .fa {
       color: #C2C2C2;
-    }
-  }
-}
-
-.postes-flex {
-  display: flex;
-  justify-content: center;
-  .postes-flex-item {
-    img {
-      width: 35px;
     }
   }
 }
