@@ -183,7 +183,6 @@
       });
       $("#edit_planning_<%= @planning.id %> input").click(function(e) {
         var planningNum = $(this).parent().attr("id").match(/\d+/)
-        console.log(planningNum);
         $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
         $(this).hide();
       });
@@ -338,6 +337,15 @@
                     }
                   },
                 start: function(e, ui) {
+                  <% Poste.all.each do |poste| %>
+                    if (ui['helper'][0].textContent == "<%= poste.name %>") {
+                      <% @employees.each do |employee| %>
+                        <% if Ability.where("user_id = :employee AND poste_id = :poste", { employee: employee.id, poste: poste.id }).length == 0 %>
+                          $( "td[id$='\\/<%= employee.id %>']" ).parent().addClass("invalid-drag");
+                        <% end %>
+                      <% end %>
+                    }
+                  <% end %>
                   cellsDroppedIn = []
                   var elementId = $(ui['helper']['0']).parent().attr("id")
                   var employeeName = elementId.match(/\/(.*)$/)[1]
@@ -354,6 +362,9 @@
                   $('#destroy_user').val(employeeName)
                   $('#destroy_poste').val(jobName)
                   $(lineInList).remove()
+                },
+                stop: function(e, ui) {
+                  $(".invalid-drag").removeClass("invalid-drag")
                 }
               });
 
@@ -401,9 +412,7 @@
             // CREATE
 
             var startTime = cellsDroppedIn[0]
-            console.log(startTime)
             var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
-            console.log(endTime)
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
             var jobName = $(ui.draggable)[0].textContent
             if ( startTime % 1 > 0 ) {
