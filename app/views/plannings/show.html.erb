@@ -201,8 +201,9 @@
       <% end %>
 
       <% @employees.each do |e| %>
+        <% today_opening = @today + @start_time.hours %>
         <% yesterday_close = (@today - 1.days) + @end_time.hour %>
-        <% if Shift.where(user_id: e.id, ends_at: yesterday_close).length > 0 %>
+        <% if Shift.where("user_id = :user_id AND ends_at >= :ends_at AND ends_at < :today", { user_id: e.id, ends_at: today_opening - 9.hours, today: today_opening }).length > 0 %>
           $("#<%= @start_time %>\\/<%= e.id %>").addClass('greyish');
           $("#<%= @start_time %>\\.5\\/<%= e.id %>").addClass('greyish');
         <% end %>
