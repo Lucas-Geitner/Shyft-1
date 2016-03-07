@@ -95,8 +95,10 @@
           <% @employees.each do |employee| %>
             <tr>
               <% @range.each do |time| %>
-                <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
-                <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
+                <% unless time == @range[-1] %>
+                  <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+                  <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
+                <% end %>
               <% end %>
             </tr>
           <% end %>
