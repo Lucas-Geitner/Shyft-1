@@ -76,6 +76,10 @@
   color: $gray-light;
 }
 
+.invalid-drag {
+  background-color: #B8B8B8;
+}
+
 .item {
   position: absolute;
   top: 0;
@@ -87,6 +91,7 @@
 }
 
 .poste {
+  opacity: 1;
   overflow: hidden;
   width: 60px;
   height: 28px;

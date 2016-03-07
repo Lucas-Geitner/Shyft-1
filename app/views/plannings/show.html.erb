@@ -209,7 +209,6 @@
         <% end %>
       <% end %>
 
-
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
       $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
@@ -229,43 +228,51 @@
       $("#find_update #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
-
-      $(".poste").draggable({
-        cursor: "grabbing",
-        helper: "clone",
-        snap: ".time-cell",
-        snapMode: "inner",
-        revert: function(socketObj) {
-          if (socketObj.length > 0) {
-            $('#find_destroy').submit()
-          } else {
-            return 'invalid'
-          }
-        },
-        start: function(e, ui) {
-          $(ui.helper).removeClass("grab")
-          $(ui.helper).addClass("dragged-poste")
-          cellsDroppedIn = []
-          if ($(ui.helper).hasClass("item")) {
-            var elementId = $(ui['helper']['0']).parent().attr("id")
-            var employeeName = elementId.match(/\/(.*)$/)[1]
-            var jobName = e.target.textContent
-            var startTime = parseFloat(elementId)
-            var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-            if ( startTime % 1 > 0 ) {
-              var startSeconds = 30
+      <% Poste.all.each do |poste| %>
+        $(".poste:contains('<%= poste.name %>')").draggable({
+          cursor: "grabbing",
+          helper: "clone",
+          snap: ".time-cell",
+          snapMode: "inner",
+          revert: function(socketObj) {
+            if (socketObj.length > 0) {
+              $('#find_destroy').submit()
             } else {
-              var startSeconds = "00"
+              return 'invalid'
             }
-            $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
-            $("#find_destroy #shift_starts_at_5i").val(startSeconds)
-            $('#destroy_user').val(employeeName)
-            $('#destroy_poste').val(jobName)
-            $(lineInList).remove()
+          },
+          start: function(e, ui) {
+            <% @employees.each do |employee| %>
+              <% if Ability.where("user_id = :employee AND poste_id = :poste", { employee: employee.id, poste: poste.id }).length == 0 %>
+                $( "td[id$='\\/<%= employee.id %>']" ).parent().addClass("invalid-drag");
+              <% end %>
+            <% end %>
+            $(ui.helper).removeClass("grab")
+            $(ui.helper).addClass("dragged-poste")
+            cellsDroppedIn = []
+            if ($(ui.helper).hasClass("item")) {
+              var elementId = $(ui['helper']['0']).parent().attr("id")
+              var employeeName = elementId.match(/\/(.*)$/)[1]
+              var jobName = e.target.textContent
+              var startTime = parseFloat(elementId)
+              var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
+              if ( startTime % 1 > 0 ) {
+                var startSeconds = 30
+              } else {
+                var startSeconds = "00"
+              }
+              $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
+              $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+              $('#destroy_user').val(employeeName)
+              $('#destroy_poste').val(jobName)
+              $(lineInList).remove()
+            }
+          },
+          stop: function(e, ui) {
+            $('.invalid-drag').removeClass("invalid-drag")
           }
-        },
-      });
-
+        });
+      <% end %>
       // RESIZE
 
       $(".item").resizable({
@@ -312,14 +319,6 @@
             if ($(ui.draggable).hasClass("item") === false) {
               $(this).parent().append($(ui.draggable).clone().addClass("item i-" + uniqueIdForItems).attr('data-toggle', 'popover').attr('data-placement', 'bottom'));
 
-              // POPOVER
-
-              // $('[data-toggle="popover"]').popover({
-              //   html: true,
-              //   trigger: "click",
-              //   delay: {"show": "300", "hide": "50"},
-              //   content: "<a href='#' data-effect='delete'><i class='fa fa-trash'></i></a>"
-              // });
               $(".item").removeClass("ui-draggable product");
               $('.i-' + uniqueIdForItems).find('.ui-resizable-handle').remove();
 
