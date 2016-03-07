@@ -199,6 +199,16 @@
           <% end %>
         <% end %>
       <% end %>
+
+      <% @employees.each do |e| %>
+        <% yesterday_close = (@today - 1.days) + @end_time.hour %>
+        <% if Shift.where(user_id: e.id, ends_at: yesterday_close).length > 0 %>
+          $("#<%= @start_time %>\\/<%= e.id %>").addClass('greyish');
+          $("#<%= @start_time %>\\.5\\/<%= e.id %>").addClass('greyish');
+        <% end %>
+      <% end %>
+
+
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
       $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
