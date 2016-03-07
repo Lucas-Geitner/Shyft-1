@@ -5,4 +5,6 @@ class Shop < ActiveRecord::Base
   has_many :plannings
   has_many :shppostes
   has_many :postes, through: :shppostes
+
+  validates :name, presence: true
 end

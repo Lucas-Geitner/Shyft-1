@@ -1,6 +1,6 @@
-<%= simple_form_for(@poste) do |f| %>
+<%= simple_form_for(@poste, url: postes_path) do |f| %>
   <%= f.error_notification %>
-  <%= f.input :name %>
+  <%= f.input :poste, as: :select, collection: @shop.organisation.postes %>
   <%= f.submit 'Créer', class: "btn btn-primary"%>
 <% end %>
 
