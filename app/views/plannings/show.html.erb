@@ -1,14 +1,14 @@
 <div class="text-center week-name">
   <h1>
     <% unless @week == 1 %>
-      <%= link_to planning_path(@planning, week: (@week - 1), day: params[:day]), class: "text-center" do %>
+      <%= link_to planning_path(@planning, week: (@week - 1), day: @day), class: "text-center" do %>
         <i class="fa fa-caret-left"></i>
       <% end %>
     <% end %>
     <% first_day = @planning.start_date + ((@week - 1) * 7).days %>
     Semaine du <%= first_day.strftime("%e") + " " + french_months(first_day.strftime("%B")) + " " + first_day.strftime("%Y") %>
     <% unless @week >= ((@planning.end_date - @planning.start_date) / 604800).ceil %>
-      <%= link_to planning_path(@planning, week: (@week + 1), day: params[:day]), class: "text-center" do %>
+      <%= link_to planning_path(@planning, week: (@week + 1), day: @day), class: "text-center" do %>
         <i class="fa fa-caret-right"></i>
       <% end %>
     <% end %>

@@ -8,8 +8,8 @@
     </div>
     <div class="card-planning-users">
         <%planning.users.uniq.first(4).each do |user|%>
-          <div class="user-circle" style ="background-color:<%=COLORS.sample%>; color:white;">
-            <%= user.first_name.split("").first%>
+          <div class="user-circle" style ="background-color:<%= color_by_letter(user) %>; color:white;">
+            <%= user.first_name.split("").first %>
           </div>
         <% end %>
         <% if planning.users.uniq.count >4 %>
@@ -18,9 +18,25 @@
     </div>
   </div>
   <div class="card-planning-controls">
-    <div class="planning-owner">Dernier changement fait par <strong><%= planning.user.first_name%> <%= planning.user.last_name%></strong> il y a 3 jours</div>
+    <% last_update = to_days(DateTime.now.to_i - planning.updated_at.to_i) %>
+    <div class="planning-owner">
+      Dernier changement fait par
+      <strong>
+        <%= planning.user.first_name%> <%= planning.user.last_name%>
+      </strong>
+      <% if last_update == 1 %>
+        <%= "il y a #{last_update} jour" %>
+      <% elsif last_update == 0 %>
+        <%= "aujourd'hui" %>
+      <% else %>
+       <%= "il y a #{last_update} jours" %>
+      <% end %>
+    </div>
     <div class="list-controls">
       <%= link_to "Voir", planning_path(planning), class: "btn btn-default" %>
+      <%= link_to planning_path(planning), method: :delete, class: "btn btn-default" do %>
+        <i class="fa fa-trash"></i>
+      <% end %>
       <% if planning.status == "Ongoing" %>
         <%= simple_form_for(planning, url: declare_path(planning), method: :patch) do |f| %>
           <%= f.submit 'Sauvegarder', class: "btn btn-default"%>

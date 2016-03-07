@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303094224) do
+ActiveRecord::Schema.define(version: 20160306220019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,9 +83,9 @@ ActiveRecord::Schema.define(version: 20160303094224) do
     t.datetime "end_date"
     t.integer  "shop_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "status"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",     default: "Ongoing"
   end
 
   add_index "plannings", ["shop_id"], name: "index_plannings_on_shop_id", using: :btree

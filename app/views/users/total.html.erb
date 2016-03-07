@@ -52,7 +52,13 @@
                                 Shifts
                               </div>
                               <table class=table>
-                                #{date_and_duration}
+                                #{date_and_duration == '' ?
+                                '<tr>
+                                  <td>
+                                    pas de shifts
+                                  </td>
+                                </tr>'
+                                : date_and_duration}
                               </table>
                             </div>" %>
 

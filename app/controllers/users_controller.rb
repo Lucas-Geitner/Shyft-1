@@ -106,7 +106,7 @@ class UsersController < ApplicationController
     line_managers = []
     employees = []
 
-    @shop.users.each do |user|
+    @shop.users.sort_by { |u| u.last_name.capitalize }.each do |user|
       case user.role
       when "HR Manager" then hr_managers << user
       when "Line Manager" then line_managers << user
@@ -117,15 +117,15 @@ class UsersController < ApplicationController
     @shop_employees = [hr_managers, line_managers, employees]
   end
 
-  def set_employees_shifts(blech)
+  def set_employees_shifts(given_date)
     @employees_shifts = Hash.new
     @shop_employees[2].each do |employee|
       employee_shifts = Hash.new
       employee.shifts.each do |shift|
-        if shift.starts_at.strftime("%B") == blech.strftime("%B")
+        if shift.starts_at.strftime("%B") == given_date.strftime("%B")
           start_time = shift.starts_at
           end_time = shift.ends_at
-          date = start_time.strftime("%A, %b %d")
+          date = french_days(start_time.strftime("%A")) + start_time.strftime(" %d ") + french_mn(start_time.strftime("%b"))
           shift_duration = (end_time - start_time) / 1.hour
           employee_shifts[date] = shift_duration
         end
@@ -136,5 +136,54 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :contract, :role, :phone)
+  end
+
+    def french_months(date)
+    case date
+      when "January" then "janvier"
+      when "February" then "février"
+      when "March" then "mars"
+      when "April" then "avril"
+      when "May" then "mai"
+      when "June" then "juin"
+      when "July" then "juillet"
+      when "August" then "août"
+      when "September" then "septembre"
+      when "October" then "octobre"
+      when "November" then "novembre"
+      when "December" then "décembre"
+      else date
+    end
+  end
+
+  def french_mn(date)
+    case date
+      when "Jan" then "jan"
+      when "Feb" then "fev"
+      when "Mar" then "mar"
+      when "Apr" then "avr"
+      when "May" then "mai"
+      when "Jun" then "juin"
+      when "Jul" then "juil"
+      when "Aug" then "août"
+      when "Sep" then "sep"
+      when "Oct" then "oct"
+      when "Nov" then "nov"
+      when "Dec" then "déc"
+      else date
+    end
+  end
+
+  def french_days(date)
+    case date
+      when "Monday" then "Lundi"
+      when "Tuesday" then "Mardi"
+      when "Wednesday" then "Mercredi"
+      when "Thursday" then "Jeudi"
+      when "Friday" then "Vendredi"
+      when "Saturday" then "Samedi"
+      when "Sunday" then "Dimanche"
+      else date
+    end
   end
 end

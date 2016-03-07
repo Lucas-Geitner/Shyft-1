@@ -6,7 +6,7 @@
           <div class="card-user-description">
             <div class="card-user-name">
               <span>
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user" style="<%= "color: #1FBED5;" if employee == current_user %>"></i>
                 <%= employee.first_name.capitalize + " " + employee.last_name.capitalize %>
               </span>
               <span class="separator">-</span>
@@ -15,7 +15,7 @@
               </span>
             </div>
             <div class="skill-buttons">
-              <% Poste.joins(:abilities).where(abilities: {user: employee}).uniq.each do |poste| %>
+              <% Poste.joins(:abilities).where(abilities: {user: employee}).uniq.sort_by { |poste| poste.name.capitalize }.each do |poste| %>
                 <div class="skill-button">
                   <%= poste.name %>
                 </div>

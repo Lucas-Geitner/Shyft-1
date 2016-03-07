@@ -3,6 +3,9 @@
 }
 .fixed-content {
   position: fixed;
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   width: 32%;
   top: 118px;
   right: 20px;
@@ -37,8 +40,10 @@
   }
   #skills-list {
     margin: 100px 0 7px 0;
+    height: 60px;
   }
 }
+
 .valign {
   height: 30px;
   line-height: 30px;

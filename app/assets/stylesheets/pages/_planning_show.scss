@@ -64,6 +64,16 @@
   margin-bottom: 30px;
 }
 
+.postes-flex {
+  display: flex;
+  justify-content: center;
+  .postes-flex-item {
+    img {
+      width: 35px;
+    }
+  }
+}
+
 .save-button {
   margin-right: 20px;
   border-radius: 10em;
@@ -168,27 +178,17 @@
     color: $gray-light;
   }
   a .fa-caret-right {
-    color: #D8D8D8;
+    color: $gray-light;
     margin-left: 15px;
   }
   a .fa-caret-left {
-    color: #D8D8D8;
+    color: $gray-light;
     margin-right: 15px;
   }
   a:hover {
     text-decoration: none;
     .fa {
       color: #C2C2C2;
-    }
-  }
-}
-
-.postes-flex {
-  display: flex;
-  justify-content: center;
-  .postes-flex-item {
-    img {
-      width: 35px;
     }
   }
 }
