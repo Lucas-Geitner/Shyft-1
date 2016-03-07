@@ -84,22 +84,37 @@ User.joins(:memberships).where(memberships: {role: "Line Manager"}).each do |man
   end
 end
 
+Organisation.all.each do |org|
+  Poste.all.each do |poste|
+    Orgposte.create(organisation: org, poste: poste)
+  end
+end
+
+Shop.all.each do |shop|
+  shop.organisation.postes.each do |poste|
+    Shpposte.create(shop: shop, poste: poste)
+  end
+end
+
 User.joins(:memberships).where(memberships: {role: "Employee"}).each do |employee|
-  Poste.all.sample(rand(1..Poste.count)).each do |poste|
+  emp_postes = employee.shops.first.postes
+  emp_postes.sample(rand(1..emp_postes.count)).each do |poste|
     Ability.new(user: employee, poste: poste).save
   end
 
-  poste = employee.abilities.all.sample.poste
-  shop = employee.memberships.first.shop
-  planning = Planning.where(shop: shop).sample
+  rand(5).times do
+    poste = employee.abilities.all.sample.poste
+    shop = employee.memberships.first.shop
+    planning = Planning.where(shop: shop).sample
 
-  shift = Shift.new(
-    user: employee,
-    poste: poste,
-    planning: planning,
-    starts_at: shop.opening_time + rand(3).hours,
-    ends_at: shop.closing_time - rand(3).hours)
-  shift.save
+    shift = Shift.new(
+      user: employee,
+      poste: poste,
+      planning: planning,
+      starts_at: shop.opening_time + rand(3).hours,
+      ends_at: shop.closing_time - rand(3).hours)
+    shift.save
+  end
 end
 
 
