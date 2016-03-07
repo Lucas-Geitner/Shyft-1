@@ -147,30 +147,8 @@
 
 <% content_for :scripts do %>
   <script>
-    // POPOVER DELETE
-    $("#agenda").on('click', '[data-effect="delete"]', function(e){
-      e.preventDefault();
-      var elementId = $(this).parent().parent().parent().attr("id")
-      var employeeName = elementId.match(/\/(.*)$/)[1]
-      var jobName = $(this).parent().parent().parent().find(".item")[0].textContent
-      var startTime = parseFloat(elementId)
-      var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-      if ( startTime % 1 > 0 ) {
-        var startSeconds = 30
-      } else {
-        var startSeconds = "00"
-      }
-      $("#find_destroy #shift_starts_at_4i").val(Math.floor(startTime))
-      $("#find_destroy #shift_starts_at_5i").val(startSeconds)
-      $('#destroy_user').val(employeeName)
-      $('#destroy_poste').val(jobName)
-      $(lineInList).remove()
-      $('#find_destroy').submit()
-      $(this).parent().parent().parent().find(".item").remove()
-      $(this).parent().parent().remove()
-    });
 
-
+    // Creating popover for postes
     $(function() {
       $('[data-toggle="popover"]').popover({
         container: 'body',
@@ -185,6 +163,9 @@
         $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
         $(this).hide();
       });
+
+      // adding already created shifts to the planning
+      // The time cells have an id with time/User_id, that's how you access them
       <% @planning.shifts.each do |shift| %>
         <% if shift.starts_at %>
           <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
@@ -197,8 +178,12 @@
           <% end %>
         <% end %>
       <% end %>
+      // setting up variables for later
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
+
+      // In the forms, the date cells cannot be given a default value, so you have to add the default value by hand. This is done here
+      // The date cells are used to find shifts (by start time) as well as creating them
       $("#find_destroy #shift_starts_at_1i").val("<%= @today.year %>")
       $("#find_destroy #shift_starts_at_2i").val("<%= @today.month %>")
       $("#find_destroy #shift_starts_at_3i").val("<%= @today.day %>")
@@ -216,12 +201,12 @@
       $("#find_update #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
-
       $(".poste").draggable({
         cursor: "grabbing",
         helper: "clone",
         snap: ".time-cell",
         snapMode: "inner",
+        // When the drag ends outside of the planning, the poste reverts back to its original space, and the 'find destroy' form is not submitted. To tell draggable to revert, you need to add "return 'invalid'". Else the form is submitted, since the drop was valid
         revert: function(socketObj) {
           if (socketObj.length > 0) {
             $('#find_destroy').submit()
@@ -230,9 +215,13 @@
           }
         },
         start: function(e, ui) {
+          // Changing the cursor look when dragging, through classes
           $(ui.helper).removeClass("grab")
           $(ui.helper).addClass("dragged-poste")
           cellsDroppedIn = []
+
+          // finding and destroying the shift that's being dragged
+          // only done if the dragged thing is a shift (has class item). Does NOT do anything for the 'draggable' buttons at the top of the planning
           if ($(ui.helper).hasClass("item")) {
             var elementId = $(ui['helper']['0']).parent().attr("id")
             var employeeName = elementId.match(/\/(.*)$/)[1]
@@ -260,7 +249,6 @@
         stop: function(e, ui) {
 
           // UPDATE
-
           var elementId = $(ui.element[0]).parent().attr("id")
           var employeeName = elementId.match(/\/(.*)$/)[1]
           var jobName = e.target.textContent
@@ -290,23 +278,19 @@
       });
 
       // DROP
-
+      // Blech is an invisible, 1px high cell inside the td, that allows for all the postes to be aligned.
+      // If the cell itself was droppable, since the poste is smaller than the cell, they could stick to the top OR the bottom of the cell, and look weird, or stick to the wrong cell.
       $(".blech").droppable({
         tolerance: "touch",
         drop: function( event, ui ) {
           cellsDroppedIn.push(parseFloat($(this).parent().attr("id")))
           if (cellsDroppedIn.length === 1) {
+            // if the dragged poste was NOT a shift, therefore if it came from one of the poste buttons on top
             if ($(ui.draggable).hasClass("item") === false) {
+              // appends a clone, allowing for the poste to be dragged and dropped again (that way you can put multiple people in the same poste)
               $(this).parent().append($(ui.draggable).clone().addClass("item i-" + uniqueIdForItems).attr('data-toggle', 'popover').attr('data-placement', 'bottom'));
 
-              // POPOVER
-
-              // $('[data-toggle="popover"]').popover({
-              //   html: true,
-              //   trigger: "click",
-              //   delay: {"show": "300", "hide": "50"},
-              //   content: "<a href='#' data-effect='delete'><i class='fa fa-trash'></i></a>"
-              // });
+              // removing draggable and resizable to allow them to be added again, making the shift draggable/droppable/resizable
               $(".item").removeClass("ui-draggable product");
               $('.i-' + uniqueIdForItems).find('.ui-resizable-handle').remove();
 
@@ -317,7 +301,7 @@
                 scroll: false,
 
                 // DELETE
-
+                // same as above
                 revert: function(socketObj) {
                     if (socketObj.length > 0) {
                       $('#find_destroy').submit()
@@ -382,16 +366,14 @@
               });
 
             } else {
+              // if the dropped item IS a shift, you just append it as such, making sure it sticks to the cell perfectly, via css
               $(this).parent().append($(ui.draggable).css({"top": "0", "left": "0"}));
             }
-            $('.popover').hide();
 
             // CREATE
 
             var startTime = cellsDroppedIn[0]
-            console.log(startTime)
             var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
-            console.log(endTime)
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
             var jobName = $(ui.draggable)[0].textContent
             if ( startTime % 1 > 0 ) {
@@ -417,6 +399,7 @@
       });
 
       // BIN
+      // Just deletes the shift visually. Since the bin is droppable, the 'find destroy' form above is automatically filled
 
       $("#bin").droppable({
         tolerance: "touch",
