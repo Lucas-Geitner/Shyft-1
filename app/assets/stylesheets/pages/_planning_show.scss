@@ -98,6 +98,9 @@
   text-align: center;
   font-weight: lighter;
   border-right: 1px solid $gray-lighter;
+  &:last-child {
+    border: 0;
+  };
 }
 
 .time-headers {

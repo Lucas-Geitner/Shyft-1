@@ -95,8 +95,10 @@
           <% @employees.each do |employee| %>
             <tr>
               <% @range.each do |time| %>
-                <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
-                <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
+                <% unless time == @range[-1] %>
+                  <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+                  <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
+                <% end %>
               <% end %>
             </tr>
           <% end %>
@@ -159,7 +161,6 @@
       });
       $("#edit_planning_<%= @planning.id %> input").click(function(e) {
         var planningNum = $(this).parent().attr("id").match(/\d+/)
-        console.log(planningNum);
         $(this).parent().parent().append("<div class='skill-button-green'>Déclaré</div><a class='btn btn-default' href='/plannings/" + planningNum + "/export'><i class='fa fa-print'></i></a>");
         $(this).hide();
       });
@@ -178,6 +179,15 @@
           <% end %>
         <% end %>
       <% end %>
+      <% @employees.each do |e| %>
+        <% today_opening = @today + @start_time.hours %>
+        <% yesterday_close = (@today - 1.days) + @end_time.hour %>
+        <% if Shift.where("user_id = :user_id AND ends_at >= :ends_at AND ends_at < :today", { user_id: e.id, ends_at: today_opening - 9.hours, today: today_opening }).length > 0 %>
+          $("#<%= @start_time %>\\/<%= e.id %>").addClass('greyish');
+          $("#<%= @start_time %>\\.5\\/<%= e.id %>").addClass('greyish');
+        <% end %>
+      <% end %>
+
       // setting up variables for later
       var uniqueIdForItems = 0
       var cellsDroppedIn = [];
@@ -201,47 +211,51 @@
       $("#find_update #shift_ends_at_3i").val("<%= @today.day %>")
 
       // POSTE DRAG
-      $(".poste").draggable({
-        cursor: "grabbing",
-        helper: "clone",
-        snap: ".time-cell",
-        snapMode: "inner",
-        // When the drag ends outside of the planning, the poste reverts back to its original space, and the 'find destroy' form is not submitted. To tell draggable to revert, you need to add "return 'invalid'". Else the form is submitted, since the drop was valid
-        revert: function(socketObj) {
-          if (socketObj.length > 0) {
-            $('#find_destroy').submit()
-          } else {
-            return 'invalid'
-          }
-        },
-        start: function(e, ui) {
-          // Changing the cursor look when dragging, through classes
-          $(ui.helper).removeClass("grab")
-          $(ui.helper).addClass("dragged-poste")
-          cellsDroppedIn = []
-
-          // finding and destroying the shift that's being dragged
-          // only done if the dragged thing is a shift (has class item). Does NOT do anything for the 'draggable' buttons at the top of the planning
-          if ($(ui.helper).hasClass("item")) {
-            var elementId = $(ui['helper']['0']).parent().attr("id")
-            var employeeName = elementId.match(/\/(.*)$/)[1]
-            var jobName = e.target.textContent
-            var startTime = parseFloat(elementId)
-            var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-            if ( startTime % 1 > 0 ) {
-              var startSeconds = 30
+      <% Poste.all.each do |poste| %>
+        $(".poste:contains('<%= poste.name %>')").draggable({
+          cursor: "grabbing",
+          helper: "clone",
+          snap: ".time-cell",
+          snapMode: "inner",
+          revert: function(socketObj) {
+            if (socketObj.length > 0) {
+              $('#find_destroy').submit()
             } else {
-              var startSeconds = "00"
+              return 'invalid'
             }
-            $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
-            $("#find_destroy #shift_starts_at_5i").val(startSeconds)
-            $('#destroy_user').val(employeeName)
-            $('#destroy_poste').val(jobName)
-            $(lineInList).remove()
+          },
+          start: function(e, ui) {
+            <% @employees.each do |employee| %>
+              <% if Ability.where("user_id = :employee AND poste_id = :poste", { employee: employee.id, poste: poste.id }).length == 0 %>
+                $( "td[id$='\\/<%= employee.id %>']" ).parent().addClass("invalid-drag");
+              <% end %>
+            <% end %>
+            $(ui.helper).removeClass("grab")
+            $(ui.helper).addClass("dragged-poste")
+            cellsDroppedIn = []
+            if ($(ui.helper).hasClass("item")) {
+              var elementId = $(ui['helper']['0']).parent().attr("id")
+              var employeeName = elementId.match(/\/(.*)$/)[1]
+              var jobName = e.target.textContent
+              var startTime = parseFloat(elementId)
+              var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
+              if ( startTime % 1 > 0 ) {
+                var startSeconds = 30
+              } else {
+                var startSeconds = "00"
+              }
+              $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
+              $("#find_destroy #shift_starts_at_5i").val(startSeconds)
+              $('#destroy_user').val(employeeName)
+              $('#destroy_poste').val(jobName)
+              $(lineInList).remove()
+            }
+          },
+          stop: function(e, ui) {
+            $('.invalid-drag').removeClass("invalid-drag")
           }
-        },
-      });
-
+        });
+      <% end %>
       // RESIZE
 
       $(".item").resizable({
@@ -310,6 +324,15 @@
                     }
                   },
                 start: function(e, ui) {
+                  <% Poste.all.each do |poste| %>
+                    if (ui['helper'][0].textContent == "<%= poste.name %>") {
+                      <% @employees.each do |employee| %>
+                        <% if Ability.where("user_id = :employee AND poste_id = :poste", { employee: employee.id, poste: poste.id }).length == 0 %>
+                          $( "td[id$='\\/<%= employee.id %>']" ).parent().addClass("invalid-drag");
+                        <% end %>
+                      <% end %>
+                    }
+                  <% end %>
                   cellsDroppedIn = []
                   var elementId = $(ui['helper']['0']).parent().attr("id")
                   var employeeName = elementId.match(/\/(.*)$/)[1]
@@ -326,6 +349,9 @@
                   $('#destroy_user').val(employeeName)
                   $('#destroy_poste').val(jobName)
                   $(lineInList).remove()
+                },
+                stop: function(e, ui) {
+                  $(".invalid-drag").removeClass("invalid-drag")
                 }
               });
 
