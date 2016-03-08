@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20160307145613) do
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "shop_id"
-    t.string   "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "role"
   end
 
   add_index "memberships", ["shop_id"], name: "index_memberships_on_shop_id", using: :btree

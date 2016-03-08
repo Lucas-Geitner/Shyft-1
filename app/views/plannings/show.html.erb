@@ -18,7 +18,7 @@
 <div class="agenda-buttons text-right">
   <div class="container postes-list">
     <div class="row">
-      <% @postes.each do |poste, logo| %>
+      <% @shop.postes.each do |poste, logo| %>
         <div class="col-xs-6 col-sm-1">
           <div class="poste resizable grab flex-center" style="background-color: <%= poste.color %>"><%= poste.name %></div>
         </div>

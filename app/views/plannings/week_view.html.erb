@@ -53,13 +53,13 @@
               <% end %>
             </tr>
           <% else %>
-            <% Poste.all.each_with_index do |poste, poste_index| %>
+            <% @shop.postes.each_with_index do |poste, poste_index| %>
               <tr>
                 <% if poste_index == 0 %>
-                  <td class="week-view-day" rowspan="<%= Poste.count %>"><%= french_days(today.strftime("%A")).upcase %></td>
+                  <td class="week-view-day" rowspan="<%= @shop.postes.length %>"><%= french_days(today.strftime("%A")).upcase %></td>
                 <% end %>
                 <td class="poste-name-cell" style="padding: 0 5px; <%= "border-top:  1px solid rgba(37, 50, 56, 0.4)" if poste_index == 0 %>"><%= poste.name %></td>
-                <% @range.each do |time| %>
+                <% @range[0...-1].each do |time| %>
                   <td data-number="<%= number_of_dudes(@planning, (today + time.hours), poste) %>" class="time-cell" id="<%= "#{time}/#{today.strftime("%A")}" %>" style="<%= "border-top:  1px solid rgba(37, 50, 56, 0.4)" if poste_index == 0 %>">
                     <%= get_div_width(@planning, (today + time.hours), poste) unless get_div_width(@planning, (today + time.hours), poste) == ((get_div_width(@planning, (today + time.hours - 30.minutes), poste) - 30)) || get_div_width(@planning, (today + time.hours), poste) == 0  %>
                     <div class="blech">
