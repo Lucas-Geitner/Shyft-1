@@ -1,8 +1,8 @@
 class PostesController < ApplicationController
   def new
-    @poste = Poste.new
+    @poste = Shpposte.new
     @postes = Hash.new
-    Poste.all.sort_by { |p| p.name }.each do |poste|
+    @shop.postes.sort_by { |p| p.name }.each do |poste|
       case poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
@@ -16,8 +16,7 @@ class PostesController < ApplicationController
   end
 
   def create
-    @poste = Poste.new(poste_params)
-    @poste.save
+    @poste = Shpposte.create(shop: @shop, poste_id: params[:shpposte][:poste])
     redirect_to new_poste_path
   end
 
@@ -32,7 +31,7 @@ class PostesController < ApplicationController
   end
 
   def destroy
-    @poste = Poste.find(params[:id])
+    @poste = Shpposte.where(shop: @shop, poste_id: params[:id]).first
     @poste.destroy
     redirect_to(:back)
   end

@@ -7,7 +7,6 @@ class UsersController < ApplicationController
     @user = User.new
     @membership = Membership.new
     @ability = Ability.new
-    @error = false
   end
 
   def show
@@ -38,7 +37,6 @@ class UsersController < ApplicationController
       @abilities.each { |ability| ability.save }
       redirect_to new_user_path
     else
-      @error = true
       redirect_to new_user_path
     end
 

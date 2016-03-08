@@ -3,5 +3,8 @@ class Shop < ActiveRecord::Base
   has_many :memberships
   has_many :users, through: :memberships
   has_many :plannings
-  has_many :postes, -> { uniq }, through: :users
+  has_many :shppostes
+  has_many :postes, through: :shppostes
+
+  validates :name, presence: true
 end
