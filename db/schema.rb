@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306220019) do
+ActiveRecord::Schema.define(version: 20160307145613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,16 @@ ActiveRecord::Schema.define(version: 20160306220019) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "orgpostes", force: :cascade do |t|
+    t.integer  "organisation_id"
+    t.integer  "poste_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "orgpostes", ["organisation_id"], name: "index_orgpostes_on_organisation_id", using: :btree
+  add_index "orgpostes", ["poste_id"], name: "index_orgpostes_on_poste_id", using: :btree
+
   create_table "plannings", force: :cascade do |t|
     t.datetime "start_date"
     t.datetime "end_date"
@@ -123,6 +133,16 @@ ActiveRecord::Schema.define(version: 20160306220019) do
 
   add_index "shops", ["organisation_id"], name: "index_shops_on_organisation_id", using: :btree
 
+  create_table "shppostes", force: :cascade do |t|
+    t.integer  "shop_id"
+    t.integer  "poste_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "shppostes", ["poste_id"], name: "index_shppostes_on_poste_id", using: :btree
+  add_index "shppostes", ["shop_id"], name: "index_shppostes_on_shop_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -163,10 +183,14 @@ ActiveRecord::Schema.define(version: 20160306220019) do
   add_foreign_key "memberships", "users"
   add_foreign_key "organisation_memberships", "organisations"
   add_foreign_key "organisation_memberships", "users"
+  add_foreign_key "orgpostes", "organisations"
+  add_foreign_key "orgpostes", "postes"
   add_foreign_key "plannings", "shops"
   add_foreign_key "plannings", "users"
   add_foreign_key "shifts", "plannings"
   add_foreign_key "shifts", "postes"
   add_foreign_key "shifts", "users"
   add_foreign_key "shops", "organisations"
+  add_foreign_key "shppostes", "postes"
+  add_foreign_key "shppostes", "shops"
 end

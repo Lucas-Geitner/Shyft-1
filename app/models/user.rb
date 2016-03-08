@@ -6,9 +6,8 @@ class User < ActiveRecord::Base
   has_many :abilities, dependent: :destroy
   has_many :postes, through: :abilities
   has_many :shops, through: :memberships
-  has_many :plannings, through: :shops
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # has_many :plannings, through: :shops
+
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -16,6 +15,8 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :abilities, allow_destroy: true
 
   has_attachment :contract
+
+  validates :first_name, :last_name, presence: true
 
   def role
     self.memberships.first.role unless self.id.nil?

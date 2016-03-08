@@ -16,9 +16,11 @@
             </div>
             <div class="skill-buttons">
               <% Poste.joins(:abilities).where(abilities: {user: employee}).uniq.sort_by { |poste| poste.name.capitalize }.each do |poste| %>
-                <div class="skill-button">
-                  <%= poste.name %>
-                </div>
+                <% if @shop.postes.include?(poste) %>
+                  <div class="skill-button">
+                    <%= poste.name %>
+                  </div>
+                <% end %>
               <% end %>
             </div>
           </div>
@@ -41,16 +43,6 @@
   </div>
 </div>
 
-
-<% content_for :scripts do %>
-  <script>
-    $('#invalid-user-alert').hide()
-    <% if @error %>
-      $('#invalid-user-alert').fadeIn()
-    <% else %>
-    <% end %>
-  </script>
-<% end %>
 
 <% content_for :title_tag do %>
 Mes employés
