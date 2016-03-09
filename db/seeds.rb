@@ -114,4 +114,4 @@ User.joins(:memberships).where(memberships: {role: "Employee"}).each do |employe
   end
 end
 
-
+Membership.where(role: "Line Manager").first.user.update(first_name: "Chaline", last_name: "Itsu-Bitsu", email: "chaline.itsu-bitsu@gmail.com")
