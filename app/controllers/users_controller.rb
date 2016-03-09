@@ -22,15 +22,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @membership = @user.memberships.build(role: params[:user][:membership][:role], shop: @shop)
+    @user.start_date = params[:start_date]
+    @membership = Membership.new(
+      user: @user,
+      shop: @shop,
+      role: params[:user][:membership][:role])
     @abilities = []
     @shop.postes.each do |poste|
       unless params["poste" + poste.id.to_s].nil?
-        ability = @user.abilities.build(poste: poste)
+        ability = Ability.new(
+          user: @user,
+          poste: poste)
         @abilities << ability
       end
     end
-
 
     if @user.save
       @membership.save
@@ -133,7 +138,17 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :contract, :role, :phone)
+    params.require(:user).permit(
+      :first_name,
+      :last_name,
+      :email,
+      :password,
+      :contract,
+      :role,
+      :phone,
+      :start_date,
+      :hourly_wage,
+      :contract_hours)
   end
 
     def french_months(date)

@@ -6,13 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 organisations = ["McDonald's", "Quick", "Exki"]
-postes = {
-  Cuisine: "#ffb444",
-  Caisse: "#3772ff",
-  McCafe: "#e44545",
-  Plonge: "#a56fd6",
-  Service: "#2bda62"
-}
+postes = ["Cuisine", "Caisse", "McCafe", "Plonge", "Service"]
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -34,7 +28,10 @@ end
     password: "aaaaaaaa",
     phone: Faker::PhoneNumber.cell_phone,
     first_name: first_name,
-    last_name: last_name)
+    last_name: last_name,
+    start_date: Faker::Date.between(2.years.ago, Date.today),
+    hourly_wage: rand(9.0..20.0).round(2),
+    contract_hours: rand(128..156))
   user.save
 end
 
@@ -54,8 +51,8 @@ end
   shop.save
 end
 
-postes.each do |poste, color|
-  Poste.new(name: poste, color: color).save
+postes.each do |poste|
+  Poste.create(name: poste)
 end
 
 User.all.each do |user|
@@ -91,8 +88,8 @@ Organisation.all.each do |org|
 end
 
 Shop.all.each do |shop|
-  shop.organisation.postes.each do |poste|
-    Shpposte.create(shop: shop, poste: poste)
+  shop.organisation.postes.each_with_index do |poste, i|
+    Shpposte.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
   end
 end
 
