@@ -1,6 +1,7 @@
 class PostesController < ApplicationController
   def new
     @poste = Shpposte.new
+    @shop_postes = Shpposte.where(shop: @shop)
     @postes = Hash.new
     @shop.postes.sort_by { |p| p.name }.each do |poste|
       case poste.name
@@ -17,11 +18,23 @@ class PostesController < ApplicationController
 
   def create
     used_colors = Shpposte.where(shop: @shop).pluck(:color)
-    available_colors = POSTE_COLORS - used_colors
-    @poste = Shpposte.create(
+    if used_colors.length < POSTE_COLORS.length
+      new_color = (POSTE_COLORS - used_colors)[0]
+    elsif used_colors.empty? || used_colors.length % POSTE_COLORS.length == 0
+      new_color = POSTE_COLORS[0]
+    else
+      color_frequency = used_colors.uniq.map { |i| used_colors.count(i) }
+      repeated_colors = []
+      used_colors.uniq.each_with_index do |color, i|
+        repeated_colors << color if color_frequency[i] == color_frequency.max
+      end
+      new_color = (POSTE_COLORS - repeated_colors)[0]
+    end
+
+    Shpposte.create(
       shop: @shop,
       poste_id: params[:shpposte][:poste],
-      color: available_colors[0])
+      color: new_color)
     redirect_to new_poste_path
   end
 

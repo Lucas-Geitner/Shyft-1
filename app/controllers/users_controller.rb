@@ -44,20 +44,6 @@ class UsersController < ApplicationController
     else
       redirect_to new_user_path
     end
-
-    # JS - ignore for the moment
-    # if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
-      # respond_to do |format|
-      #   format.html { redirect_to user_path(@user) }
-      #   format.js
-      # end
-    # else
-
-      # respond_to do |format|
-      #   format.html { render users_path }
-      #   format.js
-      # end
-    # end
   end
 
   def total
