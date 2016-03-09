@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.start_date = params[:start_date]
     @membership = Membership.new(
       user: @user,
       shop: @shop,
