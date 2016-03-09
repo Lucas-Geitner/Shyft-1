@@ -31,6 +31,8 @@
   }
   label {
     color: #717171;
+    padding-right: 0;
+    font-size: 12px;
   }
   input {
     border-radius: 3px;
@@ -38,9 +40,16 @@
   .btn {
     margin-top: 12px;
   }
+  .form-control {
+    font-size: 12px;
+    height: 30px;
+  }
+  .form-group {
+    margin-bottom: 10px;
+  }
   #skills-list {
     margin: 100px 0 7px 0;
-    height: 60px;
+    // height: 60px;
   }
 }
 

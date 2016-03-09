@@ -28,7 +28,10 @@ end
     password: "aaaaaaaa",
     phone: Faker::PhoneNumber.cell_phone,
     first_name: first_name,
-    last_name: last_name)
+    last_name: last_name,
+    start_date: Faker::Date.between(2.years.ago, Date.today),
+    hourly_wage: rand(9.0..20.0).round(2),
+    contract_hours: rand(128..156))
   user.save
 end
 
