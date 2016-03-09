@@ -1,8 +1,30 @@
-<%= simple_form_for(@poste, url: postes_path) do |f| %>
-  <%= f.error_notification %>
-  <%= f.input :poste, as: :select, collection: @shop.organisation.postes %>
-  <%= f.submit 'Créer', class: "btn btn-primary"%>
+<% if @org_postes.pluck(:poste_id).sort != @shp_postes.pluck(:poste_id).sort %>
+  <%= simple_form_for(@shop_poste, url: postes_path) do |f| %>
+    <%= f.error_notification %>
+    <div id="skills-list">
+      <% @org_postes.each do |orgposte| %>
+        <% if Shpposte.where(shop: @shop, poste: orgposte.poste).empty? %>
+          <input class='tgl tgl-flip' id='cb<%= orgposte.id.to_s %>' type='checkbox' name="poste<%= orgposte.id.to_s %>">
+          <label class='tgl-btn' id='lb<%= orgposte.id.to_s %>' data-tg-on='<%= poste_logo(orgposte.poste) %>' data-tg-off='<%= orgposte.poste.name %>' for='cb<%= orgposte.id.to_s %>'></label>
+        <% end %>
+      <% end %>
+    </div>
+    <%#= f.input :poste, as: :select, collection: @shop.organisation.postes %>
+    <%= f.submit 'Créer', class: "btn btn-primary"%>
+  <% end %>
+<% else %>
+  <p class="modal-paragraph">Aucun poste à rajouter <i class="fa fa-frown-o"></i></p>
 <% end %>
 
 
 
+<% content_for :scripts do %>
+  <script>
+    <% @org_postes.each do |orgposte| %>
+      <% if Shpposte.where(shop: @shop, poste: orgposte.poste).empty? %>
+        var bg = $('#lb<%= orgposte.id.to_s %>').data('tg-on');
+        $('body').append('<style>#lb<%= orgposte.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
+      <% end %>
+    <% end %>
+  </script>
+<% end %>
