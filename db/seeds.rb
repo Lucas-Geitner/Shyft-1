@@ -7,7 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 organisations = ["McDonald's", "Quick", "Exki"]
 postes = ["Cuisine", "Caisse", "McCafe", "Plonge", "Service"]
-colors = ["#ffb444", "#3772ff", "#e44545", "#a56fd6", "#2bda62"]
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -87,7 +86,7 @@ end
 
 Shop.all.each do |shop|
   shop.organisation.postes.each_with_index do |poste, i|
-    Shpposte.create(shop: shop, poste: poste, color: colors[i])
+    Shpposte.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
   end
 end
 

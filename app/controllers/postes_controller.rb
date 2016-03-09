@@ -16,7 +16,12 @@ class PostesController < ApplicationController
   end
 
   def create
-    @poste = Shpposte.create(shop: @shop, poste_id: params[:shpposte][:poste])
+    used_colors = Shpposte.where(shop: @shop).pluck(:color)
+    available_colors = POSTE_COLORS - used_colors
+    @poste = Shpposte.create(
+      shop: @shop,
+      poste_id: params[:shpposte][:poste],
+      color: available_colors[0])
     redirect_to new_poste_path
   end
 
