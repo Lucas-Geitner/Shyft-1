@@ -1,4 +1,4 @@
-class Shpposte < ActiveRecord::Base
+class ShopPoste < ActiveRecord::Base
   belongs_to :shop
   belongs_to :poste
 
