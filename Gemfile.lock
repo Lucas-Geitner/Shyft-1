@@ -245,6 +245,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   attachinary
   autoprefixer-rails
   better_errors
