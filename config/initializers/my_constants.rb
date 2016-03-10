@@ -1,2 +1,24 @@
 COLORS = ["#5DD39E", "#348AA7", "#525174", "#513B56", "#BCE784"]
-POSTE_COLORS = ["#ffb444", "#3772ff", "#e44545", "#a56fd6", "#2bda62"]
+POSTE_COLORS = [
+  #LIGHT BLUE
+  "#1094F6",
+  #ORANGE
+  "#FF5606",
+  #YELLOW
+  "#FCC101",
+  #VIOLET
+  "#9D1BB2",
+  #GREEN
+  "#2BDA62",
+  #DARK BLUE
+  "#3E4EB8",
+  #GREYISH
+  "#5F7D8C",
+  #PINK
+  "#EF3C79",
+  #LIGHTER GREEN
+  "#47B6AC",
+  #BROWN
+  "#7A5547"]
+
+# POSTE_COLORS = ["#ffb444", "#3772ff", "#e44545", "#a56fd6", "#2bda62"]

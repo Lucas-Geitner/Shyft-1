@@ -49,7 +49,7 @@
   <div id="skills-list">
     <% @shop.postes.each do |poste| %>
       <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="poste<%= poste.id.to_s %>">
-      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= render 'users/poste_logo', poste: poste %>' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
+      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= poste_logo(poste) %>' data-tg-off='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
     <% end %>
   </div>
 

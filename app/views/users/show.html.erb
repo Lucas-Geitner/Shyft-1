@@ -18,7 +18,7 @@
           <tr>
             <% @user.postes.each_with_index do |poste, i| %>
               <td>
-                <img src="<%= render 'users/poste_logo', poste: poste %>" alt="<%= poste.name %>">
+                <img src="<%= poste_logo(poste) %>" alt="<%= poste.name %>">
               </td>
               <% unless i == @user.postes.size - 1 %>
                 <td class="td-spacer"></td>
