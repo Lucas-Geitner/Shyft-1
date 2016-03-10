@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :shops, only: :create do
     resources :plannings, only: [:new, :create, :index]
     get '/users/total' => 'users#total', as: :total
+    get '/users/archives' => 'users#archives', as: :archived_users
     patch '/users/:id/destroy_contract' => 'users#destroy_contract', as: :destroy_contract
   end
 

@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_shop, only: [:new, :show, :create, :total]
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
-  before_action :set_shop_employees, only: [:new, :show, :total]
+  before_action :set_shop_employees, only: [:new, :show, :total, :archives]
 
   def new
     @user = User.new
@@ -85,6 +84,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def archives
+
+  end
+
   private
 
   def user_params
@@ -93,10 +96,6 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
-  end
-
-  def set_shop
-    @shop = current_user.shops.first
   end
 
   def set_shop_employees
