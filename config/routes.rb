@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   post 'plannings/:planning_id/shifts/find_and_update' => 'shifts#find_and_update', as: :find_and_update
   patch 'plannings/:id/declare' => 'plannings#declare', as: :declare
   get 'plannings/:id/export' => 'plannings#export', as: :export
-
+  patch 'shops/:shop_id/users/:user_id/archive_user' => 'memberships#archive_user', as: :archive_user
+  patch 'shops/:shop_id/users/:user_id/retrieve_user' => 'memberships#retrieve_user', as: :retrieve_user
 
   devise_for :users
   root to: 'pages#home'
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
   resources :shops, only: :create do
     resources :plannings, only: [:new, :create, :index]
     get '/users/total' => 'users#total', as: :total
+    get '/users/archives' => 'users#archives', as: :archived_users
     patch '/users/:id/destroy_contract' => 'users#destroy_contract', as: :destroy_contract
   end
 
