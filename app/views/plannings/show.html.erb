@@ -18,9 +18,9 @@
 <div class="agenda-buttons text-right">
   <div class="container postes-list">
     <div class="row">
-      <% @postes.each do |poste, logo| %>
+      <% @postes.each do |shpposte, logo| %>
         <div class="col-xs-6 col-sm-1">
-          <div class="poste resizable grab flex-center" style="background-color: <%= poste.color %>"><%= poste.name %></div>
+          <div class="poste resizable grab flex-center" style="background-color: <%= shpposte.color %>"><%= shpposte.poste.name %></div>
         </div>
       <% end %>
     </div>
@@ -52,9 +52,9 @@
         <ul class="list-unstyled text-right">
           <% @employees.each do |employee| %>
             <% employee_postes = "" %>
-            <% @postes.each do |poste, logo| %>
-              <% if employee.postes.exists?(poste) %>
-                <% employee_postes += "<img src='#{logo}' alt='#{poste.name}' />" %>
+            <% @postes.each do |shpposte, logo| %>
+              <% if employee.postes.exists?(shpposte.poste) %>
+                <% employee_postes += "<img src='#{logo}' alt='#{shpposte.poste.name}' />" %>
               <% end %>
             <% end %>
             <% popover_content = "<div class='panel panel-default popover-table'>
@@ -168,13 +168,14 @@
       // adding already created shifts to the planning
       // The time cells have an id with time/User_id, that's how you access them
       <% @planning.shifts.each do |shift| %>
+        <% shop_poste = Shpposte.where(shop: @shop, poste: shift.poste).first %>
         <% if shift.starts_at %>
           <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
             <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
             <% if shift.starts_at.min > 0 %>
-              $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shift.poste.color %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+              $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.color %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
             <% else %>
-              $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shift.poste.color %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+              $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.color %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
             <% end %>
           <% end %>
         <% end %>

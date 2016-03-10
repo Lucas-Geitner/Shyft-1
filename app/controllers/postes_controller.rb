@@ -1,9 +1,12 @@
 class PostesController < ApplicationController
+  before_action :set_org_postes, only: [:new, :create]
+  before_action :set_shp_postes, only: [:new, :create]
+
   def new
-    @poste = Shpposte.new
-    @postes = Hash.new
-    @shop.postes.sort_by { |p| p.name }.each do |poste|
-      case poste.name
+    @shop_poste = Shpposte.new
+    @shop_postes = Hash.new
+    @shp_postes.sort_by { |p| p.poste.name }.each do |shpposte|
+      case shpposte.poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
       when "Plonge" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Household/broom-96.png'
@@ -11,12 +14,32 @@ class PostesController < ApplicationController
       when "Service" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/waiter-96.png'
       else logo = 'https://maxcdn.icons8.com/Color/PNG/96/City/restaurant-96.png'
       end
-      @postes[poste] = logo
+      @shop_postes[shpposte] = logo
     end
   end
 
   def create
-    @poste = Shpposte.create(shop: @shop, poste_id: params[:shpposte][:poste])
+    @org_postes.each do |orgposte|
+      unless params["poste" + orgposte.id.to_s].nil?
+        used_colors = Shpposte.where(shop: @shop).pluck(:color)
+        if used_colors.length < POSTE_COLORS.length
+          new_color = (POSTE_COLORS - used_colors)[0]
+        elsif used_colors.empty? || used_colors.length % POSTE_COLORS.length == 0
+          new_color = POSTE_COLORS[0]
+        else
+          color_frequency = used_colors.uniq.map { |i| used_colors.count(i) }
+          repeated_colors = []
+          used_colors.uniq.each_with_index do |color, i|
+            repeated_colors << color if color_frequency[i] == color_frequency.max
+          end
+          new_color = (POSTE_COLORS - repeated_colors)[0]
+        end
+        Shpposte.create(
+          shop: @shop,
+          poste: orgposte.poste,
+          color: new_color)
+      end
+    end
     redirect_to new_poste_path
   end
 
@@ -31,9 +54,19 @@ class PostesController < ApplicationController
   end
 
   def destroy
-    @poste = Shpposte.where(shop: @shop, poste_id: params[:id]).first
-    @poste.destroy
+    poste = Shpposte.find(params[:id])
+    poste.destroy
     redirect_to(:back)
+  end
+
+  private
+
+  def set_org_postes
+    @org_postes = Orgposte.where(organisation: @shop.organisation)
+  end
+
+  def set_shp_postes
+    @shp_postes = Shpposte.where(shop: @shop)
   end
 
   def poste_params

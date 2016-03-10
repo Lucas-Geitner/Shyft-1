@@ -21,15 +21,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @membership = @user.memberships.build(role: params[:user][:membership][:role], shop: @shop)
+    @user.start_date = params[:start_date]
+    @membership = Membership.new(
+      user: @user,
+      shop: @shop,
+      role: params[:user][:membership][:role])
     @abilities = []
     @shop.postes.each do |poste|
       unless params["poste" + poste.id.to_s].nil?
-        ability = @user.abilities.build(poste: poste)
+        ability = Ability.new(
+          user: @user,
+          poste: poste)
         @abilities << ability
       end
     end
-
 
     if @user.save
       @membership.save
@@ -38,20 +43,6 @@ class UsersController < ApplicationController
     else
       redirect_to new_user_path
     end
-
-    # JS - ignore for the moment
-    # if @user.valid? && @membership.valid? && @abilities.all? { |a| a.valid? }
-      # respond_to do |format|
-      #   format.html { redirect_to user_path(@user) }
-      #   format.js
-      # end
-    # else
-
-      # respond_to do |format|
-      #   format.html { render users_path }
-      #   format.js
-      # end
-    # end
   end
 
   def total
@@ -132,7 +123,17 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :contract, :role, :phone)
+    params.require(:user).permit(
+      :first_name,
+      :last_name,
+      :email,
+      :password,
+      :contract,
+      :role,
+      :phone,
+      :start_date,
+      :hourly_wage,
+      :contract_hours)
   end
 
     def french_months(date)

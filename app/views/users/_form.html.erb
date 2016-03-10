@@ -2,24 +2,41 @@
 
   <div class="row valign">
     <label for="user_first_name" class="contol-label col-xs-4 vcenter">Prénom</label>
-    <%= f.input :first_name, placeholder: "Coluche", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :first_name, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="row valign">
     <label for="user_last_name" class="contol-label col-xs-4 vcenter">Nom</label>
-    <%= f.input :last_name, placeholder: "Du Shnok", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :last_name, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="row valign">
     <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
-    <%= f.input :email, placeholder: "cdushnok@gmail.com", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :email, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
 
   <div class="row valign">
     <label for="user_phone" class="contol-label col-xs-4 vcenter">Téléphone</label>
-    <%= f.input :phone, placeholder: "06 42 53 64 75", label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    <%= f.input :phone, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+  </div>
+
+  <div class="row valign">
+    <label for="user_start_date" class="contol-label col-xs-4 vcenter">Date de début</label>
+    <div class="form-group optional user_start_date col-xs-8 vcenter">
+      <input name="start_date" id="user_start_date" type="datetime" class="datepicker form-control">
+    </div>
+  </div>
+
+  <div class="row valign">
+    <label for="user_hourly_wage" class="contol-label col-xs-4 vcenter">Taux horaire</label>
+    <%= f.input :hourly_wage, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+  </div>
+
+  <div class="row valign">
+    <label for="user_contract_hours" class="contol-label col-xs-4 vcenter">Heures/mois</label>
+    <%= f.input :contract_hours, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
 
   <div class="row valign">
@@ -32,7 +49,7 @@
   <div id="skills-list">
     <% @shop.postes.each do |poste| %>
       <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="poste<%= poste.id.to_s %>">
-      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= render 'users/poste_logo', poste: poste %>' data-tg-off='<%= poste.name %>' data-tg-on='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
+      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= poste_logo(poste) %>' data-tg-off='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
     <% end %>
   </div>
 

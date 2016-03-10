@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307145613) do
+ActiveRecord::Schema.define(version: 20160309161607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,7 +105,6 @@ ActiveRecord::Schema.define(version: 20160307145613) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "color"
   end
 
   create_table "shifts", force: :cascade do |t|
@@ -138,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160307145613) do
     t.integer  "poste_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "color"
   end
 
   add_index "shppostes", ["poste_id"], name: "index_shppostes_on_poste_id", using: :btree
@@ -168,6 +168,9 @@ ActiveRecord::Schema.define(version: 20160307145613) do
     t.integer  "invitations_count",      default: 0
     t.boolean  "admin",                  default: false, null: false
     t.string   "phone"
+    t.float    "hourly_wage"
+    t.integer  "contract_hours"
+    t.datetime "start_date"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
