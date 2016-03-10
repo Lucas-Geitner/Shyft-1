@@ -3,5 +3,5 @@ class Orgposte < ActiveRecord::Base
   belongs_to :poste
 
   validates :organisation, :poste, presence: true
-  validates :poste, uniqueness: true
+  validates :poste, uniqueness: { scope: :organisation }
 end
