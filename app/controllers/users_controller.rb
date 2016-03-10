@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
-  before_action :set_shop_employees, only: [:new, :show, :total, :archives]
+  before_action :set_shop_employees, only: [:new, :show, :total]
 
   def new
     @user = User.new
@@ -76,7 +76,10 @@ class UsersController < ApplicationController
   end
 
   def archives
-
+    set_archived_shop_employees
+    @user = User.new
+    @membership = Membership.new
+    @ability = Ability.new
   end
 
   private
@@ -94,7 +97,37 @@ class UsersController < ApplicationController
     line_managers = []
     employees = []
 
-    @shop.users.sort_by { |u| u.last_name.capitalize }.each do |user|
+    non_archived = []
+    @shop.memberships.each do |membership|
+      if membership.archived_at.nil?
+        non_archived << membership.user
+      end
+    end
+
+    non_archived.sort_by { |u| u.last_name.capitalize }.each do |user|
+      case user.role
+      when "HR Manager" then hr_managers << user
+      when "Line Manager" then line_managers << user
+      else employees << user
+      end
+    end
+
+    @shop_employees = [hr_managers, line_managers, employees]
+  end
+
+  def set_archived_shop_employees
+    hr_managers = []
+    line_managers = []
+    employees = []
+
+    non_archived = []
+    @shop.memberships.each do |membership|
+      unless membership.archived_at.nil?
+        non_archived << membership.user
+      end
+    end
+
+    non_archived.sort_by { |u| u.last_name.capitalize }.each do |user|
       case user.role
       when "HR Manager" then hr_managers << user
       when "Line Manager" then line_managers << user

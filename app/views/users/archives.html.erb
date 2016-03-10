@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs users-tabs" id="nav-tabs-planning" role="tablist">
-  <li role="presentation" class="active"><%= link_to "Mes employés", new_user_path %></li>
-  <li role="presentation"><%= link_to "Archives", shop_archived_users_path(@shop) %></li>
+  <li role="presentation"><%= link_to "Mes employés", new_user_path %></li>
+  <li role="presentation" class="active"><%= link_to "Archives", shop_archived_users_path(@shop) %></li>
 </ul>
 
 
@@ -32,15 +32,17 @@
           </div>
           <div class="card-user-controls">
             <div class="list-controls">
+              <% archived_date = find_membership(employee, @shop).archived_at %>
+              <% legible_date = archived_date.strftime("%e ") + french_months(archived_date.strftime("%B")) + archived_date.strftime(" %Y") %>
+              <p class="archived-date">Archivé(e) le <%= legible_date %></p>
               <%= link_to "Voir", user_path(employee), class: "btn btn-default" %>
-              <%= link_to "Archiver", archive_user_path(@shop, employee), method: :patch, data: { confirm: "Êtes-vous sûr de vouloir archiver #{employee.first_name}?" }, class: "btn btn-default" %>
+              <%= link_to "Restaurer", retrieve_user_path(@shop, employee), method: :patch, data: { confirm: "Êtes-vous sûr de vouloir restaurer #{employee.first_name}?" }, class: "btn btn-default" %>
             </div>
           </div>
         </div>
       <% end %>
     <% end %>
   </div>
-
   <div class="fixed-content">
     <div class="fixed-form">
       <h2>Ajouter un employé</h1>
@@ -50,6 +52,7 @@
 </div>
 
 
+
 <% content_for :title_tag do %>
-Mes employés
+Archives - Mes employés
 <% end %>
