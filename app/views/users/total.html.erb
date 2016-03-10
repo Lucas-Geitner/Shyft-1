@@ -26,7 +26,7 @@
       <!-- get total hours worked for employee, get date and duration for popover -->
       <% total = 0 %>
       <% date_and_duration = "" %>
-      <% available_hours = employee.contract_hours || 0 %>
+      <% available_hours = employee.contract_hours.nil? ? 0 : employee.contract_hours %>
       <% shifts.each do |date, duration| %>
         <% total += duration %>
         <% date = date.to_s %>

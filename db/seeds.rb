@@ -83,13 +83,13 @@ end
 
 Organisation.all.each do |org|
   Poste.all.each do |poste|
-    Orgposte.create(organisation: org, poste: poste)
+    OrganisationPoste.create(organisation: org, poste: poste)
   end
 end
 
 Shop.all.each do |shop|
   shop.organisation.postes.each_with_index do |poste, i|
-    Shpposte.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
+    ShopPoste.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
   end
 end
 

@@ -3,7 +3,7 @@
     <%= f.error_notification %>
     <div id="skills-list">
       <% @org_postes.each do |orgposte| %>
-        <% if Shpposte.where(shop: @shop, poste: orgposte.poste).empty? %>
+        <% if ShopPoste.where(shop: @shop, poste: orgposte.poste).empty? %>
           <input class='tgl tgl-flip' id='cb<%= orgposte.id.to_s %>' type='checkbox' name="poste<%= orgposte.id.to_s %>">
           <label class='tgl-btn' id='lb<%= orgposte.id.to_s %>' data-tg-on='<%= poste_logo(orgposte.poste) %>' data-tg-off='<%= orgposte.poste.name %>' for='cb<%= orgposte.id.to_s %>'></label>
         <% end %>
@@ -21,7 +21,7 @@
 <% content_for :scripts do %>
   <script>
     <% @org_postes.each do |orgposte| %>
-      <% if Shpposte.where(shop: @shop, poste: orgposte.poste).empty? %>
+      <% if ShopPoste.where(shop: @shop, poste: orgposte.poste).empty? %>
         var bg = $('#lb<%= orgposte.id.to_s %>').data('tg-on');
         $('body').append('<style>#lb<%= orgposte.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
       <% end %>
