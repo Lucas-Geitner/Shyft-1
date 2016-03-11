@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
-  before_action :set_shop_employees, only: [:new, :show, :total]
+  before_action :set_shop_employees, only: [:new, :show, :total, :filter]
 
   def new
     @user = User.new
@@ -49,6 +49,21 @@ class UsersController < ApplicationController
     @month = params[:month] ? params[:month].to_i : 0
     @today = Date.today + @month.months
     set_employees_shifts(@today)
+    unless params[:hours].nil?
+      @employees_shifts.each do |employee, shifts|
+        actual_hours = 0
+        shifts.each do |date, duration|
+          actual_hours += duration
+        end
+        theo_hours = employee.contract_hours * 0.05 * Date.today.day
+        pace = actual_hours - theo_hours
+        if params[:hours].to_i < 0
+          @employees_shifts.delete(employee) if pace >= 0
+        else
+          @employees_shifts.delete(employee) if pace < 0
+        end
+      end
+    end
   end
 
   def edit
