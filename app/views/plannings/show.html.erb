@@ -168,7 +168,7 @@
       // adding already created shifts to the planning
       // The time cells have an id with time/User_id, that's how you access them
       <% @planning.shifts.each do |shift| %>
-        <% shop_poste = Shpposte.where(shop: @shop, poste: shift.poste).first %>
+        <% shop_poste = ShopPoste.where(shop: @shop, poste: shift.poste).first %>
         <% if shift.starts_at %>
           <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
             <% minutes = (shift.ends_at - shift.starts_at) / 60 %>

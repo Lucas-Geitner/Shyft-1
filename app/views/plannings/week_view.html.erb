@@ -88,7 +88,7 @@
         if ( /^\s*$/.test($(this).text()) == false ) {
           $(this).append('<div class="poste resizable grab item flex-center" style="background-color: <%= COLORS.sample %>; width:' + $(this).text().match(/\d+/) + 'px;">' + this.dataset.number + '</div>')
         }
-      <% shop_postes = Shpposte.where(shop: @shop) %>
+      <% shop_postes = ShopPoste.where(shop: @shop) %>
       <% shop_postes.each do |shpposte| %>
         blech = $('td:contains("<%= shpposte.poste.name %>")').parent().find('.item').each(function(key, item) {
           $(item).css({"background-color": "<%= shpposte.color %>"})

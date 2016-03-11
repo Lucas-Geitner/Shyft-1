@@ -40,29 +40,29 @@
         <th>Heures supplementaires</td>
       </tr>
 
-      <% @employees_shifts.each do |employee, shifts| %>
+    <% @employees_shifts.each do |employee, shifts| %>
 
-        <!-- get total hours worked for employee, get date and duration for popover -->
-        <% total = 0 %>
-        <% date_and_duration = "" %>
-        <% contract_hours = employee.contract_hours %>
-        <% shifts.each do |date, duration| %>
-          <% total += duration %>
-          <% date = date.to_s %>
-          <% duration = duration %>
-          <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
-          <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
-          <% date_and_duration += "<tr>
-                                    <td>#{date}</td>
-                                    <td>#{
-                                      if duration % 1 != 0
-                                        "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
-                                      else
-                                        "#{duration.floor} h"
-                                      end
-                                    }</td>
-                                  </tr>" %>
-        <% end %>
+      <!-- get total hours worked for employee, get date and duration for popover -->
+      <% total = 0 %>
+      <% date_and_duration = "" %>
+      <% contract_hours = employee.contract_hours.nil? ? 0 : employee.contract_hours %>
+      <% shifts.each do |date, duration| %>
+        <% total += duration %>
+        <% date = date.to_s %>
+        <% duration = duration %>
+        <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
+        <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
+        <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+      <% end %>
 
 
         <!-- create popover content -->
