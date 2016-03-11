@@ -1,89 +1,130 @@
-<div class="panel panel-default total-hours">
-  <div class="panel-heading admin-month-table">
-    <div class="flex-center">
-      <%= link_to shop_total_path(@shop, month: @month - 1) do %>
-        <i class="fa fa-caret-left"></i>
-      <% end %>
-      <h1><%= @today.strftime("%B %Y") %></h1>
-      <%= link_to shop_total_path(@shop, month: @month + 1) do %>
-        <i class="fa fa-caret-right"></i>
-      <% end %>
-    </div>
-  </div>
-
-  <table class="table">
-
-    <tr>
-      <th>Prénom</td>
-      <th>Nom de famille</td>
-      <th>Total heures travaillées</td>
-      <th>Heures restantes</td>
-      <th>Heures contractuelles</td>
-    </tr>
-
-    <% @employees_shifts.each do |employee, shifts| %>
-
-      <!-- get total hours worked for employee, get date and duration for popover -->
-      <% total = 0 %>
-      <% date_and_duration = "" %>
-      <% available_hours = employee.contract_hours %>
-      <% shifts.each do |date, duration| %>
-        <% total += duration %>
-        <% date = date.to_s %>
-        <% duration = duration %>
-        <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
-        <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
-        <% date_and_duration += "<tr>
-                                  <td>#{date}</td>
-                                  <td>#{
-                                    if duration % 1 != 0
-                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
-                                    else
-                                      "#{duration.floor} h"
-                                    end
-                                  }</td>
-                                </tr>" %>
-      <% end %>
-
-
-      <!-- create popover content -->
-      <% popover_content = "<div class='panel panel-default popover-table'>
-                              <div class='panel-heading'>
-                                Shifts
-                              </div>
-                              <table class=table>
-                                #{date_and_duration == '' ?
-                                '<tr>
-                                  <td>
-                                    pas de shifts
-                                  </td>
-                                </tr>'
-                                : date_and_duration}
-                              </table>
-                            </div>" %>
-
-
-      <% remaining_hours = total - available_hours %>
-      <tr class="<%= hours_card_class(remaining_hours) %>">
-        <td><%= employee.first_name %></td>
-        <td><%= employee.last_name %></td>
-        <!-- convert float to integer and rational and include popover for all shifts -->
-        <% if total % 1 != 0 %>
-          <td data-toggle="popover" data-content="<%= popover_content %>"><%= total.floor %> <sup><%= (total % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (total % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
-        <% else %>
-          <td data-toggle="popover" data-content="<%= popover_content %>"><%= total.floor %></td>
-        <% end %>
-        <!-- convert float to integer and rational -->
-        <% if remaining_hours % 1 != 0 %>
-          <td class="<%= remaining_hours_class(remaining_hours) %>"><%= -remaining_hours.floor %> <sup><%= (remaining_hours % 1).to_r.to_s.scan(/\d/)[0] %></sup>&frasl;<sub><%= (remaining_hours % 1).to_r.to_s.scan(/\d/)[1] %></sub></td>
-        <% else %>
-          <td class="<%= remaining_hours_class(remaining_hours) %>"><%= -remaining_hours.floor %></td>
-        <% end %>
-        <td><%= available_hours %></td>
-      </tr>
+<div class="total-hours-wrapper">
+  <ul class="list-inline">
+    <% [-1, 1].each do |n| %>
+      <li>
+        <form action="/shops/<%= @shop.id %>/users/total">
+          <input name="hours" class="hidden" value="<%= n %>">
+          <input type="submit" class="pace-filter <%= n < 0 ? 'pace-filter-green' : 'pace-filter-red' %>" value="<%= n < 0 ? "Good" : "Bad" %>">
+        </form>
+      </li>
     <% end %>
-  </table>
+    <li>
+      <form action="/shops/<%= @shop.id %>/users/total">
+        <input type="submit" class="pace-filter pace-filter-reset" value="Reset">
+      </form>
+    </li>
+  </ul>
+
+  <div class="panel panel-default total-hours">
+    <div class="panel-heading admin-month-table">
+      <div class="flex-center">
+        <%= link_to shop_total_path(@shop, month: @month - 1) do %>
+          <i class="fa fa-caret-left"></i>
+        <% end %>
+        <h1><%= @today.strftime("%B %Y") %></h1>
+        <%= link_to shop_total_path(@shop, month: @month + 1) do %>
+          <i class="fa fa-caret-right"></i>
+        <% end %>
+      </div>
+    </div>
+
+    <table class="table">
+
+      <tr>
+        <th>Prénom</td>
+        <th>Nom de famille</td>
+        <th>Heures contractuelles</td>
+        <th>Heures travaillées</td>
+        <th>Pace (+/-)</th>
+        <th>Heures restantes</td>
+        <th>Heures supplementaires</td>
+      </tr>
+
+      <% @employees_shifts.each do |employee, shifts| %>
+
+        <!-- get total hours worked for employee, get date and duration for popover -->
+        <% total = 0 %>
+        <% date_and_duration = "" %>
+        <% contract_hours = employee.contract_hours %>
+        <% shifts.each do |date, duration| %>
+          <% total += duration %>
+          <% date = date.to_s %>
+          <% duration = duration %>
+          <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
+          <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
+          <% date_and_duration += "<tr>
+                                    <td>#{date}</td>
+                                    <td>#{
+                                      if duration % 1 != 0
+                                        "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                      else
+                                        "#{duration.floor} h"
+                                      end
+                                    }</td>
+                                  </tr>" %>
+        <% end %>
+
+
+        <!-- create popover content -->
+        <% popover_content = "<div class='panel panel-default popover-table'>
+                                <div class='panel-heading'>
+                                  Shifts
+                                </div>
+                                <table class=table>
+                                  #{date_and_duration == '' ?
+                                  '<tr>
+                                    <td>
+                                      pas de shifts
+                                    </td>
+                                  </tr>'
+                                  : date_and_duration}
+                                </table>
+                              </div>" %>
+
+        <% theo_hours = contract_hours * 0.05 * Date.today.day %>
+        <% pace = total - theo_hours %>
+        <tr class="<%= hours_card_class(total - contract_hours) %>">
+          <td><%= employee.first_name %></td>
+          <td><%= employee.last_name %></td>
+
+          <!-- HEURES CONTRACTUELLES -->
+          <td><%= trim_float(contract_hours) %></td>
+
+          <!-- HEURES TRAVAILLEES -->
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+            <%= trim_float(total) %>
+          </td>
+
+          <!-- PACE -->
+          <td>
+            <div class="<%= pace <= 0 ? 'pace pace-green' : 'pace pace-red' %>">
+              <%= trim_float(pace).to_i.abs %>
+            </div>
+          </td>
+
+          <!-- HEURES RESTANTES -->
+          <td class="<%= remaining_hours_class(total - contract_hours) %>">
+            <% if contract_hours >= total %>
+              <%= trim_float(contract_hours - total) %>
+            <% else %>
+              <%= 0 %>
+            <% end %>
+          </td>
+
+          <!-- HEURES SUPPLEMENTAIRES -->
+          <td>
+            <% if contract_hours < total %>
+              <%= trim_float(total - contract_hours) %>
+            <% else %>
+              <%= 0 %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 </div>
+
 
 <% content_for :scripts do %>
   <script>
