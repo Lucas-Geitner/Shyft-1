@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   get 'memberships/create'
 
+  get 'mail' => 'pages#test_mail'
+
   get 'plannings/:id/week' => 'plannings#week_view', as: :week_view
   post 'plannings/:planning_id/shifts/find_and_destroy' => 'shifts#find_and_destroy', as: :find_and_destroy
   post 'plannings/:planning_id/shifts/find_and_update' => 'shifts#find_and_update', as: :find_and_update
