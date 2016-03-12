@@ -1,4 +1,4 @@
-<%= simple_nested_form_for user, url: custom_path do |f| %>
+<%= simple_nested_form_for user, url: user_invitation_path do |f| %>
 
   <div class="row valign">
     <label for="user_first_name" class="contol-label col-xs-4 vcenter">Prénom</label>
@@ -14,8 +14,6 @@
     <label for="user_email" class="contol-label col-xs-4 vcenter">Email</label>
     <%= f.input :email, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
   </div>
-
-  <%= f.input :password, as: :hidden, input_html: { :value => "aaaaaaaa" } %>
 
   <div class="row valign">
     <label for="user_phone" class="contol-label col-xs-4 vcenter">Téléphone</label>
