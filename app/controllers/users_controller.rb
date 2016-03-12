@@ -20,29 +20,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    @user.start_date = params[:start_date]
-    @membership = Membership.new(
-      user: @user,
-      shop: @shop,
-      role: params[:user][:membership][:role])
-    @abilities = []
-    @shop.postes.each do |poste|
-      unless params["poste" + poste.id.to_s].nil?
-        ability = Ability.new(
-          user: @user,
-          poste: poste)
-        @abilities << ability
-      end
-    end
-
-    if @user.save
-      @membership.save
-      @abilities.each { |ability| ability.save }
-      redirect_to new_user_path
-    else
-      redirect_to new_user_path
-    end
+    # see application_controller#after_invite_path_for(resource)
   end
 
   def total
@@ -83,10 +61,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def user_params
-    params.require(:user).permit(:email, :contract)
-  end
 
   def set_user
     @user = User.find(params[:id])
