@@ -15,8 +15,20 @@
     border-top: 1px solid rgba(77, 90, 96, 0.1);
     position: relative;
   };
-  tr td:last-child {
+  tr td:nth-last-child(3) {
     border-right: 1px solid rgba(37, 50, 56, 0.4);
+  }
+  tr td:nth-last-child(2) {
+    border: none;
+    background-color: white;
+    width: 45px;
+  }
+  tr td:last-child {
+    border: none;
+    background-color: white;
+    text-align: center;
+    color: $gray-light;
+    font-weight: lighter;
   }
 }
 

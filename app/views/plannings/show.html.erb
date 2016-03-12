@@ -85,6 +85,7 @@
           <% @range.each do |time| %>
             <div class="time-header"><%= time %>:00</div>
           <% end %>
+          <div class="time-header" id="total-header">Total</div>
         </div>
         <table id="planner">
           <tr>
@@ -100,6 +101,14 @@
                   <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
                 <% end %>
               <% end %>
+              <td></td>
+              <td class="total-hours-cell" id="total-hours-<%= "#{employee.id}" %>">
+                <% total = 0 %>
+                <% employee.shifts.where('date(starts_at) = ?', @today).each do |shift| %>
+                  <% total += (shift.ends_at - shift.starts_at)/3600 %>
+                <% end %>
+                <%= trim_float(total) %>
+              </td>
             </tr>
           <% end %>
         </table>
@@ -123,7 +132,7 @@
       </div>
       <div id="forms">
         <!-- Create -->
-        <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
+        <%= simple_form_for([@planning, @shift], remote: true, id: "create-shift") do |f| %>
           <%= f.input :starts_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
           <%= f.input :ends_at, start_year: @today.year, end_year: @today.year, discard_day: true, discard_month: true, discard_year: true, label: false %>
           <%= f.input :poste, as: :hidden %>

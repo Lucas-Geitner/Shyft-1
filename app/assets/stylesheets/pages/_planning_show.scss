@@ -102,6 +102,11 @@
     border: 0;
   };
 }
+#total-header {
+  font-weight: bold;
+  font-size: 14px;
+  color: $gray-light;
+}
 
 .time-headers {
   display: flex;
