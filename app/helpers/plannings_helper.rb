@@ -28,6 +28,13 @@ module PlanningsHelper
     end
   end
 
+  def readable_date(date)
+    day = french_days(date.strftime("%A"))
+    number = date.strftime("%e")
+    month = french_mn(date.strftime("%b"))
+    return "#{day} #{number} #{month}"
+  end
+
   def french_months(date)
     case date
       when "January" then "janvier"
