@@ -45,7 +45,8 @@
       <!-- get total hours worked for employee, get date and duration for popover -->
       <% total = 0 %>
       <% date_and_duration = "" %>
-      <% contract_hours = employee.contract_hours.nil? ? 0 : employee.contract_hours %>
+      <% membership = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: @shop.id}).first %>
+      <% contract_hours = membership.contract_hours.nil? ? 0 : membership.contract_hours %>
       <% shifts.each do |date, duration| %>
         <% total += duration %>
         <% date = date.to_s %>
