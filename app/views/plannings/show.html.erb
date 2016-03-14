@@ -94,13 +94,11 @@
           </tr>
           <% @employees.each do |employee| %>
             <tr>
-              <% @range.each do |time| %>
-                <% unless time == @range[-1] %>
-                  <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
-                  <td class="time-cell" id="<%= "#{time}.25/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
-                  <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.3)"><div class="blech"></div></td>
-                  <td class= "time-cell" id="<%= "#{time}.75/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
-                <% end %>
+              <% @range[0...-1].each do |time| %>
+                <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+                <td class="time-cell" id="<%= "#{time}.25/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.3)"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.75/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
               <% end %>
             </tr>
           <% end %>
