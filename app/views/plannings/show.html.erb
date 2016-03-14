@@ -123,6 +123,13 @@
           </div>
         </div>
       </div>
+      <div class="hours-worked">
+        <ul class="list-unstyled">
+          <% @employees.each do |employee| %>
+            <li>total: blech</li>
+          <% end %>
+        </ul>
+      </div>
       <div id="forms">
         <!-- Create -->
         <%= simple_form_for([@planning, @shift], remote: true) do |f| %>
