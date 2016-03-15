@@ -33,13 +33,13 @@
   </div>
 
   <div class="row valign">
-    <label for="user_contract_hours" class="contol-label col-xs-4 vcenter">Heures/mois</label>
-    <%= f.input :contract_hours, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
-  </div>
-
-  <div class="row valign">
-    <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Rôle</label>
     <%= f.simple_fields_for membership do |p| %>
+      <label for="user_contract_hours" class="contol-label col-xs-4 vcenter">Heures/mois</label>
+      <%= p.input :contract_hours, label: false, wrapper_html: { class: "col-xs-8 vcenter" } %>
+    </div>
+
+    <div class="row valign">
+      <label for="user_membership_role" class="contol-label col-xs-4 vcenter">Rôle</label>
       <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 vcenter" }, collection: Membership::ROLES, prompt: "Choisir un rôle" %>
     <% end %>
   </div>

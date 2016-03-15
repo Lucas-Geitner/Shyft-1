@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
     @membership = Membership.new(
       user: @user,
       shop: @shop,
-      role: params[:user][:membership][:role])
+      role: params[:user][:membership][:role],
+      contract_hours: params[:user][:membership][:contract_hours])
     @abilities = []
     @shop.postes.each do |poste|
       unless params["poste" + poste.id.to_s].nil?
@@ -47,8 +48,7 @@ class ApplicationController < ActionController::Base
       :role,
       :phone,
       :start_date,
-      :hourly_wage,
-      :contract_hours)
+      :hourly_wage)
   end
 end
 
