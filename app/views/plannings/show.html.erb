@@ -40,7 +40,7 @@
           <%= link_to planning_path(@planning, week: @week, day: n), class: "tab #{"active" if day_n == @today }" do %>
             <div>
               <%= french_days(day_n.strftime('%A')) %>
-              <div class="small-date"><%= day_n.strftime('%d') + " " + french_months(day_n.strftime('%b')) %></div>
+              <div class="small-date"><%= day_n.strftime('%d') + " " + french_mn(day_n.strftime('%b')) %></div>
             </div>
           <% end %>
         <% end %>
