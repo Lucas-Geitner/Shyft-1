@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20160310095405) do
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "shop_id"
+    t.string   "role"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.string   "role"
     t.datetime "archived_at"
   end
 
@@ -94,9 +94,9 @@ ActiveRecord::Schema.define(version: 20160310095405) do
     t.datetime "end_date"
     t.integer  "shop_id"
     t.integer  "user_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "status",     default: "Ongoing"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "status"
   end
 
   add_index "plannings", ["shop_id"], name: "index_plannings_on_shop_id", using: :btree
