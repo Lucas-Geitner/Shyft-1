@@ -40,7 +40,7 @@
           <%= link_to planning_path(@planning, week: @week, day: n), class: "tab #{"active" if day_n == @today }" do %>
             <div>
               <%= french_days(day_n.strftime('%A')) %>
-              <div class="small-date"><%= day_n.strftime('%d') + " " + french_months(day_n.strftime('%b')) %></div>
+              <div class="small-date"><%= day_n.strftime('%d') + " " + french_mn(day_n.strftime('%b')) %></div>
             </div>
           <% end %>
         <% end %>
@@ -89,16 +89,16 @@
         <table id="planner">
           <tr>
             <% @range.each do |time| %>
-              <th colspan="2"></td>
+              <th colspan="4"></td>
             <% end %>
           </tr>
           <% @employees.each do |employee| %>
             <tr>
-              <% @range.each do |time| %>
-                <% unless time == @range[-1] %>
-                  <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
-                  <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.2)"><div class="blech"></div></td>
-                <% end %>
+              <% @range[0...-1].each do |time| %>
+                <td class="time-cell" id="<%= "#{time}/#{employee.id}" %>"><div class="blech"></div></td>
+                <td class="time-cell" id="<%= "#{time}.25/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.3)"><div class="blech"></div></td>
+                <td class= "time-cell" id="<%= "#{time}.75/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
               <% end %>
             </tr>
           <% end %>
@@ -172,8 +172,12 @@
         <% if shift.starts_at %>
           <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
             <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
-            <% if shift.starts_at.min > 0 %>
+            <% if shift.starts_at.min == 30 %>
               $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+            <% elsif shift.starts_at.min == 15 %>
+              $("#<%= "#{shift.starts_at.hour}\\\\.25\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
+            <% elsif shift.starts_at.min == 45 %>
+              $("#<%= "#{shift.starts_at.hour}\\\\.75\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
             <% else %>
               $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
             <% end %>
@@ -225,6 +229,7 @@
               return 'invalid'
             }
           },
+          // DESTROY POSTE ON DRAG START
           start: function(e, ui) {
             <% @employees.each do |employee| %>
               <% if Ability.where("user_id = :employee AND poste_id = :poste", { employee: employee.id, poste: poste.id }).length == 0 %>
@@ -240,8 +245,12 @@
               var jobName = e.target.textContent
               var startTime = parseFloat(elementId)
               var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-              if ( startTime % 1 > 0 ) {
+              if ( startTime % 1 === 0.25 ) {
+                var startSeconds = 15
+              } else if ( startTime % 1 === 0.5 ) {
                 var startSeconds = 30
+              } else if ( startTime % 1 === 0.75 ) {
+                var startSeconds = 45
               } else {
                 var startSeconds = "00"
               }
@@ -260,7 +269,7 @@
       // RESIZE
 
       $(".item").resizable({
-        grid: 30,
+        grid: 15,
         stop: function(e, ui) {
 
           // UPDATE
@@ -272,13 +281,21 @@
           if (endTime > 23.5) {
             endTime -= 24
           }
-          if ( startTime % 1 > 0 ) {
+          if ( startTime % 1 === 0.25 ) {
+            var startSeconds = 15
+          } else if ( startTime % 1 === 0.5 ) {
             var startSeconds = 30
+          } else if ( startTime % 1 === 0.75 ) {
+            var startSeconds = 45
           } else {
             var startSeconds = "00"
           }
-          if ( endTime % 1 > 0 ) {
+          if ( endTime % 1=== 0.25 ) {
+            var endSeconds = 15
+          } else if ( endTime % 1 === 0.5 ) {
             var endSeconds = 30
+          } else if ( endTime % 1 === 0.75 ) {
+            var endSeconds = 45
           } else {
             var endSeconds = "00"
           }
@@ -340,8 +357,12 @@
                   var jobName = e.target.textContent
                   var startTime = parseFloat(elementId)
                   var lineInList = $("li:contains('" + employeeName + ": " + startTime + "h -')")
-                  if ( startTime % 1 > 0 ) {
+                  if ( startTime % 1 === 0.25 ) {
+                    var startSeconds = 15
+                  } else if ( startTime % 1 === 0.5 ) {
                     var startSeconds = 30
+                  } else if ( startTime % 1 === 0.75 ) {
+                    var startSeconds = 45
                   } else {
                     var startSeconds = "00"
                   }
@@ -372,13 +393,21 @@
                     if (endTime > 23.5) {
                       endTime -= 24
                     }
-                    if ( startTime % 1 > 0 ) {
+                    if ( startTime % 1 === 0.25 ) {
+                      var startSeconds = 15
+                    } else if ( startTime % 1 === 0.5 ) {
                       var startSeconds = 30
+                    } else if ( startTime % 1 === 0.75 ) {
+                      var startSeconds = 45
                     } else {
                       var startSeconds = "00"
                     }
-                    if ( endTime % 1 > 0 ) {
+                    if ( endTime % 1=== 0.25 ) {
+                      var endSeconds = 15
+                    } else if ( endTime % 1 === 0.5 ) {
                       var endSeconds = 30
+                    } else if ( endTime % 1 === 0.75 ) {
+                      var endSeconds = 45
                     } else {
                       var endSeconds = "00"
                     }
@@ -403,13 +432,21 @@
             var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
             var jobName = $(ui.draggable)[0].textContent
-            if ( startTime % 1 > 0 ) {
+            if ( startTime % 1 === 0.25 ) {
+              var startSeconds = 15
+            } else if ( startTime % 1 === 0.5 ) {
               var startSeconds = 30
+            } else if ( startTime % 1 === 0.75 ) {
+              var startSeconds = 45
             } else {
               var startSeconds = "00"
             }
-            if ( endTime % 1 > 0 ) {
+            if ( endTime % 1=== 0.25 ) {
+              var endSeconds = 15
+            } else if ( endTime % 1 === 0.5 ) {
               var endSeconds = 30
+            } else if ( endTime % 1 === 0.75 ) {
+              var endSeconds = 45
             } else {
               var endSeconds = "00"
             }

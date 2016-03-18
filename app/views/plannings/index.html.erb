@@ -27,11 +27,11 @@
             </div>
             <h3 style="color: rgba(17, 18, 19, 0.76);padding-bottom: 15px;">Plannings en cours</h3>
             <% @plannings_actuels.each do |p|%>
-            <%= render partial: "planning_item", locals: {planning: p}%>
+              <%= render partial: "planning_item", locals: {planning: p}%>
             <% end %>
             <h3 style="color: rgba(17, 18, 19, 0.76);padding-bottom: 15px;">Plannings en prévisions</h3>
             <% @plannings_futures.each do |p|%>
-            <%= render partial: "planning_item", locals: {planning: p}%>
+              <%= render partial: "planning_item", locals: {planning: p}%>
             <% end %>
           </div>
           <div role="tabpanel" class="tab-pane <%= "active" if params[:archives]%>" id="Mesarchives">
