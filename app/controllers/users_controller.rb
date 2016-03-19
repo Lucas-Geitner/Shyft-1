@@ -33,7 +33,8 @@ class UsersController < ApplicationController
         shifts.each do |date, duration|
           actual_hours += duration
         end
-        theo_hours = employee.contract_hours * 0.05 * Date.today.day
+        membership = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: @shop.id}).first
+        theo_hours = membership.contract_hours * 0.05 * Date.today.day
         pace = actual_hours - theo_hours
         if params[:hours].to_i < 0
           @employees_shifts.delete(employee) if pace >= 0
