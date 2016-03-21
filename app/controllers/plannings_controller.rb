@@ -33,6 +33,8 @@ class PlanningsController < ApplicationController
     else
       @range = (@start_time..@end_time).to_a
     end
+    @start_month = DateTime.new(@today.year, @today.month)
+    @end_month = @start_month + 1.month
     @employees = @shop.users
     @shift = Shift.new()
 
