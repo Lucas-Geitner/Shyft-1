@@ -1,0 +1,37 @@
+<nav class="sk-slide-menu" id="sk-slide-menu">
+    <h3>Menu</h3>
+    <%= link_to shop_plannings_path(@shop) do %>
+        <i class="fa fa-calendar icon"></i>Mes plannings
+    <% end %>
+    <%= link_to new_user_path do %>
+        <i class="fa fa-users icon" ></i>Mes Employés
+    <% end %>
+    <%= link_to new_poste_path do %>
+        <i class="fa fa-list icon"></i>Postes
+    <% end %>
+    <%= link_to shop_total_path(@shop) do %>
+        <i class="fa fa-file-text-o icon"></i>Espace administratif
+    <% end %>
+    <%= link_to current_user do %>
+        <i class="fa fa-user icon"></i> <%= t ".profile", default: "Profile" %>
+    <% end %>
+    <%= link_to destroy_user_session_path, method: :delete do %>
+        <i class="fa fa-sign-out icon"></i>  <%= t ".sign_out", default: "Déconnexion" %>
+    <% end %>
+</nav>
+
+<% content_for :scripts do %>
+  <script type="text/javascript">
+
+    function openSlide() {
+        document.getElementById( 'sk-slide-menu' ).classList.toggle("sk-slide-open");
+    };
+    function close_slide() {
+        document.getElementById( 'sk-slide-menu' ).classList.remove("sk-slide-open");
+    }
+    window.onload = function() {
+        document.getElementById( 'sk-sidebar-btn' ).addEventListener('click', openSlide);
+        document.getElementById( 'wrapper' ).addEventListener('click', close_slide);  
+    }
+  </script>
+<% end %>

@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   get 'plannings/:id/export' => 'plannings#export', as: :export
   patch 'shops/:shop_id/users/:user_id/archive_user' => 'memberships#archive_user', as: :archive_user
   patch 'shops/:shop_id/users/:user_id/retrieve_user' => 'memberships#retrieve_user', as: :retrieve_user
-
+ 
+  get 'profile' => 'profile#showProfileData'
   devise_for :users
   root to: 'pages#home'
   resources :users, except: [:index, :create]
