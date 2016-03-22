@@ -64,6 +64,16 @@
   margin-bottom: 30px;
 }
 
+.daily-hours, .monthly-hours {
+  width: 60px;
+  max-width: 60px;
+}
+
+.over-hours {
+  color: red;
+  font-weight: bolder;
+}
+
 .postes-flex {
   display: flex;
   justify-content: center;

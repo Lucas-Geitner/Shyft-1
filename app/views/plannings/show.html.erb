@@ -88,9 +88,11 @@
         </div>
         <table id="planner">
           <tr>
-            <% @range.each do |time| %>
+            <% @range[0...-1].each do |time| %>
               <th colspan="4"></td>
             <% end %>
+              <th class="text-center">Dy</th>
+              <th class="text-center">Mth</th>
           </tr>
           <% @employees.each do |employee| %>
             <tr>
@@ -100,6 +102,13 @@
                 <td class= "time-cell" id="<%= "#{time}.5/#{employee.id}" %>" style="border-left: 1px dotted rgba(37,50,56,0.3)"><div class="blech"></div></td>
                 <td class= "time-cell" id="<%= "#{time}.75/#{employee.id}" %>" style="border-left: 1px dotted rgba(57,70,76,0.1)"><div class="blech"></div></td>
               <% end %>
+              <% time_worked = 0 %>
+              <% contract_hours = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: @shop.id }).first.contract_hours %>
+              <% Shift.where("starts_at >= :beginning AND ends_at <= :end AND user_id = :employee", { beginning: @start_month, end: @end_month, employee: employee.id }).each do |shift|
+                time_worked += (shift.ends_at - shift.starts_at) / 1.hour
+              end %>
+              <td class="daily-hours" id="<%= employee.id %>dh">10</td>
+              <td class="monthly-hours <%= "over-hours" if (contract_hours - time_worked) <= 0 %>" id="<%= employee.id %>mh"><%= (contract_hours - time_worked).to_f %></td>
             </tr>
           <% end %>
         </table>
@@ -171,16 +180,23 @@
         <% shop_poste = ShopPoste.where(shop: @shop, poste: shift.poste).first %>
         <% if shift.starts_at %>
           <% if shift.starts_at.strftime("%F") == @today.strftime("%F") %>
-            <% minutes = (shift.ends_at - shift.starts_at) / 60 %>
-            <% if shift.starts_at.min == 30 %>
-              $("#<%= "#{shift.starts_at.hour}\\\\.5\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
-            <% elsif shift.starts_at.min == 15 %>
-              $("#<%= "#{shift.starts_at.hour}\\\\.25\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
-            <% elsif shift.starts_at.min == 45 %>
-              $("#<%= "#{shift.starts_at.hour}\\\\.75\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
-            <% else %>
-              $("#<%= "#{shift.starts_at.hour}\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= minutes %>px"><%= shift.poste.name %></div>')
-            <% end %>
+            <% div_width = (shift.ends_at - shift.starts_at) / 60 %>
+            <% if shift.starts_at.min == 30
+              minutes = "\\\\.5"
+            elsif shift.starts_at.min == 15
+              minutes = "\\\\.25"
+            elsif shift.starts_at.min == 45
+              minutes = "\\\\.75"
+            else
+              minutes = ""
+            end %>
+            $("#<%= "#{shift.starts_at.hour}#{ minutes }\\\\/#{shift.user_id}" %>").append('<div class="poste resizable grab item flex-center" style="background-color: <%= shop_poste.present? ? shop_poste.color : "#D2D2D2" %>; width: <%= div_width %>px"><%= shift.poste.name %></div>')
+            $('#<%= shift.user.id %>dh').text(parseFloat($('#<%= shift.user.id %>dh').text()) - <%= div_width / 60 %>)
+            if ( parseFloat($('#<%= shift.user.id %>dh').text()) <= 0 ) {
+              $('#<%= shift.user.id %>dh').addClass("over-hours")
+            } else {
+              $('#<%= shift.user.id %>dh').removeClass("over-hours")
+            }
           <% end %>
         <% end %>
       <% end %>
@@ -254,6 +270,21 @@
               } else {
                 var startSeconds = "00"
               }
+              var duration = e.target.clientWidth / 60
+              var dailyHours = $(ui['helper']['0']).parent().parent().find(".daily-hours")
+              var monthlyHours = $(ui['helper']['0']).parent().parent().find(".monthly-hours")
+              dailyHours.text(parseFloat(dailyHours.text()) + duration)
+              monthlyHours.text(parseFloat(monthlyHours.text()) + duration)
+              if ( parseFloat(dailyHours.text()) <= 0 ) {
+                dailyHours.addClass("over-hours")
+              } else {
+                dailyHours.removeClass("over-hours")
+              }
+              if ( parseFloat(monthlyHours.text()) <= 0 ) {
+                monthlyHours.addClass("over-hours")
+              } else {
+                monthlyHours.removeClass("over-hours")
+              }
               $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
               $("#find_destroy #shift_starts_at_5i").val(startSeconds)
               $('#destroy_user').val(employeeName)
@@ -270,7 +301,26 @@
 
       $(".item").resizable({
         grid: 15,
+        containment: '#planner',
         stop: function(e, ui) {
+
+          var dailyHours = ui.originalElement.parent().parent().find(".daily-hours")
+          var monthlyHours = ui.originalElement.parent().parent().find(".monthly-hours")
+          var originalTime = ui.originalSize.width / 60
+          var newTime = ui.size.width / 60
+
+          dailyHours.text(parseFloat(dailyHours.text()) - (newTime - originalTime))
+          monthlyHours.text(parseFloat(monthlyHours.text()) - (newTime - originalTime))
+          if ( parseFloat(dailyHours.text()) <= 0 ) {
+            dailyHours.addClass("over-hours")
+          } else {
+            dailyHours.removeClass("over-hours")
+          }
+          if ( parseFloat(monthlyHours.text()) <= 0 ) {
+            monthlyHours.addClass("over-hours")
+          } else {
+            monthlyHours.removeClass("over-hours")
+          }
 
           // UPDATE
           var elementId = $(ui.element[0]).parent().attr("id")
@@ -366,6 +416,21 @@
                   } else {
                     var startSeconds = "00"
                   }
+                  var duration = e.target.clientWidth / 60
+                  var dailyHours = $(ui['helper']['0']).parent().parent().find(".daily-hours")
+                  var monthlyHours = $(ui['helper']['0']).parent().parent().find(".monthly-hours")
+                  dailyHours.text(parseFloat(dailyHours.text()) + duration)
+                  monthlyHours.text(parseFloat(monthlyHours.text()) + duration)
+                  if ( parseFloat(dailyHours.text()) <= 0 ) {
+                    dailyHours.addClass("over-hours")
+                  } else {
+                    dailyHours.removeClass("over-hours")
+                  }
+                  if ( parseFloat(monthlyHours.text()) <= 0 ) {
+                    monthlyHours.addClass("over-hours")
+                  } else {
+                    monthlyHours.removeClass("over-hours")
+                  }
                   $("#find_destroy #shift_starts_at_4i").val(('0' + Math.floor(startTime)).slice(-2))
                   $("#find_destroy #shift_starts_at_5i").val(startSeconds)
                   $('#destroy_user').val(employeeName)
@@ -382,6 +447,24 @@
               $(".item").resizable({
                 grid: 30,
                 stop: function(e, ui) {
+
+                    var dailyHours = ui.originalElement.parent().parent().find(".daily-hours")
+                    var monthlyHours = ui.originalElement.parent().parent().find(".monthly-hours")
+                    var originalTime = ui.originalSize.width / 60
+                    var newTime = ui.size.width / 60
+
+                    dailyHours.text(parseFloat(dailyHours.text()) - (newTime - originalTime))
+                    monthlyHours.text(parseFloat(monthlyHours.text()) - (newTime - originalTime))
+                    if ( parseFloat(dailyHours.text()) <= 0 ) {
+                      dailyHours.addClass("over-hours")
+                    } else {
+                      dailyHours.removeClass("over-hours")
+                    }
+                    if ( parseFloat(monthlyHours.text()) <= 0 ) {
+                      monthlyHours.addClass("over-hours")
+                    } else {
+                      monthlyHours.removeClass("over-hours")
+                    }
 
                     // ITEM UPDATE
 
@@ -429,8 +512,23 @@
             // CREATE
 
             var startTime = cellsDroppedIn[0]
-            var endTime = startTime + ( $(ui.draggable)[0].clientWidth / 30 / 2 )
+            var duration = ( $(ui.draggable)[0].clientWidth / 30 / 2 )
+            var endTime = startTime + duration
             var employeeName = $(this).parent().attr("id").match(/\/(.*)$/)[1];
+            var dailyHours = $('#' + employeeName + 'dh')
+            var monthlyHours = $('#' + employeeName + 'mh')
+            dailyHours.text(parseFloat(dailyHours.text()) - duration)
+            monthlyHours.text(parseFloat(monthlyHours.text()) - duration)
+            if ( parseFloat(dailyHours.text()) <= 0 ) {
+              dailyHours.addClass("over-hours")
+            } else {
+              dailyHours.removeClass("over-hours")
+            }
+            if ( parseFloat(monthlyHours.text()) <= 0 ) {
+              monthlyHours.addClass("over-hours")
+            } else {
+              monthlyHours.removeClass("over-hours")
+            }
             var jobName = $(ui.draggable)[0].textContent
             if ( startTime % 1 === 0.25 ) {
               var startSeconds = 15
