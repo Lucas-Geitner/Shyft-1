@@ -5,8 +5,29 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-organisations = ["McDonald's", "Quick", "Exki"]
-postes = ["Cuisine", "Caisse", "McCafe", "Plonge", "Service"]
+organisations = {
+  "McDonald's" => {
+    org_postes: ["Cuisine", "Caisse", "McCafe", "Plonge", "Service"],
+    photo: "http://media.zenfs.com/en_us/News/Reuters/2014-09-09T150237Z_1972753717_GM1EA991RXB01_RTRMADP_3_US-MCDONALDS-SALES.JPG"
+  },
+  "Chez Clément" => {
+    org_postes: ["Cuisine", "Caisse", "Bar", "Plonge", "Service"],
+    photo: "http://www.chezclement.com/images/restaurant-opera-1.jpg"
+  },
+  "Exki" => {
+    org_postes: ["Cuisine", "Caisse", "Bar", "Plonge", "Service"],
+    photo: "http://misterjill.be/images/detail/1200_EXKI_01.jpg"
+  }
+}
+
+postes = Array.new
+organisations.each do |org, attributes|
+  attributes[:org_postes].each do |poste|
+    unless postes.include?(poste)
+      postes << poste
+    end
+  end
+end
 
 def choose_weighted(weighted)
   sum = weighted.inject(0) do |sum, item_and_weight|
@@ -34,8 +55,19 @@ end
   user.save
 end
 
-organisations.each do |org|
-  Organisation.new(name: org).save
+postes.each do |poste|
+  Poste.create(name: poste)
+end
+
+organisations.each do |org, attributes|
+  Organisation.create(
+    name: org,
+    photo: attributes[:photo])
+  attributes[:org_postes].each do |poste|
+    OrganisationPoste.create(
+      organisation: Organisation.find_by_name(org),
+      poste: Poste.find_by_name(poste))
+  end
 end
 
 30.times do
@@ -48,10 +80,6 @@ end
     closing_time: closing_time,
     organisation: organisation)
   shop.save
-end
-
-postes.each do |poste|
-  Poste.create(name: poste)
 end
 
 User.all.each do |user|
@@ -78,12 +106,6 @@ User.joins(:memberships).where(memberships: {role: "Line Manager"}).each do |man
       user: manager,
       shop: manager.memberships.first.shop)
     planning.save
-  end
-end
-
-Organisation.all.each do |org|
-  Poste.all.each do |poste|
-    OrganisationPoste.create(organisation: org, poste: poste)
   end
 end
 
@@ -114,4 +136,8 @@ User.joins(:memberships).where(memberships: {role: "Employee"}).each do |employe
   end
 end
 
-Membership.where(role: "Line Manager").first.user.update(first_name: "Chaline", last_name: "Itsu-Bitsu", email: "chaline.itsu-bitsu@gmail.com")
+chaline = User.joins(:memberships, :shops).where(memberships: {role: "Line Manager"}, shops: {organisation: 1}).first
+clement = User.joins(:memberships, :shops).where(memberships: {role: "Line Manager"}, shops: {organisation: 2}).first
+
+chaline.update(first_name: "Chaline", last_name: "Itsu-Bitsu", email: "chaline.itsu-bitsu@gmail.com")
+clement.update(first_name: "Clément", last_name: "Dubois", email: "clement@gmail.com")
