@@ -37,7 +37,7 @@ class PlanningsController < ApplicationController
     @shift = Shift.new()
 
     @postes = Hash.new
-    shop_postes = Shpposte.where(shop: @shop)
+    shop_postes = ShopPoste.where(shop: @shop)
     shop_postes.each do |shpposte|
       case shpposte.poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'

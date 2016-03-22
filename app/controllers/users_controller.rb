@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
-  before_action :set_shop_employees, only: [:new, :show, :total]
+  before_action :set_shop_employees, only: [:new, :show, :total, :filter]
 
   def new
     @user = User.new
@@ -20,35 +20,29 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    @user.start_date = params[:start_date]
-    @membership = Membership.new(
-      user: @user,
-      shop: @shop,
-      role: params[:user][:membership][:role])
-    @abilities = []
-    @shop.postes.each do |poste|
-      unless params["poste" + poste.id.to_s].nil?
-        ability = Ability.new(
-          user: @user,
-          poste: poste)
-        @abilities << ability
-      end
-    end
-
-    if @user.save
-      @membership.save
-      @abilities.each { |ability| ability.save }
-      redirect_to new_user_path
-    else
-      redirect_to new_user_path
-    end
+    # see application_controller#after_invite_path_for(resource)
   end
 
   def total
     @month = params[:month] ? params[:month].to_i : 0
     @today = Date.today + @month.months
     set_employees_shifts(@today)
+    unless params[:hours].nil?
+      @employees_shifts.each do |employee, shifts|
+        actual_hours = 0
+        shifts.each do |date, duration|
+          actual_hours += duration
+        end
+        membership = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: @shop.id}).first
+        theo_hours = membership.contract_hours * 0.05 * Date.today.day
+        pace = actual_hours - theo_hours
+        if params[:hours].to_i < 0
+          @employees_shifts.delete(employee) if pace >= 0
+        else
+          @employees_shifts.delete(employee) if pace < 0
+        end
+      end
+    end
   end
 
   def edit
@@ -83,10 +77,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def user_params
-    params.require(:user).permit(:email, :contract)
-  end
 
   def set_user
     @user = User.find(params[:id])

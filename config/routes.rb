@@ -1,12 +1,5 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  get 'shops/create'
-
-  get 'organisations/create'
-
-  get 'organisation_memberships/create'
-
-  get 'memberships/create'
 
   get 'plannings/:id/week' => 'plannings#week_view', as: :week_view
   post 'plannings/:planning_id/shifts/find_and_destroy' => 'shifts#find_and_destroy', as: :find_and_destroy

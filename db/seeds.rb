@@ -30,8 +30,7 @@ end
     first_name: first_name,
     last_name: last_name,
     start_date: Faker::Date.between(2.years.ago, Date.today),
-    hourly_wage: rand(9.0..20.0).round(2),
-    contract_hours: rand(128..156))
+    hourly_wage: rand(9.0..20.0).round(2))
   user.save
 end
 
@@ -64,7 +63,8 @@ User.all.each do |user|
   membership = Membership.new(
     user: user,
     shop: Shop.all.sample,
-    role: choose_weighted({ "HR Manager" => 1, "Line Manager" => 10, "Employee" => 100 }))
+    role: choose_weighted({ "HR Manager" => 1, "Line Manager" => 10, "Employee" => 100 }),
+    contract_hours: rand(128..156))
   membership.save
 end
 
@@ -83,13 +83,13 @@ end
 
 Organisation.all.each do |org|
   Poste.all.each do |poste|
-    Orgposte.create(organisation: org, poste: poste)
+    OrganisationPoste.create(organisation: org, poste: poste)
   end
 end
 
 Shop.all.each do |shop|
   shop.organisation.postes.each_with_index do |poste, i|
-    Shpposte.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
+    ShopPoste.create(shop: shop, poste: poste, color: POSTE_COLORS[i])
   end
 end
 
