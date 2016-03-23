@@ -1,0 +1,44 @@
+<nav class="sk-navbar">
+    <div id="sk-navbar-wrapper">
+        <button  type="button" id="sk-sidebar-btn" class="hidden-md hidden-lg">
+            <span class="sr-only">Sidebar navigation</span>
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="sk-navbar-brand">
+            <%= link_to root_path do %>
+                <%= image_tag "skello.png" , id: "sk-navbar-logo" %>
+            <% end %>
+        </div>
+            <div class="sk-navbar-item sk-navbar-btn hidden-xs hidden-sm">
+                <% p = Planning.where("shop_id = :shop_id AND start_date <= :today AND end_date >= :today", {shop_id: @shop.id, today: Date.today}) %>
+                <% if p.length > 0 %>
+                <% days = to_days(DateTime.now.to_i - p.first.start_date.to_i) %>
+                <% week = (days / 7) + 1 %>
+                <% day = (days % 7) + 1 %>
+                <%= link_to t(".top_call_to_action", default: "Planning actuel"), planning_path(p.first, week: week, day: day) %>
+                <% else %>
+                <%= link_to t(".top_call_to_action", default: "Mes plannings"), shop_plannings_path(@shop) %>
+                <% end %>
+            </div>
+            <div class="sk-navbar-item hidden-xs hidden-sm" id="sk-navbar-avatar">    <div class="dropdown">
+                    <div class="avatar dropdown-toggle" id="user-details-icon" data-toggle="dropdown">
+                    <%= current_user.first_name[0]+ current_user.last_name[0] %>
+                    
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
+                        <li>
+                          <%= link_to current_user do %>
+                          <i class="fa fa-user"></i> <%= t ".profile", default: "Profile" %>
+                          <% end %>
+                      </li>
+                      <li>
+                          <%= link_to destroy_user_session_path, method: :delete do %>
+                          <i class="fa fa-sign-out"></i>  <%= t ".sign_out", default: "Déconnexion" %>
+                          <% end %>
+                      </li>
+                  </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

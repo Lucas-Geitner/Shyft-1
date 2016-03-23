@@ -1,0 +1,72 @@
+@media (min-width: 992px) {
+    .sk-navbar {
+        width: 100%;
+        height: 70px;
+        background-color: black;
+        position: fixed;
+    }
+
+    #sk-navbar-logo {
+        height: 40px;
+        margin:0 0 0 0;
+    }
+
+    #sk-navbar-brand {
+        float: left;
+        height: auto;
+        width: auto;
+        margin: auto;
+    }
+
+    #sk-sidebar-btn {
+        float: left;
+    }
+
+    #sk-navbar-wrapper {
+        height: 100%;
+        width: 100;
+        padding: 15px 20px 15px 20px;
+        margin: auto;
+    }
+
+
+    .sk-navbar-item {
+        color: white;
+        float:right;
+        cursor: pointer;
+        text-align: center;
+        margin:0 30px 0 30px;
+    }
+
+    #sk-navbar-avatar {
+        margin: auto;
+        background: $shyft-light-blue;
+        height: 45px;
+        width: 45px;
+        line-height: 45px;
+        border-radius: 50%;
+        font-weight: lighter;
+        font-size: 20px;
+        padding-left: 7px;
+    }
+
+    .sk-navbar-btn {
+        padding: 10px 10px 0 10px;
+        width: auto;
+        height: 45px;
+        border-radius: 40px;
+        border: 2px solid white;
+        font-size: 14px;
+    }
+
+    .sk-navbar-btn:hover {
+      color: white;
+      background-color: none;
+      padding: 10px 15px;
+    }
+
+    .sk-navbar-btn a {
+      color: white;
+      text-decoration: none;
+    }
+}
