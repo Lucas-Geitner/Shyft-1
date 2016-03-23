@@ -1,4 +1,4 @@
-<% total_hours = @user.contract_hours %>
+<% total_hours = @user.memberships.first.contract_hours %>
 <% total = 0 %>
 <% @employees_shifts[@user].each do |date, duration| %>
   <% total += duration %>

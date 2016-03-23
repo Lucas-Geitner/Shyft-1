@@ -17,4 +17,8 @@ module UsersHelper
       return ""
     end
   end
+
+  def trim_float(float)
+    "%g" % ("%.2f" % float)
+  end
 end

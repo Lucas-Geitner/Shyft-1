@@ -1,7 +1,7 @@
 
 <div id="user-info" class="text-center">
 
-  <div class="user-details-wrapper">
+  <div class="user-details-wrapper" style="background: linear-gradient(-225deg, rgba(0,101,168,0.6) 0%, rgba(0,36,61,0.6) 50%), url('<%= @user.shops.first.organisation.photo %>'); background-position: center; background-size: 100%;">
     <div class="user-details-container">
       <div class="user-details-icon">
         <%= @user.first_name[0]+ @user.last_name[0] %>
@@ -150,7 +150,7 @@
   </div>
 
   <% unless @employees_shifts.nil? || @employees_shifts[@user].nil? || @employees_shifts[@user].empty? %>
-    <%= render  'users/table' %>
+    <%= render 'users/table' %>
   <% end %>
 
 </div>

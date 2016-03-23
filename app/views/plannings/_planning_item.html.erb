@@ -2,9 +2,9 @@
 
   <div class="card-planning-description">
     <div class="card-planning-dates">
-      <span><%= planning.start_date.strftime("%A, %b %e") %></span>
+      <span><%= readable_date(planning.start_date) %></span>
       <span class="separator"></span>
-      <span><%= planning.end_date.strftime("%A, %b %e") %></span>
+      <span><%= readable_date(planning.end_date) %></span>
     </div>
     <div class="card-planning-users">
         <%planning.users.uniq.first(4).each do |user|%>
@@ -22,7 +22,7 @@
     <div class="planning-owner">
       Dernier changement fait par
       <strong>
-        <%= planning.user.first_name%> <%= planning.user.last_name%>
+        <%= planning.user.name %>
       </strong>
       <% if last_update == 1 %>
         <%= "il y a #{last_update} jour" %>

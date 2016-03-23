@@ -33,17 +33,20 @@ class PlanningsController < ApplicationController
     else
       @range = (@start_time..@end_time).to_a
     end
+    @start_month = DateTime.new(@today.year, @today.month)
+    @end_month = @start_month + 1.month
     @employees = @shop.users
     @shift = Shift.new()
 
     @postes = Hash.new
-    shop_postes = Shpposte.where(shop: @shop)
+    shop_postes = ShopPoste.where(shop: @shop)
     shop_postes.each do |shpposte|
       case shpposte.poste.name
       when "Cuisine" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/hamburger-96.png'
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
       when "Plonge" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Household/broom-96.png'
       when "McCafe" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
+      when "Bar" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
       when "Service" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/waiter-96.png'
       else logo = 'https://maxcdn.icons8.com/Color/PNG/96/City/restaurant-96.png'
       end

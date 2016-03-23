@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310095405) do
+ActiveRecord::Schema.define(version: 20160323095420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,13 @@ ActiveRecord::Schema.define(version: 20160310095405) do
 
   add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
 
+  create_table "conventions", force: :cascade do |t|
+    t.integer  "hours_without_pause"
+    t.integer  "max_daily_hours"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
   create_table "declared_plannings", force: :cascade do |t|
     t.integer  "planning_id"
     t.json     "shifts"
@@ -51,13 +58,22 @@ ActiveRecord::Schema.define(version: 20160310095405) do
 
   add_index "declared_plannings", ["planning_id"], name: "index_declared_plannings_on_planning_id", using: :btree
 
+  create_table "groups", force: :cascade do |t|
+    t.integer  "organisation_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "groups", ["organisation_id"], name: "index_groups_on_organisation_id", using: :btree
+
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "shop_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "role"
     t.datetime "archived_at"
+    t.integer  "contract_hours"
   end
 
   add_index "memberships", ["shop_id"], name: "index_memberships_on_shop_id", using: :btree
@@ -73,21 +89,26 @@ ActiveRecord::Schema.define(version: 20160310095405) do
   add_index "organisation_memberships", ["organisation_id"], name: "index_organisation_memberships_on_organisation_id", using: :btree
   add_index "organisation_memberships", ["user_id"], name: "index_organisation_memberships_on_user_id", using: :btree
 
-  create_table "organisations", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "orgpostes", force: :cascade do |t|
+  create_table "organisation_postes", force: :cascade do |t|
     t.integer  "organisation_id"
     t.integer  "poste_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
-  add_index "orgpostes", ["organisation_id"], name: "index_orgpostes_on_organisation_id", using: :btree
-  add_index "orgpostes", ["poste_id"], name: "index_orgpostes_on_poste_id", using: :btree
+  add_index "organisation_postes", ["organisation_id"], name: "index_organisation_postes_on_organisation_id", using: :btree
+  add_index "organisation_postes", ["poste_id"], name: "index_organisation_postes_on_poste_id", using: :btree
+
+  create_table "organisations", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "photo"
+    t.string   "group_name"
+    t.integer  "convention_id"
+  end
+
+  add_index "organisations", ["convention_id"], name: "index_organisations_on_convention_id", using: :btree
 
   create_table "plannings", force: :cascade do |t|
     t.datetime "start_date"
@@ -106,6 +127,7 @@ ActiveRecord::Schema.define(version: 20160310095405) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "type"
   end
 
   create_table "shifts", force: :cascade do |t|
@@ -122,18 +144,7 @@ ActiveRecord::Schema.define(version: 20160310095405) do
   add_index "shifts", ["poste_id"], name: "index_shifts_on_poste_id", using: :btree
   add_index "shifts", ["user_id"], name: "index_shifts_on_user_id", using: :btree
 
-  create_table "shops", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "organisation_id"
-    t.datetime "opening_time"
-    t.datetime "closing_time"
-  end
-
-  add_index "shops", ["organisation_id"], name: "index_shops_on_organisation_id", using: :btree
-
-  create_table "shppostes", force: :cascade do |t|
+  create_table "shop_postes", force: :cascade do |t|
     t.integer  "shop_id"
     t.integer  "poste_id"
     t.datetime "created_at", null: false
@@ -141,12 +152,26 @@ ActiveRecord::Schema.define(version: 20160310095405) do
     t.string   "color"
   end
 
-  add_index "shppostes", ["poste_id"], name: "index_shppostes_on_poste_id", using: :btree
-  add_index "shppostes", ["shop_id"], name: "index_shppostes_on_shop_id", using: :btree
+  add_index "shop_postes", ["poste_id"], name: "index_shop_postes_on_poste_id", using: :btree
+  add_index "shop_postes", ["shop_id"], name: "index_shop_postes_on_shop_id", using: :btree
+
+  create_table "shops", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "organisation_id"
+    t.datetime "opening_time"
+    t.datetime "closing_time"
+    t.boolean  "automatic_pauses"
+    t.integer  "group_id"
+  end
+
+  add_index "shops", ["group_id"], name: "index_shops_on_group_id", using: :btree
+  add_index "shops", ["organisation_id"], name: "index_shops_on_organisation_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "encrypted_password",     default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -159,7 +184,6 @@ ActiveRecord::Schema.define(version: 20160310095405) do
     t.datetime "updated_at",                             null: false
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
@@ -170,12 +194,16 @@ ActiveRecord::Schema.define(version: 20160310095405) do
     t.boolean  "admin",                  default: false, null: false
     t.string   "phone"
     t.float    "hourly_wage"
-    t.integer  "contract_hours"
     t.datetime "start_date"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.string   "invitation_token"
   end
 
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
@@ -183,18 +211,21 @@ ActiveRecord::Schema.define(version: 20160310095405) do
   add_foreign_key "abilities", "postes"
   add_foreign_key "abilities", "users"
   add_foreign_key "declared_plannings", "plannings"
+  add_foreign_key "groups", "organisations"
   add_foreign_key "memberships", "shops"
   add_foreign_key "memberships", "users"
   add_foreign_key "organisation_memberships", "organisations"
   add_foreign_key "organisation_memberships", "users"
-  add_foreign_key "orgpostes", "organisations"
-  add_foreign_key "orgpostes", "postes"
+  add_foreign_key "organisation_postes", "organisations"
+  add_foreign_key "organisation_postes", "postes"
+  add_foreign_key "organisations", "conventions"
   add_foreign_key "plannings", "shops"
   add_foreign_key "plannings", "users"
   add_foreign_key "shifts", "plannings"
   add_foreign_key "shifts", "postes"
   add_foreign_key "shifts", "users"
+  add_foreign_key "shop_postes", "postes"
+  add_foreign_key "shop_postes", "shops"
+  add_foreign_key "shops", "groups"
   add_foreign_key "shops", "organisations"
-  add_foreign_key "shppostes", "postes"
-  add_foreign_key "shppostes", "shops"
 end

@@ -3,7 +3,7 @@ class PostesController < ApplicationController
   before_action :set_shp_postes, only: [:new, :create]
 
   def new
-    @shop_poste = Shpposte.new
+    @shop_poste = ShopPoste.new
     @shop_postes = Hash.new
     @shp_postes.sort_by { |p| p.poste.name }.each do |shpposte|
       case shpposte.poste.name
@@ -11,6 +11,7 @@ class PostesController < ApplicationController
       when "Caisse" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Ecommerce/check-96.png'
       when "Plonge" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Household/broom-96.png'
       when "McCafe" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
+      when "Bar" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/coffee_to_go-96.png'
       when "Service" then logo = 'https://maxcdn.icons8.com/Color/PNG/96/Food/waiter-96.png'
       else logo = 'https://maxcdn.icons8.com/Color/PNG/96/City/restaurant-96.png'
       end
@@ -21,7 +22,7 @@ class PostesController < ApplicationController
   def create
     @org_postes.each do |orgposte|
       unless params["poste" + orgposte.id.to_s].nil?
-        used_colors = Shpposte.where(shop: @shop).pluck(:color)
+        used_colors = ShopPoste.where(shop: @shop).pluck(:color)
         if used_colors.length < POSTE_COLORS.length
           new_color = (POSTE_COLORS - used_colors)[0]
         elsif used_colors.empty? || used_colors.length % POSTE_COLORS.length == 0
@@ -34,7 +35,7 @@ class PostesController < ApplicationController
           end
           new_color = (POSTE_COLORS - repeated_colors)[0]
         end
-        Shpposte.create(
+        ShopPoste.create(
           shop: @shop,
           poste: orgposte.poste,
           color: new_color)
@@ -54,7 +55,7 @@ class PostesController < ApplicationController
   end
 
   def destroy
-    poste = Shpposte.find(params[:id])
+    poste = ShopPoste.find(params[:id])
     poste.destroy
     redirect_to(:back)
   end
@@ -62,11 +63,11 @@ class PostesController < ApplicationController
   private
 
   def set_org_postes
-    @org_postes = Orgposte.where(organisation: @shop.organisation)
+    @org_postes = OrganisationPoste.where(organisation: @shop.organisation)
   end
 
   def set_shp_postes
-    @shp_postes = Shpposte.where(shop: @shop)
+    @shp_postes = ShopPoste.where(shop: @shop)
   end
 
   def poste_params
