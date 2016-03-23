@@ -1,0 +1,21 @@
+<h1>Vos <%= @organisation.group_name %>s</h1>
+<% @organisation.groups.each do |g| %>
+  <h2><%= g.name %></h2>
+  <h3><%= @organisation.shop_name %>s</h3>
+  <ul class="list-inline list-unstyled">
+    <li><%= link_to "Plannings", group_plannings_path(g) %></li>
+    <li><%= link_to "Espace Administratif", admin_space_path(g) %></li>
+  </ul>
+<% end %>
+<% unless Shop.where(organisation: @organisation, group_id: nil).length == 0 %>
+  <h2>Autres</h2>
+  <ul>
+    <% Shop.where(organisation: @organisation, group_id: nil).each do |s| %>
+      <li><%= s.name %></li>
+      <ul class="list-inline list-unstyled">
+        <li>Plannings</li>
+        <li>Espace Administratif</li>
+      </ul>
+    <% end %>
+  </ul>
+<% end %>

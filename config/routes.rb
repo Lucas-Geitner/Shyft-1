@@ -8,7 +8,10 @@ Rails.application.routes.draw do
   get 'plannings/:id/export' => 'plannings#export', as: :export
   patch 'shops/:shop_id/users/:user_id/archive_user' => 'memberships#archive_user', as: :archive_user
   patch 'shops/:shop_id/users/:user_id/retrieve_user' => 'memberships#retrieve_user', as: :retrieve_user
- 
+
+  get 'groups/:id/admin' => 'groups#admin_space', as: :admin_space
+  get 'groups/:id/plannings' => 'groups#plannings', as: :group_plannings
+
   get 'profile' => 'profile#showProfileData'
   devise_for :users
   root to: 'pages#home'
@@ -17,7 +20,9 @@ Rails.application.routes.draw do
   resources :postes, except: :index
   resources :memberships, only: :create
   resources :organisation_memberships, only: :create
-  resources :organisations, only: :create
+  resources :organisations, only: :create do
+    resources :groups, only: :index
+  end
   resources :shops, only: :create do
     resources :plannings, only: [:new, :create, :index]
     get '/users/total' => 'users#total', as: :total

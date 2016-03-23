@@ -7,3 +7,7 @@ ul a:active:focus, ul a:focus {
   outline: none;
   text-decoration: none;
 }
+
+a .fa.fa-caret-left, a .fa.fa-caret-right {
+  color: $gray;
+}
