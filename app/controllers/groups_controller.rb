@@ -4,6 +4,15 @@ class GroupsController < ApplicationController
   end
 
   def admin_space
+    @group = Group.find(params[:id])
+    @organisation = @group.organisation
+    if params[:date]
+      date = DateTime.parse(params[:date])
+      @month = DateTime.new(date.year, date.month)
+    else
+      now = DateTime.now
+      @month = DateTime.new(now.year, now.month)
+    end
   end
 
   def plannings

@@ -1,0 +1,15 @@
+<li>
+  <%= link_to "Menu", organisation_groups_path(@shop.organisation) %>
+  <% unless @group.nil? %>
+    <li><%= @group.organisation.group_name.capitalize %>: <%= @group.name %>
+      <ul>
+        <li>
+          <%= link_to "Plannings", group_plannings_path(@group) %>
+        </li>
+        <li>
+          <%= link_to "Espace Administratif", admin_space_path(@group) %>
+        </li>
+      </ul>
+    </li>
+  <% end %>
+</li>

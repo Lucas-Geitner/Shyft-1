@@ -1,0 +1,112 @@
+<h1><%= "#{@organisation.group_name.capitalize}: #{@group.name}" %></h1>
+
+<h2>
+  <%= link_to admin_space_path(@group, date: (@month - 1.month).strftime("%F")), class: "text-center caret-button" do %>
+    <i class="fa fa-caret-left"></i>
+  <% end %>
+  <%= @month.strftime("%b %Y") %>
+  <%= link_to admin_space_path(@group, date: (@month + 1.month).strftime("%F")), class: "text-center caret-button" do %>
+    <i class="fa fa-caret-right"></i>
+  <% end %>
+</h2>
+
+<h2><%= @organisation.shop_name %>s</h2>
+
+<% @group.shops.each do |shop| %>
+  <h3><%= shop.name %></h3>
+
+  <div class="panel panel-default total-hours">
+    <table class="table">
+
+      <tr>
+        <th>Prénom</td>
+        <th>Nom de famille</td>
+        <th>Heures contractuelles</td>
+        <th>Heures travaillées</td>
+        <th>Heures supplementaires</td>
+      </tr>
+
+    <% employees_shifts = Hash.new
+    shop.users.each do |employee|
+      employee_shifts = Hash.new
+      employee.shifts.each do |shift|
+        if shift.starts_at.strftime("%B") == @month.strftime("%B")
+          start_time = shift.starts_at
+          end_time = shift.ends_at
+          date = french_days(start_time.strftime("%A")) + start_time.strftime(" %d ") + french_mn(start_time.strftime("%b"))
+          shift_duration = (end_time - start_time) / 1.hour
+          employee_shifts[date] = shift_duration
+        end
+      end
+      employees_shifts[employee] = employee_shifts
+    end %>
+    <% employees_shifts.each do |employee, shifts| %>
+
+      <!-- get total hours worked for employee, get date and duration for popover -->
+      <% total = 0 %>
+      <% date_and_duration = "" %>
+      <% membership = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: shop.id}).first %>
+      <% contract_hours = membership.contract_hours.nil? ? 0 : membership.contract_hours %>
+      <% shifts.each do |date, duration| %>
+        <% total += duration %>
+        <% date = date.to_s %>
+        <% duration = duration %>
+        <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
+        <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
+        <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+      <% end %>
+
+
+        <!-- create popover content -->
+        <% popover_content = "<div class='panel panel-default popover-table'>
+                                <div class='panel-heading'>
+                                  Shifts
+                                </div>
+                                <table class=table>
+                                  #{date_and_duration == '' ?
+                                  '<tr>
+                                    <td>
+                                      pas de shifts
+                                    </td>
+                                  </tr>'
+                                  : date_and_duration}
+                                </table>
+                              </div>" %>
+
+        <% theo_hours = contract_hours * 0.05 * Date.today.day %>
+        <% pace = total - theo_hours %>
+        <tr class="<%= hours_card_class(total - contract_hours) %>">
+          <td><%= employee.first_name %></td>
+          <td><%= employee.last_name %></td>
+
+          <!-- HEURES CONTRACTUELLES -->
+          <td><%= trim_float(contract_hours) %></td>
+
+          <!-- HEURES TRAVAILLEES -->
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+            <%= trim_float(total) %>
+          </td>
+
+          <!-- HEURES SUPPLEMENTAIRES -->
+          <td>
+            <% if contract_hours < total %>
+              <%= trim_float(total - contract_hours) %>
+            <% else %>
+              <%= 0 %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+<% end %>
