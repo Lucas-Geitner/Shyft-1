@@ -19,18 +19,22 @@
     <table class="table">
 
       <tr>
-        <th>Prénom</td>
-        <th>Nom de famille</td>
-        <th>Heures contractuelles</td>
-        <th>Heures travaillées</td>
-        <th>Heures supplementaires</td>
+        <th>Nom</th>
+        <th>Taux Horaire</th>
+        <th>Brut Mensuel</th>
+        <th>Heures travaillées</th>
+        <th>Congés</th>
+        <th>Congés payés</th>
+        <th>Arrêts maladie</th>
+        <th>Total Horaire</th>
+        <th>Salaire</th>
       </tr>
 
     <% employees_shifts = Hash.new
     shop.users.each do |employee|
       employee_shifts = Hash.new
-      employee.shifts.each do |shift|
-        if shift.starts_at.strftime("%B") == @month.strftime("%B")
+      employee.shifts.where("starts_at >= ? AND ends_at < ?", @month, @month + 1.month).each do |shift|
+        if shift.starts_at.strftime("%B") == @month.strftime("%B") && shift.poste.absence_type.nil?
           start_time = shift.starts_at
           end_time = shift.ends_at
           date = french_days(start_time.strftime("%A")) + start_time.strftime(" %d ") + french_mn(start_time.strftime("%b"))
@@ -67,46 +71,156 @@
 
 
         <!-- create popover content -->
-        <% popover_content = "<div class='panel panel-default popover-table'>
+        <% popover_content = date_and_duration == '' ? '' : "<div class='panel panel-default popover-table'>
                                 <div class='panel-heading'>
                                   Shifts
                                 </div>
                                 <table class=table>
-                                  #{date_and_duration == '' ?
-                                  '<tr>
-                                    <td>
-                                      pas de shifts
-                                    </td>
-                                  </tr>'
-                                  : date_and_duration}
+                                  #{date_and_duration}
                                 </table>
                               </div>" %>
 
         <% theo_hours = contract_hours * 0.05 * Date.today.day %>
         <% pace = total - theo_hours %>
         <tr class="<%= hours_card_class(total - contract_hours) %>">
-          <td><%= employee.first_name %></td>
-          <td><%= employee.last_name %></td>
+          <td><%= employee.name %></td>
 
-          <!-- HEURES CONTRACTUELLES -->
-          <td><%= trim_float(contract_hours) %></td>
+          <!-- TAUX HORAIRE -->
+          <td><%= employee.hourly_wage %></td>
+
+          <!-- BRUT DE BASE -->
+          <td><%= trim_float(employee.hourly_wage * 151.67) %></td>
 
           <!-- HEURES TRAVAILLEES -->
           <td data-toggle="popover" data-content="<%= popover_content %>">
             <%= trim_float(total) %>
           </td>
 
-          <!-- HEURES SUPPLEMENTAIRES -->
+          <!-- CONGES -->
+          <% leave_time = 0 %>
+          <% date_and_duration = "" %>
+          <% Shift.where("user_id = ? AND starts_at >= ? AND ends_at < ?", employee.id, @month, (@month + 1.month)).joins(:poste).where(postes: { absence_type: "unpaid" }).each do |s|%>
+            <% date = french_days(s.starts_at.strftime("%A")) + s.starts_at.strftime(" %d ") + french_mn(s.starts_at.strftime("%b")) %>
+            <% duration = (s.ends_at - s.starts_at) / 1.hour %>
+            <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+            <% leave_time += duration %>
+          <% end %>
+          <% popover_content = date_and_duration == '' ? '' : "<div class='panel panel-default popover-table'>
+                                <div class='panel-heading'>
+                                  Congés
+                                </div>
+                                <table class=table>
+                                  #{date_and_duration}
+                                </table>
+                              </div>" %>
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+            <%= trim_float(leave_time) %>
+          </td>
+
+          <!-- CONGES PAYES -->
+          <% paid_leave_time = 0 %>
+          <% date_and_duration = "" %>
+          <% Shift.where("user_id = ? AND starts_at >= ? AND ends_at < ?", employee.id, @month, (@month + 1.month)).joins(:poste).where(postes: { absence_type: "paid" }).each do |s|%>
+            <% date = french_days(s.starts_at.strftime("%A")) + s.starts_at.strftime(" %d ") + french_mn(s.starts_at.strftime("%b")) %>
+            <% duration = (s.ends_at - s.starts_at) / 1.hour %>
+            <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+            <% paid_leave_time += duration %>
+          <% end %>
+          <% popover_content = date_and_duration == '' ? '' : "<div class='panel panel-default popover-table'>
+                                          <div class='panel-heading'>
+                                            Congés payés
+                                          </div>
+                                          <table class=table>
+                                            #{date_and_duration}
+                                          </table>
+                                        </div>" %>
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+            <%= trim_float(paid_leave_time) %>
+          </td>
+
+          <!-- ARRETS MALADIE -->
+          <% sick_leave_time = 0 %>
+          <% date_and_duration = "" %>
+          <% Shift.where("user_id = ? AND starts_at >= ? AND ends_at < ?", employee.id, @month, (@month + 1.month)).joins(:poste).where(postes: { absence_type: "sick leave" }).each do |s|%>
+            <% date = french_days(s.starts_at.strftime("%A")) + s.starts_at.strftime(" %d ") + french_mn(s.starts_at.strftime("%b")) %>
+            <% duration = (s.ends_at - s.starts_at) / 1.hour %>
+            <% date_and_duration += "<tr>
+                                  <td>#{date}</td>
+                                  <td>#{
+                                    if duration % 1 != 0
+                                      "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
+                                    else
+                                      "#{duration.floor} h"
+                                    end
+                                  }</td>
+                                </tr>" %>
+            <% sick_leave_time += duration %>
+          <% end %>
+          <% popover_content = date_and_duration == "" ? "" : "<div class='panel panel-default popover-table'>
+                                          <div class='panel-heading'>
+                                            Congés payés
+                                          </div>
+                                          <table class=table>
+                                            #{date_and_duration}
+                                          </table>
+                                        </div>" %>
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+            <%= trim_float(sick_leave_time) %>
+          </td>
+
+          <!-- TOTAL HORAIRE -->
           <td>
-            <% if contract_hours < total %>
-              <%= trim_float(total - contract_hours) %>
+            <% total_counted_hours = paid_leave_time + total %>
+            <%= trim_float(total_counted_hours) %>
+          </td>
+
+          <!-- SALAIRE -->
+          <td>
+            <% if total < 36 %>
+              <%= trim_float(total_counted_hours * employee.hourly_wage) %>
+            <% elsif total < 40 %>
+              <%= trim_float((35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*(total_counted_hours - 35))) %>
             <% else %>
-              <%= 0 %>
+              <%= trim_float( (35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*4)+((employee.hourly_wage * 1.2)*(total_counted_hours - 39))) %>
             <% end %>
           </td>
+
+          <!-- =IF(AK12<36,$AB12*AK12,IF(AK12<40,$AB12*35+$AC12*(AK12-35),$AB12*35+$AC12*4+(AK12-39)*$AD12)) -->
+
+
         </tr>
       <% end %>
     </table>
   </div>
 
+<% end %>
+
+<% content_for :scripts do %>
+  <script>
+    $('[data-toggle="popover"]').popover({
+      container: 'body',
+      html: true,
+      trigger: 'hover',
+      delay: {"show": "300", "hide": "50"},
+      placement: 'bottom'
+    });
+  </script>
 <% end %>
