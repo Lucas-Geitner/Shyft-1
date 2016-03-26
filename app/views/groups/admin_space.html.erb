@@ -48,11 +48,13 @@
 
       <!-- get total hours worked for employee, get date and duration for popover -->
       <% total = 0 %>
+      <% total_with_pauses = 0 %>
       <% date_and_duration = "" %>
       <% membership = Membership.where("user_id = :user AND shop_id = :shop", { user: employee.id, shop: shop.id}).first %>
       <% contract_hours = membership.contract_hours.nil? ? 0 : membership.contract_hours %>
       <% shifts.each do |date, duration| %>
         <% total += duration %>
+        <% total_with_pauses += duration >= 6 ? duration - 0.5 : duration %>
         <% date = date.to_s %>
         <% duration = duration %>
         <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
@@ -188,7 +190,7 @@
 
           <!-- TOTAL HORAIRE -->
           <td>
-            <% total_counted_hours = paid_leave_time + total %>
+            <% total_counted_hours = paid_leave_time + total_with_pauses %>
             <%= trim_float(total_counted_hours) %>
           </td>
 
@@ -202,10 +204,6 @@
               <%= trim_float( (35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*4)+((employee.hourly_wage * 1.2)*(total_counted_hours - 39))) %>
             <% end %>
           </td>
-
-          <!-- =IF(AK12<36,$AB12*AK12,IF(AK12<40,$AB12*35+$AC12*(AK12-35),$AB12*35+$AC12*4+(AK12-39)*$AD12)) -->
-
-
         </tr>
       <% end %>
     </table>

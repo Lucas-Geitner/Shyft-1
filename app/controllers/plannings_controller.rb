@@ -1,5 +1,3 @@
-require 'csv'
-
 class PlanningsController < ApplicationController
   def index
     if params[:date] && params[:date] != ""
@@ -102,7 +100,7 @@ class PlanningsController < ApplicationController
     end
   end
 
-  def declare
+  def export
     @planning = Planning.find(params[:id])
     @planning.update(status: "Declared")
     declared_planning = DeclaredPlanning.new(planning: @planning)
@@ -118,13 +116,6 @@ class PlanningsController < ApplicationController
       hash[shift.id] = parameters
     end
     declared_planning.shifts = hash
-    declared_planning.save
-    send_data to_csv(@planning, declared_planning), filename: "planning#{@planning.id}.csv"
-  end
-
-  def export
-    @planning = Planning.find(params[:id])
-    declared_planning = DeclaredPlanning.find_by_planning_id(@planning.id)
     send_data to_csv(@planning, declared_planning), filename: "planning#{@planning.id}.csv"
   end
 

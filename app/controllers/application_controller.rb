@@ -1,3 +1,5 @@
+require 'csv'
+
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: :home
   before_action :set_shop_for_user, if: :user_signed_in?

@@ -133,7 +133,7 @@ class UsersController < ApplicationController
     @shop_employees[2].each do |employee|
       employee_shifts = Hash.new
       employee.shifts.each do |shift|
-        if shift.starts_at.strftime("%B") == given_date.strftime("%B")
+        if shift.starts_at.strftime("%B") == given_date.strftime("%B") && shift.poste.absence_type.nil?
           start_time = shift.starts_at
           end_time = shift.ends_at
           date = french_days(start_time.strftime("%A")) + start_time.strftime(" %d ") + french_mn(start_time.strftime("%b"))

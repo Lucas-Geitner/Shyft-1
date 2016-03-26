@@ -117,15 +117,8 @@
             <i class="fa fa-trash"></i>
           </div>
           <div class="flex-align">
-            <% if @planning.status == "Ongoing" %>
-              <%= simple_form_for(@planning, url: declare_path(@planning), method: :patch) do |f| %>
-                <%= f.submit 'Sauvegarder', class: "btn btn-default save-button"%>
-              <% end %>
-            <% elsif @planning.status == "Declared" %>
-              <div class="skill-button-green">Déclaré</div>
-              <%= link_to export_path(@planning), class: "btn btn-default" do %>
-                <i class="fa fa-print"></i>
-              <% end %>
+            <%= link_to export_path(@planning), class: "btn btn-default" do %>
+              <i class="fa fa-print"></i>
             <% end %>
           </div>
         </div>
