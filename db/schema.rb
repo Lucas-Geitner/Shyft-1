@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160326184520) do
+ActiveRecord::Schema.define(version: 20160328124315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 20160326184520) do
   end
 
   add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
+
+  create_table "benefit_in_kinds", force: :cascade do |t|
+    t.integer  "organisation_id"
+    t.integer  "amount"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "benefit_in_kinds", ["organisation_id"], name: "index_benefit_in_kinds_on_organisation_id", using: :btree
 
   create_table "conventions", force: :cascade do |t|
     t.integer  "hours_without_pause"
@@ -204,6 +213,8 @@ ActiveRecord::Schema.define(version: 20160326184520) do
     t.string   "invitation_token"
     t.string   "contract_type"
     t.integer  "salary_charge"
+    t.boolean  "benefit_in_pay"
+    t.integer  "transport_cost"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -214,6 +225,7 @@ ActiveRecord::Schema.define(version: 20160326184520) do
 
   add_foreign_key "abilities", "postes"
   add_foreign_key "abilities", "users"
+  add_foreign_key "benefit_in_kinds", "organisations"
   add_foreign_key "declared_plannings", "plannings"
   add_foreign_key "groups", "organisations"
   add_foreign_key "memberships", "shops"
