@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'primes/new'
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   get 'plannings/:id/week' => 'plannings#week_view', as: :week_view
@@ -11,13 +13,15 @@ Rails.application.routes.draw do
 
   get 'groups/:id/admin' => 'groups#admin_space', as: :admin_space
   get 'groups/:id/plannings' => 'groups#plannings', as: :group_plannings
+  get 'shops/:shop_id/users/:user_id/primes/new' => 'primes#new', as: :new_prime
 
   get 'profile' => 'profile#showProfileData'
   devise_for :users
   root to: 'pages#home'
-  resources :users, except: [:index, :create]
+  resources :users, except: [:create]
   post 'users_custom' => "users#create", as: :custom
   resources :postes, except: :index
+  resources :primes, only: :create
   resources :memberships, only: :create
   resources :organisation_memberships, only: :create
   resources :organisations, only: :create do

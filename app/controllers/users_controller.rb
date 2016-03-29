@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :destroy_contract]
-  before_action :set_shop_employees, only: [:new, :show, :total, :filter]
+  before_action :set_shop_employees, only: [:index, :show, :total, :filter]
+
+  def index
+  end
 
   def new
     @user = User.new
@@ -58,7 +61,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to new_user_path
+    redirect_to users_path
   end
 
   def destroy_contract

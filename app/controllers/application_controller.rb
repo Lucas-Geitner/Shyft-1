@@ -31,7 +31,10 @@ class ApplicationController < ActionController::Base
       user: @user,
       shop: @shop,
       role: params[:user][:membership][:role],
-      contract_hours: params[:user][:membership][:contract_hours])
+      contract_hours: params[:user][:membership][:contract_hours],
+      contract_type: params[:user][:membership][:contract_type],
+      salary_charge: params[:user][:membership][:salary_charge],
+      transport_cost: params[:user][:membership][:transport_cost])
     @abilities = []
     @shop.postes.each do |poste|
       unless params["poste" + poste.id.to_s].nil?

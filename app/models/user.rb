@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :abilities, dependent: :destroy
   has_many :postes, through: :abilities
   has_many :shops, through: :memberships
+  has_many :primes
   # has_many :plannings, through: :shops
 
   devise :invitable, :database_authenticatable, :registerable,

@@ -1,55 +1,104 @@
-<ul class="nav nav-tabs users-tabs" id="nav-tabs-planning" role="tablist">
-  <li role="presentation" class="active"><%= link_to "Mes employés", new_user_path %></li>
-  <li role="presentation"><%= link_to "Archives", shop_archived_users_path(@shop) %></li>
-</ul>
+<h1 style="margin-bottom: 40px;">Ajouter un employé</h1>
+<%= simple_nested_form_for @user, url: user_invitation_path do |f| %>
 
+  <div class="row valign">
+    <label for="user_first_name" class="contol-label col-xs-4 col-md-2 vcenter">Prénom</label>
+    <%= f.input :first_name, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+  </div>
 
-<div class="row" id="page-content">
-  <div class="scrolling-list col-xs-7">
-    <% @shop_employees.each do |employee_group| %>
-      <% employee_group.each do |employee| %>
-        <div class="<%= employee.role == "Line Manager" ? "card-user card-manager" : "card-user" %>">
-          <div class="card-user-description">
-            <div class="card-user-name">
-              <span>
-                <i class="fa fa-user" style="<%= "color: #1FBED5;" if employee == current_user %>"></i>
-                <%= employee.first_name.capitalize + " " + employee.last_name.capitalize %>
-              </span>
-              <span class="separator">-</span>
-              <span>
-                <%= employee.memberships.first.role %>
-              </span>
-            </div>
-            <div class="skill-buttons">
-              <% Poste.joins(:abilities).where(abilities: {user: employee}).uniq.sort_by { |poste| poste.name.capitalize }.each do |poste| %>
-                <% if @shop.postes.include?(poste) %>
-                  <div class="skill-button">
-                    <%= poste.name %>
-                  </div>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-          <div class="card-user-controls">
-            <div class="list-controls">
-              <%= link_to "Voir", user_path(employee), class: "btn btn-default" %>
-              <%= link_to "Archiver", archive_user_path(@shop, employee), method: :patch, data: { confirm: "Êtes-vous sûr de vouloir archiver #{employee.first_name}?" }, class: "btn btn-default" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
+  <div class="row valign">
+    <label for="user_last_name" class="contol-label col-xs-4 col-md-2 vcenter">Nom</label>
+    <%= f.input :last_name, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+  </div>
+
+  <div class="row valign">
+    <label for="user_email" class="contol-label col-xs-4 col-md-2 vcenter">Email</label>
+    <%= f.input :email, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+  </div>
+
+  <div class="row valign">
+    <label for="user_phone" class="contol-label col-xs-4 col-md-2 vcenter">Téléphone</label>
+    <%= f.input :phone, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+  </div>
+
+  <div class="row valign">
+    <label for="user_start_date" class="contol-label col-xs-4 col-md-2 vcenter">Date de début</label>
+    <div class="form-group optional user_start_date col-xs-8 col-md-10 vcenter">
+      <input name="start_date" id="user_start_date" type="datetime" class="datepicker form-control">
+    </div>
+  </div>
+
+  <div class="row valign">
+    <label for="user_hourly_wage" class="contol-label col-xs-4 col-md-2 vcenter">Taux horaire</label>
+    <%= f.input :hourly_wage, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+  </div>
+
+  <%= f.simple_fields_for @membership do |p| %>
+    <div class="row valign">
+      <label for="user_contract_hours" class="contol-label col-xs-4 col-md-2 vcenter">Heures/mois</label>
+      <%= p.input :contract_hours, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+    </div>
+
+    <div class="row valign">
+      <label for="user_membership_role" class="control-label col-xs-4 col-md-2 vcenter">Rôle</label>
+      <%= p.input :role, as: :select, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" }, collection: Membership::ROLES, prompt: "Choisir un rôle" %>
+    </div>
+
+    <div class="row valign">
+      <label for="user_membership_contract_type" class="control-label col-xs-4 col-md-2 vcenter">Type de Contrat</label>
+      <%= p.input :contract_type, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+    </div>
+
+    <div class="row valign">
+      <label for="user_membership_salary_charge" class="control-label col-xs-4 col-md-2 vcenter">Charge salariale (%)</label>
+      <%= p.input :salary_charge, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+    </div>
+
+    <div class="row valign">
+      <label for="user_membership_transport_cost" class="control-label col-xs-4 col-md-2 vcenter">Coût Transport</label>
+      <%= p.input :transport_cost, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
+    </div>
+  <% end %>
+
+  <div id="skills-list">
+    <% @shop.postes.where(absence_type: nil).each do |poste| %>
+      <input class='tgl tgl-flip' id='cb<%= poste.id.to_s %>' type='checkbox' name="poste<%= poste.id.to_s %>">
+      <label class='tgl-btn' id='lb<%= poste.id.to_s %>' data-tg-on='<%= poste_logo(poste) %>' data-tg-off='<%= poste.name %>' for='cb<%= poste.id.to_s %>'></label>
     <% end %>
   </div>
 
-  <div class="fixed-content">
-    <div class="fixed-form">
-      <h2>Ajouter un employé</h1>
-      <%= render 'users/form', user: @user, membership: @membership, ability: @ability %>
-    </div>
+  <div class="row valign">
+    <label for="user_contract" class="contol-label col-xs-4 col-md-2 vcenter">Contrat</label>
+    <%= f.input :contract, as: :attachinary, label: false, wrapper_html: { class: "col-xs-8 col-md-10 vcenter" } %>
   </div>
-</div>
 
+  <div class="text-center">
+    <%= f.button :submit, value: "Créer", class: "btn-primary", id: "submit-new-employee" %>
+  </div>
+<% end %>
+
+
+
+<% content_for :scripts do %>
+  <script>
+    <% @shop.postes.each do |poste| %>
+      var bg = $('#lb<%= poste.id.to_s %>').data('tg-on').trim();
+      $('body').append('<style>#lb<%= poste.id.to_s %>::after{background-image: url(' + bg + ')}</style>');
+    <% end %>
+
+    $(function() {
+      $('#skills-list').hide();
+      $('#user_membership_role').change(function(){
+        if($('#user_membership_role').val() == 'Employee') {
+          $('#skills-list').slideDown();
+        } else {
+          $('#skills-list').slideUp();
+        }
+      });
+    });
+  </script>
+<% end %>
 
 <% content_for :title_tag do %>
-Mes employés
+Créer un nouvel employé
 <% end %>

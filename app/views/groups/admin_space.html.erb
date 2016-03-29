@@ -20,6 +20,7 @@
 
       <tr>
         <th>Nom</th>
+        <th>Type de contrat</th>
         <th>Taux Horaire</th>
         <th>Brut Mensuel</th>
         <th>Heures travaillées</th>
@@ -27,7 +28,10 @@
         <th>Congés payés</th>
         <th>Arrêts maladie</th>
         <th>Total Horaire</th>
-        <th>Salaire</th>
+        <th>Salaire brut sans AEN</th>
+        <th>Primes</th>
+        <th>AEN à soustraire</th>
+        <th>Salaire net estimé</th>
       </tr>
 
     <% employees_shifts = Hash.new
@@ -37,7 +41,7 @@
         if shift.starts_at.strftime("%B") == @month.strftime("%B") && shift.poste.absence_type.nil?
           start_time = shift.starts_at
           end_time = shift.ends_at
-          date = french_days(start_time.strftime("%A")) + start_time.strftime(" %d ") + french_mn(start_time.strftime("%b"))
+          date = start_time
           shift_duration = (end_time - start_time) / 1.hour
           employee_shifts[date] = shift_duration
         end
@@ -46,7 +50,7 @@
     end %>
     <% employees_shifts.each do |employee, shifts| %>
 
-      <!-- get total hours worked for employee, get date and duration for popover -->
+      <%# get total hours worked for employee, get date and duration for popover %>
       <% total = 0 %>
       <% total_with_pauses = 0 %>
       <% date_and_duration = "" %>
@@ -55,12 +59,11 @@
       <% shifts.each do |date, duration| %>
         <% total += duration %>
         <% total_with_pauses += duration >= 6 ? duration - 0.5 : duration %>
-        <% date = date.to_s %>
         <% duration = duration %>
         <% n1 = (duration % 1).to_r.to_s.scan(/\d/)[0] %>
         <% n2 = (duration % 1).to_r.to_s.scan(/\d/)[1] %>
         <% date_and_duration += "<tr>
-                                  <td>#{date}</td>
+                                  <td>#{date.strftime('%F')}</td>
                                   <td>#{
                                     if duration % 1 != 0
                                       "#{duration.floor} <sup>#{n1}</sup>&frasl;<sub>#{n2}</sub> h"
@@ -72,7 +75,7 @@
       <% end %>
 
 
-        <!-- create popover content -->
+        <%# create popover content %>
         <% popover_content = date_and_duration == '' ? '' : "<div class='panel panel-default popover-table'>
                                 <div class='panel-heading'>
                                   Shifts
@@ -85,7 +88,11 @@
         <% theo_hours = contract_hours * 0.05 * Date.today.day %>
         <% pace = total - theo_hours %>
         <tr class="<%= hours_card_class(total - contract_hours) %>">
+          <!-- NOM -->
           <td><%= employee.name %></td>
+
+          <!-- TYPE DE CONTRAT -->
+          <td><%= Membership.where(user: employee, shop: shop).first.contract_type %></td>
 
           <!-- TAUX HORAIRE -->
           <td><%= employee.hourly_wage %></td>
@@ -195,14 +202,56 @@
           </td>
 
           <!-- SALAIRE -->
+          <% if total < 36 %>
+            <% salary_before_charges = total_counted_hours * employee.hourly_wage %>
+          <% elsif total < 40 %>
+            <% salary_before_charges = (35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*(total_counted_hours - 35)) %>
+          <% else %>
+            <% salary_before_charges =  (35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*4)+((employee.hourly_wage * 1.2)*(total_counted_hours - 39)) %>
+          <% end %>
           <td>
-            <% if total < 36 %>
-              <%= trim_float(total_counted_hours * employee.hourly_wage) %>
-            <% elsif total < 40 %>
-              <%= trim_float((35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*(total_counted_hours - 35))) %>
-            <% else %>
-              <%= trim_float( (35 * employee.hourly_wage)+((employee.hourly_wage * 1.1)*4)+((employee.hourly_wage * 1.2)*(total_counted_hours - 39))) %>
-            <% end %>
+            <%= trim_float(salary_before_charges) %>
+          </td>
+
+          <!-- PRIMES -->
+          <% total_primes = 0 %>
+          <% popover_lines = "" %>
+          <% Prime.where(user: employee).where("for_month >= :today AND for_month < :next_month", today: @month, next_month: @month + 1.month).each do |p|
+            total_primes += p.amount
+            popover_lines += "<tr>
+                                  <td>#{p.description}</td>
+                                  <td>#{trim_float(p.amount)}</td>
+                                </tr>"
+          end %>
+          <% popover_content = popover_lines == "" ? "" : "<div class='panel panel-default popover-table'>
+              <div class='panel-heading'>
+                Congés payés
+              </div>
+              <table class=table>
+                #{popover_lines}
+              </table>
+            </div>"
+          %>
+          <td data-toggle="popover" data-content="<%= popover_content %>">
+           <%= trim_float(total_primes) %>
+           <%= link_to "+", new_prime_path(shop, employee), style: "font-weight: bolder; color: rgba(70,70,70,0.4);" %>
+          </td>
+
+          <!-- AEN A SOUSTRAIRE -->
+          <% days_worked = employees_shifts[employee].to_a.uniq { |data| data[0].strftime('%F')}.count %>
+          <% benefits = days_worked * shop.organisation.benefit_in_kind %>
+          <td>
+            <%= trim_float(benefits) %>
+          </td>
+
+          <!-- SALAIRE NET ESTIME -->
+          <% salary_with_benefits = (salary_before_charges + total_primes + benefits) %>
+          <% salary_charge = Membership.where(shop: shop, user: employee).first.salary_charge %>
+          <% salary_charge = 0 if salary_charge.nil? %>
+          <% transport_charge = Membership.where(shop: shop, user: employee).first.transport_cost %>
+          <% net_salary = salary_with_benefits + (salary_with_benefits * (salary_charge / 100)) + transport_charge - benefits %>
+          <td>
+            <%= trim_float(net_salary) %>
           </td>
         </tr>
       <% end %>

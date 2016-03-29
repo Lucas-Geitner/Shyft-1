@@ -1,0 +1,11 @@
+<h1>Ajouter une prime pour <%= @user.name %></h1>
+
+<%= simple_form_for(@prime) do |f| %>
+  <%= f.input :user, as: :hidden, input_html: { value: @user.id } %>
+  <%= f.input :shop, as: :hidden, input_html: { value: @shop.id } %>
+  <%= f.input :amount, label: "Montant" %>
+  <%= f.input :for_month, as: :integer, label: "Pour le mois:", input_html: { value: DateTime.now.month, min: 1, max: 12 } %>
+  <%= f.input :description %>
+  <%= f.button :submit, class: "btn btn-plus" %>
+<% end %>
+

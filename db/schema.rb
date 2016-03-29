@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160328124315) do
+ActiveRecord::Schema.define(version: 20160328170917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,15 +41,6 @@ ActiveRecord::Schema.define(version: 20160328124315) do
   end
 
   add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
-
-  create_table "benefit_in_kinds", force: :cascade do |t|
-    t.integer  "organisation_id"
-    t.integer  "amount"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "benefit_in_kinds", ["organisation_id"], name: "index_benefit_in_kinds_on_organisation_id", using: :btree
 
   create_table "conventions", force: :cascade do |t|
     t.integer  "hours_without_pause"
@@ -84,6 +75,9 @@ ActiveRecord::Schema.define(version: 20160328124315) do
     t.string   "role"
     t.datetime "archived_at"
     t.integer  "contract_hours"
+    t.string   "contract_type"
+    t.float    "salary_charge"
+    t.float    "transport_cost"
   end
 
   add_index "memberships", ["shop_id"], name: "index_memberships_on_shop_id", using: :btree
@@ -111,12 +105,13 @@ ActiveRecord::Schema.define(version: 20160328124315) do
 
   create_table "organisations", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "photo"
     t.string   "group_name"
     t.integer  "convention_id"
     t.string   "shop_name"
+    t.float    "benefit_in_kind"
   end
 
   add_index "organisations", ["convention_id"], name: "index_organisations_on_convention_id", using: :btree
@@ -140,6 +135,19 @@ ActiveRecord::Schema.define(version: 20160328124315) do
     t.datetime "updated_at",   null: false
     t.string   "absence_type"
   end
+
+  create_table "primes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "shop_id"
+    t.integer  "amount"
+    t.datetime "for_month"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "description"
+  end
+
+  add_index "primes", ["shop_id"], name: "index_primes_on_shop_id", using: :btree
+  add_index "primes", ["user_id"], name: "index_primes_on_user_id", using: :btree
 
   create_table "shifts", force: :cascade do |t|
     t.integer  "user_id"
@@ -211,10 +219,7 @@ ActiveRecord::Schema.define(version: 20160328124315) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "invitation_token"
-    t.string   "contract_type"
-    t.integer  "salary_charge"
     t.boolean  "benefit_in_pay"
-    t.integer  "transport_cost"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -225,7 +230,6 @@ ActiveRecord::Schema.define(version: 20160328124315) do
 
   add_foreign_key "abilities", "postes"
   add_foreign_key "abilities", "users"
-  add_foreign_key "benefit_in_kinds", "organisations"
   add_foreign_key "declared_plannings", "plannings"
   add_foreign_key "groups", "organisations"
   add_foreign_key "memberships", "shops"
@@ -237,6 +241,8 @@ ActiveRecord::Schema.define(version: 20160328124315) do
   add_foreign_key "organisations", "conventions"
   add_foreign_key "plannings", "shops"
   add_foreign_key "plannings", "users"
+  add_foreign_key "primes", "shops"
+  add_foreign_key "primes", "users"
   add_foreign_key "shifts", "plannings"
   add_foreign_key "shifts", "postes"
   add_foreign_key "shifts", "users"

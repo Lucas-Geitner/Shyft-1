@@ -6,6 +6,7 @@ class Shop < ActiveRecord::Base
   has_many :shifts, through: :plannings
   has_many :shop_postes
   has_many :postes, through: :shop_postes
+  has_many :primes
   belongs_to :group
 
   validates :name, presence: true
