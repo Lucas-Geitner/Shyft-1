@@ -119,6 +119,19 @@ class PlanningsController < ApplicationController
     send_data to_csv(@planning, declared_planning), filename: "planning#{@planning.id}.csv"
   end
 
+  def duplicate
+    @planning = Planning.find(params[:planning_id])
+    @today = DateTime.parse(params[:date])
+    @last_week = @today - 1.week
+    Shift.where(planning: @planning).where("starts_at >= ? AND ends_at < ?", @last_week, @last_week + 1.day).each do |s|
+      new_shift = Shift.new(user: s.user, poste: s.poste, planning: s.planning)
+      new_shift.starts_at = s.starts_at + 1.week
+      new_shift.ends_at = s.ends_at + 1.week
+      new_shift.save
+    end
+    redirect_to (:back)
+  end
+
   private
 
   def to_csv(planning, declared_planning)

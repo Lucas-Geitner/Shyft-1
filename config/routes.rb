@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   end
 
   resources :plannings, only: [:show, :edit, :update, :destroy] do
+    get'/duplicate' => 'plannings#duplicate', as: :duplicate
     resources :shifts, only: [:create, :update, :destroy]
   end
 

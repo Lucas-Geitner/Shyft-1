@@ -47,6 +47,7 @@
       </div>
     </div>
 
+
     <div id="agenda">
       <div class="employee-names">
         <ul class="list-unstyled text-right">
@@ -120,6 +121,9 @@
             <%= link_to export_path(@planning), class: "btn btn-default" do %>
               <i class="fa fa-print"></i>
             <% end %>
+          </div>
+          <div>
+            <%= link_to "Dupliquer la semaine dernière", planning_duplicate_path(@planning, date: @today), class: "btn btn-plus" %>
           </div>
         </div>
       </div>
